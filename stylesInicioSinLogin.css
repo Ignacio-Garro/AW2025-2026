@@ -41,7 +41,7 @@ body {
   
   
   .btn-primary {
-    --bs-btn-bg: #adadad;
+    --bs-btn-bg: #868686;
     --bs-btn-hover-bg: #868686;
     --bs-btn-color: white;
     border: none;
@@ -56,7 +56,28 @@ body {
   }
   
   .container-main{
-    background-color: #eeeeee;
+    /*Para meter una imagen de fondo en el main*/
+    background-image: url(media/foto\ de\ perfil.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color:white;
+  }
+  .container-main h2{
+    font-weight: 800;
+  }
+
+  .container-main p {
+    font-size: 1em;
+    line-height: 1.5;
+    font-weight: 500;
+    /*Text shadow muy util para encima de las fotos*/
+    text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.6);
   }
   
   .container-padding-small {
@@ -72,7 +93,8 @@ body {
   }
 
   .container-footer {
-    background-color: #f8f9fa; /* gris claro elegante */
+    background-image: url();
+    background-color: #ffffff; /* gris claro elegante */
   }
   
   /* Ajuste visual del logo */
