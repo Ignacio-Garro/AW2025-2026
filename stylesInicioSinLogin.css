@@ -80,6 +80,13 @@ body {
     text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.6);
   }
   
+  .voltia {
+    color:#00205B;
+  }
+
+  .drive {
+    color: #2ED573;
+  }
   .container-padding-small {
     padding: 10px 0px;
   }
