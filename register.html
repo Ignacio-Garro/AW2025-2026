@@ -19,19 +19,19 @@
                     <!--Primer campo: Nombre-->
                     <div class="col-md-6 col-lg-4">
                         <label for="nombre" class="form-label required">Nombre</label>
-                        <input type="text" class="form-control" required>
+                        <input type="text" class="form-control" title="Nombre" required>
                     </div>
 
                     <!--Segundo campo: Apellidos-->
                     <div class="col-md-6 col-lg-4">
                         <label for="nombre" class="form-label required">Apellidos</label> 
-                        <input type="text" class="form-control" required>
+                        <input type="text" class="form-control" title="Apellidos" required>
                     </div> 
 
                     <!--Tercer campo: Email-->
                     <div class="col-md-6 col-lg-4">
                         <label for="email" class="form-label required">Email</label>
-                        <input type="email" class="form-control" placeholder="@" required>
+                        <input type="email" class="form-control" title="Debe incluir @" placeholder="@" required>
                     </div> 
                     <!--Cuarto campo: Contraseña (requisitos: 1 Min(?=.*[a-z]), 1 May(?=.*[A-Z]), 1 Num(?=.*\d), minimo 8 caracteres{8,}$)-->
                     <div class="col-md-6 col-lg-4">
@@ -44,11 +44,14 @@
                     </div>
 
                     <!--Quinto campo: Teléfono móvil. Requisito 9 numeros[0-9]{9}-->
+                    <!--oninput="this.value = this.value.replace(/[^0-9]/g, '')" esto hace que solo podamos escribir numeros-->
                     <div class="col-md-6 col-lg-4">
                         <label for="telefono" class="form-label">Teléfono</label>                    
                         <input type="tel" class="form-control"
+                            maxlength="9" 
                             pattern="[0-9]{9}"
                             title="Debe tener 9 dígitos"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '')" 
                             placeholder="657893456">
                     </div>
 
