@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- mobile friendly -->
+    <title>VoltiaDrive</title>
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous"><!-- bootstrap CSS-->
+
+     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script><!-- bootstrap JS-->
+
+    <link rel = "stylesheet" href = "register.css">
+</head>
+<body>
+    <div class="container-full">
+        <div class="container container-register">
+            <h1 class="text-center pb-3">Sign Up</h1>
+            <form class="registerForm">
+                <div class="row">
+                    <!--Primer campo: Nombre-->
+                    <div class="col-md-6 col-lg-4">
+                        <label for="nombre" class="form-label required">Nombre</label>
+                        <input type="text" class="form-control" required>
+                    </div>
+
+                    <!--Segundo campo: Apellidos-->
+                    <div class="col-md-6 col-lg-4">
+                        <label for="nombre" class="form-label required">Apellidos</label> 
+                        <input type="text" class="form-control" required>
+                    </div> 
+
+                    <!--Tercer campo: Email-->
+                    <div class="col-md-6 col-lg-4">
+                        <label for="email" class="form-label required">Email</label>
+                        <input type="email" class="form-control" placeholder="@" required>
+                    </div> 
+                    <!--Cuarto campo: Contraseña (requisitos: 1 Min(?=.*[a-z]), 1 May(?=.*[A-Z]), 1 Num(?=.*\d), minimo 8 caracteres{8,}$)-->
+                    <div class="col-md-6 col-lg-4">
+                        <label for="password" class="form-label required">Contraseña</label>   
+                        <input type="password" class="form-control"
+                            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$"
+                            title="Debe incluir mínimo 8 caracteres, 1 minúscula, 1 mayúscula y 1 número"
+                            placeholder="8 caracteres, minúscula, mayúscula y número"
+                            required>    
+                    </div>
+
+                    <!--Quinto campo: Teléfono móvil. Requisito 9 numeros[0-9]{9}-->
+                    <div class="col-md-6 col-lg-4">
+                        <label for="telefono" class="form-label">Teléfono</label>                    
+                        <input type="tel" class="form-control"
+                            pattern="[0-9]{9}"
+                            title="Debe tener 9 dígitos"
+                            placeholder="657893456">
+                    </div>
+
+                    <!--Sexto campo: Concesionario asignado (select) (DEFINIRLO BIEN, NO SE QUE CONCESIONARIOS HAY)-->
+                    <div class="col-md-6 col-lg-4">
+                        <label for="concesionario" class="form-label required">Seleccione el concesionario</label>
+                        <select id="concesionario" name="concesionario" class="form-select" required>
+                            <option value="">-- Seleccione concesionario --</option>
+                            <option value="tesla">Tesla</option>
+                            <option value="byd">BYD</option>
+                            <option value="mg">MG</option>
+                        </select>
+                    </div>
+                    <!--Boton de registro-->
+                    <button class="btn btn-primary mt-4">Sign Up</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

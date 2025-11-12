@@ -25,35 +25,14 @@
         </div>
     </div>
 
-    <!--¡¡¡¡¡FALTA HACER ENLACES A LO DE CONTACTO Y LEGAL!!!!!-->
-
-    <!--Creamos el pie de página fuera del main ya que no es contenido principal de la página-->
-    <div class="container-footer py-4 border-top">
-        <div class="row align-items-center justify-content-between text-center text-md-start">
-            <!--Parte izquierda logo de la empresa y eslogan (por ejemplo)-->
-            <div class="col-12 col-md-4 mb-3 mb-md-0 d-flex justify-content-center justify-content-md-start">
-                <img src="media/logo y eslogan.png" alt="Logo VoltiaDrive" width="250"> <!--width tamaño de la foto-->
-            </div>
-            <!--Parte derecha del footer-->
-            <div class="col-12 col-md-8 d-flex flex-column justify-content-sm-center justify-content-md-center text-sm-center gap-4 gap-xl-5 gap-xxl-6 pe-md-5 pe-lg-5 pe-xl-5">
-                <div class="row text-md-end">
-                    <!--Columna de contacto-->
-                    <div class="col-6 col-sm-6">
-                        <h6 class="fw-bold">Contacto</h6>
-                        <p class="mb-1">Teléfono</p>
-                        <p class="mb-1">Email</p>
-                        <p class="mb-0">Dirección</p>
-                    </div>
-                     <!-- Columna de legal -->
-                    <div class="col-6 col-sm-6">
-                        <h6 class="fw-bold">Legal</h6>
-                        <p class="mb-1">Cookies</p>
-                        <p class="mb-1">Privacidad</p>
-                        <p class="mb-0">Aviso Legal</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!--Importamos el footer que tenemos creado-->
+    <div id="footer-container"></div><!-- where footer will appear -->
+    <script>
+        fetch('footer.html')
+        .then(response => response.text()) //load footer.html content
+        .then(html => {
+            document.getElementById('footer-container').innerHTML = html; //insert into this div
+        });
+    </script>
 </body>
 </html>
