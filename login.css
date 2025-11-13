@@ -19,3 +19,8 @@
     flex-direction: column;
     gap:10px;
 }
+
+.error {
+  font-size: 0.9em;
+  color: red;
+}
