@@ -1,0 +1,150 @@
+body {
+    margin-top: 40px; /* This margin just makes the text easier to read. You can remove it if you want since it can mess with your other styles. */
+  }
+  
+  body::before {
+    content: "XS";
+    color: red;
+    font-size: 2rem;
+    font-weight: bold;
+    position: fixed;
+    top: 0;
+    right: 0;
+  }
+  
+  /* This box class is purely used for explaining how the bootstrap grid system works. */
+  .box {
+    display: flex;
+    background-color: rgb(207, 207, 207);
+    min-height: 50px;
+    font-size: 1rem;
+    border-radius: 15px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column; 
+    padding: 15px 20px;
+    gap: 15px;
+    text-align: center;
+  }
+  
+  .box-tall {
+    min-height: 200px;
+  }
+  
+  .sin-puntos {
+    list-style: none;
+    font-size: 1.5rem;
+    background-color: #adadad;
+    border-radius: 15px;
+    padding: 20px 40px;
+  }
+  
+  
+  .btn-primary {
+    --bs-btn-bg: #868686;
+    --bs-btn-hover-bg: #868686;
+    --bs-btn-color: white;
+    border: none;
+    padding: 10px 20px; /* top-bottom | left-right */
+    width: 100%;
+    font-size: 1.2rem;      
+    font-family: Arial, sans-serif;  
+  }
+  
+  .container{
+    font-size: 1rem;
+  }
+  
+  .container-main{
+    /*Para meter una imagen de fondo en el main*/
+    background-image: url(/media/foto\ de\ perfil.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color:white;
+  }
+  .container-main h2{
+    font-weight: 800;
+  }
+
+  .container-main p {
+    font-size: 1em;
+    line-height: 1.5;
+    font-weight: 500;
+    /*Text shadow muy util para encima de las fotos*/
+    text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.6);
+  }
+  
+  .voltia {
+    color:#00205B;
+  }
+
+  .drive {
+    color: #2ED573;
+  }
+  .container-padding-small {
+    padding: 10px 0px;
+  }
+  
+  .container-padding-medium {
+    padding: 30px 0px;
+  }
+  
+  .container-padding-large {
+    padding: 60px 0px;
+  }
+
+  .container-footer {
+    background-image: url();
+    background-color: #ffffff; /* gris claro elegante */
+  }
+  
+  /* Ajuste visual del logo */
+  .container-footer img {
+    max-width: 200px;
+    height: auto;
+  }
+  
+  @media (min-width: 576px) {
+    body::before {
+      content: "SM";
+    }
+  }
+  
+  @media (min-width: 768px) {
+    body::before {
+      content: "MD";
+    }
+  }
+  
+  @media (min-width: 992px) {
+    body::before {
+      content: "LG";
+    }
+  }
+  
+  @media (min-width: 1200px) {
+    body::before {
+      content: "XL";
+    }
+  }
+  
+  @media (min-width: 1400px) {
+    body::before {
+      content: "XXL";
+    }
+  }
+
+  /* Cuando la pantalla sea XS (móvil), los bloques se apilan y se centran */
+    @media (max-width: 576px) {
+        .container-footer .col-md-7 {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        }
+    }
