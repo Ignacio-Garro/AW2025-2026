@@ -57,7 +57,7 @@ body {
   
   .container-main{
     /*Para meter una imagen de fondo en el main*/
-    background-image: url(media/foto\ de\ perfil.png);
+    background-image: url(/media/foto\ de\ perfil.png);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
