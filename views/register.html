@@ -14,32 +14,33 @@
     <div class="container-full">
         <div class="container container-register">
             <h1 class="text-center pb-3">Sign Up</h1>
-            <form class="registerForm">
-                <div class="row">
+            <form id="registerForm" class="registerForm" novalidate> <!-- novalidate: desactiva la validación automática de HTML5-->
+                <div class="row g-3">
                     <!--Primer campo: Nombre-->
                     <div class="col-md-6 col-lg-4">
                         <label for="nombre" class="form-label required">Nombre</label>
-                        <input type="text" class="form-control" title="Nombre" required>
+                        <input type="text" name="nombre" id="nombre" class="form-control" title="Nombre" aria-label="nombre" required>
                     </div>
 
                     <!--Segundo campo: Apellidos-->
                     <div class="col-md-6 col-lg-4">
-                        <label for="nombre" class="form-label required">Apellidos</label> 
-                        <input type="text" class="form-control" title="Apellidos" required>
+                        <label for="apellidos" class="form-label required">Apellidos</label> 
+                        <input type="text" name="apellidos" id="apellidos" class="form-control" title="Apellidos" aria-label="apellidos" required>
                     </div> 
 
                     <!--Tercer campo: Email-->
                     <div class="col-md-6 col-lg-4">
-                        <label for="email" class="form-label required">Email</label>
-                        <input type="email" class="form-control" title="Debe incluir @" placeholder="@" required>
+                        <label for="correo" class="form-label required">Email</label>
+                        <input type="email" name="correo" id="correo" class="form-control" title="Debe incluir @" placeholder="@" aria-label="correo" required>
                     </div> 
                     <!--Cuarto campo: Contraseña (requisitos: 1 Min(?=.*[a-z]), 1 May(?=.*[A-Z]), 1 Num(?=.*\d), minimo 8 caracteres{8,}$)-->
                     <div class="col-md-6 col-lg-4">
-                        <label for="password" class="form-label required">Contraseña</label>   
-                        <input type="password" class="form-control"
+                        <label for="contraseña" class="form-label required">Contraseña</label>   
+                        <input type="password" name="contraseña" id="contraseña" class="form-control"
                             pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$"
                             title="Debe incluir mínimo 8 caracteres, 1 minúscula, 1 mayúscula y 1 número"
                             placeholder="8 caracteres, minúscula, mayúscula y número"
+                            aria-label="contraseña "
                             required>    
                     </div>
 
@@ -47,29 +48,31 @@
                     <!--oninput="this.value = this.value.replace(/[^0-9]/g, '')" esto hace que solo podamos escribir numeros-->
                     <div class="col-md-6 col-lg-4">
                         <label for="telefono" class="form-label">Teléfono</label>                    
-                        <input type="tel" class="form-control"
+                        <input type="tel" name="telefono" id="telefono" class="form-control"
                             maxlength="9" 
                             pattern="[0-9]{9}"
                             title="Debe tener 9 dígitos"
                             oninput="this.value = this.value.replace(/[^0-9]/g, '')" 
-                            placeholder="657893456">
+                            placeholder="657893456"
+                            aria-label="telefono">
                     </div>
 
                     <!--Sexto campo: Concesionario asignado (select) (DEFINIRLO BIEN, NO SE QUE CONCESIONARIOS HAY)-->
                     <div class="col-md-6 col-lg-4">
-                        <label for="concesionario" class="form-label required">Seleccione el concesionario</label>
-                        <select id="concesionario" name="concesionario" class="form-select" required>
+                        <label for="id_concesionario" class="form-label required">Seleccione el concesionario</label>
+                        <select id="concesionario" name="id_concesionario" class="form-select" aria-label="id_concesionario" required>
                             <option value="">-- Seleccione concesionario ID --</option>
-                            <option value="tesla">Tesla</option>
-                            <option value="byd">BYD</option>
-                            <option value="mg">MG</option>
+                            <!--Se rellenan automáticamente con JS-->
                         </select>
                     </div>
                     <!--Boton de registro-->
-                    <button class="btn btn-primary mt-4">Sign Up</button>
+                    <button type="submit" class="btn btn-primary mt-4">Sign Up</button>
                 </div>
-            </form>
+                <!--Mostramos mensajes de error. Por ejemplo: Cuenta creada o el correo ya existe-->
+                <div id="mensaje" class="mb-3"></div>
+            </form>                
         </div>
     </div>
+    <script src="register.js"></script>
 </body>
 </html>

@@ -7,7 +7,7 @@ const connection = mysql.createConnection({
     user: 'root',
     password: '',   //XAMPP: vacío
     database: 'flota_vehiculos',
-    port: 3306           
+    port: 3306          
   });
 
 // 3. Conectamos
