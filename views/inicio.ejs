@@ -10,14 +10,7 @@
 </head>
 <body>
 
-  <div id="navbar-container"></div>
-  <script>
-    fetch('/html/partials/navbar.html')
-      .then(response => response.text())
-      .then(html => {
-        document.getElementById('navbar-container').innerHTML = html;
-      });
-  </script>
+  <%- include('navbar') %>
 
   <div class="container-main">
     <div class="container container-padding-large text-center">
@@ -44,13 +37,13 @@
       <div class="row gy-3">
         <div class="col">
           <div class="box box-tall">
-            <button class="btn btn-primary">Ver Vehiculos 1</button>
+            <button class="btn btn-primary">Ver Vehiculos</button>
             <p>Muestra todos los vehículos disponibles para reservar.</p>
           </div>
         </div>
         <div class="col">
           <div class="box box-tall">
-            <button class="btn btn-primary">Ver mis Reservas 1</button>
+            <button class="btn btn-primary">Ver mis Reservas</button>
             <p>Consulta las reservas que tienes activas o pendientes.</p>
           </div>
         </div>
@@ -72,6 +65,17 @@
     <div class="container-foto-fondo container-padding-medium">
       <img src="/media/coche.png" alt="foto de fondo">
     </div>
+
+    <!--Importamos el footer que tenemos creado
+    <div id="footer-container"></div>
+    <script>
+        fetch('/html/partials/footer.html')
+        .then(response => response.text()) //load footer.html content
+        .then(html => {
+            document.getElementById('footer-container').innerHTML = html; 
+        });
+    </script>
+    -->
   </div>
 
 </body>

@@ -7,7 +7,7 @@ const db = require('./config/db'); // Conexión MySQL
 const PORT = 3000;
 const app = express();
 
-
+app.set('views', path.join(__dirname, 'views')); 
 //app.use(express.static(path.join(__dirname, 'views')));//Sirve todos los archivos de la carpeta views como estáticos.
 app.use(express.static(path.join(__dirname, 'public')));//Sirve todos los archivos de la carpeta public como estáticos.
 app.use(express.urlencoded({ extended: true }));//Permite que Express pueda leer datos enviados por formularios HTML (POST).
@@ -78,20 +78,22 @@ app.get('/logout', (req, res) => {
     res.redirect('/login'); // Redirige al login después de cerrar sesión
   });
 });
+
 //VEHICULOS---------------------
 app.get('/vehiculos', (req, res) => {
   if (!req.session.usuario) { // solo muestra si hay sesión iniciada, sino redirige al login
     return res.redirect('/login'); 
   }
+  const query = "SELECT * FROM vehiculos"; // consulta para obtener todos los vehículos
 
-  // Datos de ejemplo (luego los traes desde la base de datos)
-  const vehiculos = [
-    { nombre: 'Ferrari L34', marca: 'Ferrari', modelo: 'L34', año: 2024, color: 'gris', precio: '356,000 €', imagen: '/media/coche1.jpg' },
-    { nombre: 'Lamborghini A12', marca: 'Lamborghini', modelo: 'A12', año: 2023, color: 'rojo', precio: '450,000 €', imagen: '/media/coche2.jpg' },
-    { nombre: 'Lamborghini 4', marca: 'Lamborghini', modelo: '4', año: 2025, color: 'gris', precio: '340,000 €', imagen: '/media/coche1.jpg' }
-  ];
+  db.query(query, (err, results) => { // ejecuta la consulta
+    if (err) {
+      console.error('Error consultando vehículos:', err);
+      return res.status(500).send('Error en el servidor');
+    }
 
-  res.render('vehiculos', { usuario: req.session.usuario, vehiculos });//renderiza vehiculos.ejs con datos de usuario y vehículos
+  res.render('vehiculos', { usuario: req.session.usuario, vehiculos: results });//renderiza vehiculos.ejs con datos de usuario y vehículos
+  });
 });
 
 //Iniciamos el servidor

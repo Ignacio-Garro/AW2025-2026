@@ -11,14 +11,7 @@
 
 
 <body>
-    <div id="navbar-container"></div>
-    <script>
-    fetch('/html/partials/navbar.html')
-      .then(response => response.text())
-      .then(html => {
-        document.getElementById('navbar-container').innerHTML = html;
-      });
-    </script>
+    <%- include('navbar') %>
 
     <div class="container-main text-center">
         <h2 class="titulo vehiculos pt-5">Vehículos Disponibles</h2>
