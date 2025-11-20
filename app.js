@@ -1,5 +1,6 @@
 //Importamos módulos
 const express = require('express');
+const session = require('express-session');
 const path = require('path');
 const db = require('./config/db'); // Conexión MySQL
 
@@ -7,36 +8,27 @@ const PORT = 3000;
 const app = express();
 
 
-//Sirve TODOS los archivos de 'views' como estáticos
-//HTML, CSS, partials (navbar, footer), JS, imágenes, etc.
-app.use(express.static(path.join(__dirname, 'views')));
+//app.use(express.static(path.join(__dirname, 'views')));//Sirve todos los archivos de la carpeta views como estáticos.
+app.use(express.static(path.join(__dirname, 'public')));//Sirve todos los archivos de la carpeta public como estáticos.
+app.use(express.urlencoded({ extended: true }));//Permite que Express pueda leer datos enviados por formularios HTML (POST).
+app.use(session({//para tener sesiones de usuario
+  secret: 'secreto', // cualquier cadena aleatoria
+  resave: false,
+  saveUninitialized: true
+}));
 
-//Sirve TODO lo que esté en 'public' (imágenes, JS)
-app.use(express.static(path.join(__dirname, 'public')));
-
-//Para leer formularios (POST)
-app.use(express.urlencoded({ extended: true }));
 
 //Ruta principal → inicioSinLogin.html
 app.get('/', (req, res) => {
    res.sendFile(path.join(__dirname, 'public', 'html', 'inicioSinLogin.html'));
 });
 
-//CODIGO DE LOGIN
-
-// Configurar EJS
+//CODIGO DE LOGIN-------------------
 app.set('view engine', 'ejs'); // vamos a usar EJS como motor de plantillas
-
-//simulación de base de datos de usuarios - remplazar por base de datos real
-//const usuarios = [
-//  { email: 'ignacio@gmail.com', password: '123' },
-//  { email: 'ana@gmail.com', password: 'password123' }
-//];
 
 app.get('/login', (req, res) => { // cuando abre el login
   res.render('login', { error: null, email: '' });
 });
-
 
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
@@ -60,17 +52,47 @@ app.post('/login', (req, res) => {
     if (usuario.contraseña !== password) {
       return res.render('login', { error: 'Contraseña incorrecta', email });
     }
+    // Guardar usuario en sesión
+    req.session.usuario = usuario;
 
-    res.redirect('/html/inicio.html');
+    res.redirect('/inicio');
   });
 });
 
 app.get('/inicio', (req, res) => {
-  res.send('¡Bienvenido a la página principal!');
+
+  if (!req.session.usuario) {
+    // Si no hay sesión, redirige al login
+    return res.redirect('/login');
+  }
+
+  res.render('inicio', { usuario: req.session.usuario });
 });
 
+app.get('/logout', (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      console.error(err);
+      return res.send('Error al cerrar sesión');
+    }
+    res.redirect('/login'); // Redirige al login después de cerrar sesión
+  });
+});
+//VEHICULOS---------------------
+app.get('/vehiculos', (req, res) => {
+  if (!req.session.usuario) { // solo muestra si hay sesión iniciada, sino redirige al login
+    return res.redirect('/login'); 
+  }
 
+  // Datos de ejemplo (luego los traes desde la base de datos)
+  const vehiculos = [
+    { nombre: 'Ferrari L34', marca: 'Ferrari', modelo: 'L34', año: 2024, color: 'gris', precio: '356,000 €', imagen: '/media/coche1.jpg' },
+    { nombre: 'Lamborghini A12', marca: 'Lamborghini', modelo: 'A12', año: 2023, color: 'rojo', precio: '450,000 €', imagen: '/media/coche2.jpg' },
+    { nombre: 'Lamborghini 4', marca: 'Lamborghini', modelo: '4', año: 2025, color: 'gris', precio: '340,000 €', imagen: '/media/coche1.jpg' }
+  ];
 
+  res.render('vehiculos', { usuario: req.session.usuario, vehiculos });//renderiza vehiculos.ejs con datos de usuario y vehículos
+});
 
 //Iniciamos el servidor
 app.listen(PORT, () => {
