@@ -13,7 +13,7 @@
 <body>
     <div id="navbar-container"></div><!-- where nav will appear -->
     <script>
-        fetch('/partials/navbar.html')
+        fetch('/html/partials/navbar.html')
         .then(response => response.text()) //load navbar.html content
         .then(html => {
             document.getElementById('navbar-container').innerHTML = html; //insert into this div
@@ -42,7 +42,7 @@
                 </div>
 
                 <div class="col-7 p-5">
-                    <img src="media/coche1.jpg" alt="coche1" class="fotoCoche">
+                    <img src="/media/coche1.jpg" alt="coche1" class="fotoCoche">
                 </div>
             </div>
             <div class="row ">  
@@ -62,7 +62,7 @@
                 </div>
 
                 <div class="col-7 p-5">
-                    <img src="media/coche1.jpg" alt="coche1" class="fotoCoche">
+                    <img src="/media/coche1.jpg" alt="coche1" class="fotoCoche">
                 </div>
             </div>
             <div class="row ">  
@@ -82,7 +82,7 @@
                 </div>
 
                 <div class="col-7 p-5">
-                    <img src="media/coche1.jpg" alt="coche1" class="fotoCoche">
+                    <img src="/media/coche1.jpg" alt="coche1" class="fotoCoche">
                 </div>
             </div>
         </div>

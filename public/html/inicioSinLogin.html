@@ -19,7 +19,7 @@
             <div class="d-flex justify-content-center container-padding-medium">
                 <div class="d-flex justify-content-center gap-3 container-padding-medium">
                     <a href="/login" class="btn btn-primary px-4">LogIn</a>
-                    <a href="register.html" class="btn btn-primary px-4">Register</a>
+                    <a href="/html/register.html" class="btn btn-primary px-4">Register</a>
                   </div>
             </div>
         </div>
@@ -28,7 +28,7 @@
     <!--Importamos el footer que tenemos creado-->
     <div id="footer-container"></div><!-- where footer will appear -->
     <script>
-        fetch('/partials/footer.html')
+        fetch('/html/partials/footer.html')
         .then(response => response.text()) //load footer.html content
         .then(html => {
             document.getElementById('footer-container').innerHTML = html; //insert into this div

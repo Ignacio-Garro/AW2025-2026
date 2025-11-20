@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 
 //Ruta principal → inicioSinLogin.html
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'inicioSinLogin.html'));
+   res.sendFile(path.join(__dirname, 'public', 'html', 'inicioSinLogin.html'));
 });
 
 //CODIGO DE LOGIN
@@ -28,27 +28,41 @@ app.get('/', (req, res) => {
 app.set('view engine', 'ejs'); // vamos a usar EJS como motor de plantillas
 
 //simulación de base de datos de usuarios - remplazar por base de datos real
-const usuarios = [
-  { email: 'ignacio@gmail.com', password: '123' },
-  { email: 'ana@gmail.com', password: 'password123' }
-];
+//const usuarios = [
+//  { email: 'ignacio@gmail.com', password: '123' },
+//  { email: 'ana@gmail.com', password: 'password123' }
+//];
 
 app.get('/login', (req, res) => { // cuando abre el login
   res.render('login', { error: null, email: '' });
 });
 
 
-app.post('/login', (req, res) => { // cuando envía el formulario
+app.post('/login', (req, res) => {
   const { email, password } = req.body;
-  const usuario = usuarios.find(u => u.email === email);
+  console.log("Correo recibido:", email, "| Contraseña:", password);
 
-  if(!usuario) {
-    res.render('login', { error: 'Usuario no encontrado', email });
-  } else if(usuario.password !== password) {
-    res.render('login', { error: 'Contraseña incorrecta', email });
-  } else {
-    res.redirect('/inicio.html'); // redirige a la página principal después del login
-  }
+  const query = "SELECT * FROM usuarios WHERE correo = ?";
+  db.query(query, [email], (err, results) => {
+    if (err) {
+      console.error("ERROR en consulta:", err);
+      return res.render('login', { error: 'Error interno del servidor', email });
+    }
+
+    console.log("Resultados de la query:", results);
+
+    if (results.length === 0) {
+      return res.render('login', { error: 'Usuario no encontrado', email });
+    }
+
+    const usuario = results[0];
+
+    if (usuario.contraseña !== password) {
+      return res.render('login', { error: 'Contraseña incorrecta', email });
+    }
+
+    res.redirect('/html/inicio.html');
+  });
 });
 
 app.get('/inicio', (req, res) => {
