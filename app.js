@@ -78,7 +78,6 @@ app.get('/logout', (req, res) => {
     res.redirect('/login'); // Redirige al login después de cerrar sesión
   });
 });
-
 //VEHICULOS---------------------
 app.get('/vehiculos', (req, res) => {
   if (!req.session.usuario) { // solo muestra si hay sesión iniciada, sino redirige al login
