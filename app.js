@@ -24,6 +24,19 @@ app.get('/', (req, res) => {
 });
 
 //CODIGO DE LOGIN-------------------
+//cerrar sesion
+app.get('/logout', (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      console.error(err);
+      return res.send('Error al cerrar sesión');
+    }
+    // CAMBIO AQUÍ: En vez de '/login', redirige a la raíz '/'
+    // La raíz '/' es la que carga 'inicioSinLogin.html'
+    res.redirect('/'); 
+  });
+});
+
 app.set('view engine', 'ejs'); // vamos a usar EJS como motor de plantillas
 
 app.get('/login', (req, res) => { // cuando abre el login
