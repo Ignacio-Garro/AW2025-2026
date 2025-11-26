@@ -49,48 +49,109 @@
   </nav>
 
   <!-- Modal de Accesibilidad -->
-  <div class="modal fade" id="modalAccesibilidad" tabindex="-1" aria-labelledby="tituloModal" aria-hidden="true">
-  
-  <div class="modal-dialog">
-    
-    <div class="modal-content text-dark">
-      
-      <div class="modal-header">
-        <h5 class="modal-title" id="tituloModal">Ajustes de Accesibilidad</h5>
+  <div class="modal fade" id="modalAccesibilidad" tabindex="-1" aria-labelledby="tituloModal" aria-hidden="true"> <!-- modal con un id -->
+    <div class="modal-dialog"> <!-- ancho y margenes de modal -->
+      <div class="modal-content text-dark p-4"> <!-- la caja donde esta el modal -->
         
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-      </div>
-
-      <div class="modal-body">
-        
-        <div class="form-check form-switch mb-3">
-            <input class="form-check-input" type="checkbox" id="switchModoOscuro">
-            <label class="form-check-label" for="switchModoOscuro">Activar Modo Oscuro</label>
+        <div class="modal-header"><!-- header de modal -->
+          <h5 class="modal-title" id="tituloModal">Ajustes de Accesibilidad</h5>
+          
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
 
-        <hr> <div class="mb-3">
-            <label for="rangeFuente" class="form-label">Tamaño de texto</label>
-            <input type="range" class="form-range" min="16" max="32" step="1" id="rangeFuente" value="16">
+        <div class="modal-body"><!-- body de modal -->
+          
+          <div class="form-check form-switch mb-5 mt-4"> <!-- modo oscuro -->
+              <input class="form-check-input" type="checkbox" id="switchModoOscuro">
+              <label class="form-check-label" for="switchModoOscuro">Activar Modo Oscuro</label>
+          </div>
+
+          <div class="mb-5"><!-- elegir tamaño de texto -->
+              <label for="rangeFuente" class="form-label">Tamaño de texto</label>
+              <input type="range" class="form-range" min="16" max="32" step="1" id="rangeFuente" value="16">
+          </div>
+
+          
+
+          <div class="mb-5"> <!-- elegir color -->
+              <label for="colorTexto" class="form-label">Color del texto</label>
+              <input type="color" class="form-control form-control-color" id="colorTexto" value="#000000" title="Elige tu color">
+          </div>
+
         </div>
 
-        <hr>
-
-        <div class="mb-3">
-            <label for="colorTexto" class="form-label">Color del texto</label>
-            <input type="color" class="form-control form-control-color" id="colorTexto" value="#000000" title="Elige tu color">
-        </div>
-
-      </div>
-
-      <div class="modal-footer">
+      <div class="modal-footer"> <!-- botones de restablecer y guardar -->
         <button type="button" class="btn btn-secondary" id="btnReset">Restablecer</button>
         
         <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Guardar y Cerrar</button>
       </div>
-
     </div>
   </div>
 </div>
+
+<script>
+    // 1. SELECCIÓN DE ELEMENTOS
+    // =========================
+    // Guardamos en variables los elementos del HTML que vamos a manipular.
+    // document.getElementById('...') busca la etiqueta que tenga ese ID exacto.
+    const body = document.body; // El cuerpo entero de la página (para cambiar fondo y texto general)
+    const switchOscuro = document.getElementById('switchModoOscuro'); // El interruptor
+    const rangeFuente = document.getElementById('rangeFuente'); // El deslizador de tamaño
+    const colorInput = document.getElementById('colorTexto'); // El selector de color
+    const btnReset = document.getElementById('btnReset'); // El botón de restablecer
+
+    // 2. LÓGICA PARA MODO OSCURO
+    // ==========================
+    // 'change' detecta cuando el usuario hace clic en el interruptor (on/off)
+    switchOscuro.addEventListener('change', () => {
+        // Comprobamos si el interruptor quedó marcado (true) o desmarcado (false)
+        if (switchOscuro.checked) {
+            // Si está marcado, añadimos clases de Bootstrap:
+            // 'bg-dark' pone el fondo negro.
+            // 'text-white' pone las letras blancas.
+            body.classList.add('bg-dark', 'text-white'); 
+        } else {
+            // Si se desmarca, quitamos esas clases para volver al estado normal.
+            body.classList.remove('bg-dark', 'text-white');
+        }
+    });
+
+    // 3. LÓGICA PARA TAMAÑO DE TEXTO
+    // ==============================
+    // 'input' detecta el movimiento del deslizador en tiempo real (mientras arrastras)
+    rangeFuente.addEventListener('input', (e) => {
+        // e.target.value contiene el número actual del deslizador (ej. 24)
+        // Le añadimos 'px' para formar "24px" y se lo aplicamos al body.
+        body.style.fontSize = e.target.value + 'px';
+    });
+
+    // 4. LÓGICA PARA COLOR DE TEXTO
+    // =============================
+    colorInput.addEventListener('input', (e) => {
+        // Cambiamos el color de la fuente al color elegido por el usuario
+        body.style.color = e.target.value;
+        
+        // TRUCO: Si el modo oscuro está activado, Bootstrap fuerza el texto a blanco con 'text-white'.
+        // Para que se vea nuestro color personalizado, tenemos que quitar 'text-white' si existe.
+        if(switchOscuro.checked) {
+             body.classList.remove('text-white');
+        }
+    });
+
+    // 5. BOTÓN DE RESTABLECER (RESET)
+    // ===============================
+    btnReset.addEventListener('click', () => {
+        // 1. Limpiamos los estilos visuales del body
+        body.classList.remove('bg-dark', 'text-white'); // Quita modo oscuro
+        body.style.fontSize = ''; // Quita tamaño personalizado (vuelve al original)
+        body.style.color = ''; // Quita color personalizado
+        
+        // 2. Reiniciamos los controles del modal a sus valores por defecto
+        switchOscuro.checked = false; // Apaga el interruptor visualmente
+        rangeFuente.value = 16; // Devuelve el deslizador al inicio
+        colorInput.value = '#000000'; // Devuelve el color a negro
+    });
+</script>
 
 </body>
 </html>
