@@ -20,7 +20,7 @@ app.use(session({//para tener sesiones de usuario
 
 //Ruta principal → inicioSinLogin.html
 app.get('/', (req, res) => {
-   res.sendFile(path.join(__dirname, 'public', 'html', 'inicioSinLogin.html'));
+   res.sendFile(path.join(__dirname, 'public', 'inicioSinLogin.html'));
 });
 
 //CODIGO DE LOGIN-------------------
