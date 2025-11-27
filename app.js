@@ -4,6 +4,8 @@ const session = require('express-session');
 const path = require('path');
 const db = require('./config/db'); // Conexión MySQL
 
+const { cargarDatosIniciales } = require('./public/js/cargaJSON');
+
 const PORT = 3000;
 const app = express();
 
@@ -108,8 +110,19 @@ app.get('/vehiculos', (req, res) => {
   });
 });
 
-//Iniciamos el servidor
-app.listen(PORT, () => {
+//Iniciamos el servidor sin cargar datos en la BD
+/*app.listen(PORT, () => {
   console.log(`Servidor en http://localhost:${PORT}`);
   console.log(`Abre: http://localhost:${PORT}`);
+});*/
+
+//Iniciamos servidor cargando datos en la BD
+cargarDatosIniciales().then(resultado => {
+  app.listen(PORT, () => {
+      console.log(`🚀 Servidor: http://localhost:${PORT}`);
+      if (resultado.exito) {
+          console.log(`✅ ${resultado.mensaje}`);
+          console.log(`🔐 Admin: ${resultado.admin}`);
+      }
+  });
 });
