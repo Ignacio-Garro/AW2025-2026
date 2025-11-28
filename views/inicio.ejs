@@ -7,10 +7,15 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="/css/stylesInicio.css">
+    
+    <!--Lo he puesto aqui pq lo dijo el profe-->
+
+    <%- include('navbar') %>
+
 </head>
 <body>
 
-  <%- include('navbar') %>
+  
 
   <div class="container-main container-login">
     <div class="container container-padding-large text-center">
@@ -66,16 +71,18 @@
       <img src="/media/coche.png" alt="foto de fondo">
     </div>
 
-    <!--Importamos el footer que tenemos creado
-    <div id="footer-container"></div>
-    <script>
-        fetch('/html/partials/footer.html')
-        .then(response => response.text()) //load footer.html content
-        .then(html => {
-            document.getElementById('footer-container').innerHTML = html; 
+    <footer>
+      <!--Importamos el footer que tenemos creado-->
+      <div id="footer-container"></div>
+      <script>
+        fetch('/footer.html')
+          .then(response => response.text()) //load footer.html content
+          .then(html => {
+          document.getElementById('footer-container').innerHTML = html; 
         });
-    </script>
-    -->
+      </script>
+    </footer>
+    
   </div>
 </body>
 </html>

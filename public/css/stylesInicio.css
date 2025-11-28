@@ -1,5 +1,9 @@
 body {
-  margin-top: 40px; /* This margin just makes the text easier to read. You can remove it if you want since it can mess with your other styles. */
+  min-height: 100vh;
+  /*margin-top: 40px; /* This margin just makes the text easier to read. You can remove it if you want since it can mess with your other styles. */
+  margin: 0;
+  display: flex;
+  flex-direction: column; 
 }
 
 body::before {
@@ -66,6 +70,9 @@ body::before {
 .container-foto-fondo {
   height: 600px;
   overflow: hidden;
+  background-color: white;  
+  margin-bottom: 0 !important; /* ← SIN MARGEN */
+  padding-bottom: 0 !important;
 }
 
 .container-foto-fondo img {
@@ -73,12 +80,24 @@ body::before {
   height: 100%;
   object-fit: cover;
 }
+
+footer{
+  background-color: white;
+  margin-top: 0 !important; /* ← SIN MARGEN */
+  padding-top: 0 !important; /* ← SIN PADDING */
+  padding-bottom: 20px; /* ← SOLO PADDING INFERIOR */
+  border-top: none !important;
+}
 .container{
   font-size: 1rem;
 }
 
 .container-main{
-  background-color: #eeeeee;
+  background-color: #eeee; 
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 0 !important;
 }
 
 .container-padding-small {

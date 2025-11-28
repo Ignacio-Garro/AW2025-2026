@@ -98,17 +98,6 @@ body {
   .container-padding-large {
     padding: 60px 0px;
   }
-
-  .container-footer {
-    background-image: url();
-    background-color: #ffffff; /* gris claro elegante */
-  }
-  
-  /* Ajuste visual del logo */
-  .container-footer img {
-    max-width: 200px;
-    height: auto;
-  }
   
   @media (min-width: 576px) {
     body::before {
@@ -139,12 +128,3 @@ body {
       content: "XXL";
     }
   }
-
-  /* Cuando la pantalla sea XS (móvil), los bloques se apilan y se centran */
-    @media (max-width: 576px) {
-        .container-footer .col-md-7 {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        }
-    }
