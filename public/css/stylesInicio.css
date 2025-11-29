@@ -83,9 +83,9 @@ body::before {
 
 footer{
   background-color: white;
-  margin-top: 0 !important; /* ← SIN MARGEN */
-  padding-top: 0 !important; /* ← SIN PADDING */
-  padding-bottom: 20px; /* ← SOLO PADDING INFERIOR */
+  margin-top: 0 !important; /*SIN MARGEN*/
+  padding-top: 0 !important; /*SIN PADDING*/
+  padding-bottom: 20px; 
   border-top: none !important;
 }
 .container{

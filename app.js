@@ -93,6 +93,7 @@ app.get('/logout', (req, res) => {
     res.redirect('/login'); // Redirige al login después de cerrar sesión
   });
 });
+
 //VEHICULOS---------------------
 app.get('/vehiculos', (req, res) => {
   if (!req.session.usuario) { // solo muestra si hay sesión iniciada, sino redirige al login
@@ -110,11 +111,13 @@ app.get('/vehiculos', (req, res) => {
   });
 });
 
-//Iniciamos el servidor sin cargar datos en la BD
-/*app.listen(PORT, () => {
-  console.log(`Servidor en http://localhost:${PORT}`);
-  console.log(`Abre: http://localhost:${PORT}`);
-});*/
+//PANEL ADMINISTRADOR---------------------
+app.get('/admin', (req, res) => {
+  if (!req.session.usuario) {
+    return res.redirect('/login');
+  }
+  res.render('admin', { usuario: req.session.usuario, active: 'admin'});
+});
 
 //Iniciamos servidor cargando datos en la BD
 cargarDatosIniciales().then(resultado => {
