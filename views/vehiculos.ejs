@@ -25,7 +25,7 @@
                             <ul>
                                 <li>Marca: <%= vehiculo.marca %></li>
                                 <li>Modelo: <%= vehiculo.modelo %></li>
-                                <li>Año: <%= vehiculo.año %></li>
+                                <li>Año: <%= vehiculo.año_matriculacion %></li>
                                 <li>Color: <%= vehiculo.color %></li>
                                 <li>Precio: <%= vehiculo.precio %></li>
                             </ul>
@@ -39,5 +39,16 @@
             <% }); %>
         </div>
     </div>
+    <footer>
+        <!--Importamos el footer que tenemos creado-->
+        <div id="footer-container"></div><!-- where footer will appear -->
+        <script>
+            fetch('/footer.html')
+            .then(response => response.text()) //load footer.html content
+            .then(html => {
+            document.getElementById('footer-container').innerHTML = html; //insert into this div
+            });
+        </script>
+    </footer>
 </body>
 </html>

@@ -89,9 +89,9 @@ async function cargarDatosIniciales() {
         for (const v of datos.vehiculos) {
             await new Promise(resolve => {
                 db.query(
-                    `INSERT INTO Vehiculos (id_vehiculo, matricula, marca, modelo, año_matriculacion, numero_plazas, color, autonomia_km, imagen, estado, id_concesionario) 
-                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-                    [v.id_vehiculo, v.matricula, v.marca, v.modelo, v.año_matriculacion, v.numero_plazas, v.color, v.autonomia_km, v.imagen, v.estado, v.id_concesionario],
+                    `INSERT INTO Vehiculos (id_vehiculo, matricula, marca, modelo, año_matriculacion, precio, numero_plazas, color, autonomia_km, imagen, estado, id_concesionario) 
+                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                    [v.id_vehiculo, v.matricula, v.marca, v.modelo, v.año_matriculacion, v.precio, v.numero_plazas, v.color, v.autonomia_km, v.imagen, v.estado, v.id_concesionario],
                     (err, result) => {
                         if (!err) {
                             vehiNuevos++;
