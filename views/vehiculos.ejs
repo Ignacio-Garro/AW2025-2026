@@ -45,7 +45,7 @@
                     <!-- Para Cada vehiculo -->
                     <% vehiculos.forEach(vehiculo => { %>
                         <div class="col-md-4 mb-4"><!-- col-md-4 Usa el sistema de rejilla de Bootstrap, 4 col de las 12 - mb-4 margen bottom 4-->
-                            <div class="card h-100 shadow-sm "> <!-- card -->
+                            <div class="card h-100 shadow-sm rounded-4 overflow-hidden"> <!-- card -->
                                 <!-- imagen -->
                                 <div class="bg-light text-center"> 
                                     <img src="<%= vehiculo.imagen || '/images/default-car.png' %>" 
@@ -78,9 +78,9 @@
                                         </div>
                                         <!-- botton reservar -->
                                         <% if (vehiculo.estado === 'disponible') { %>  
-                                            <a href="/vehiculos/reservar/<%= vehiculo.id_vehiculo %>" class="btn btn-outline-primary w-100 mt-2">Reservar</a>
+                                            <a href="/vehiculos/reservar/<%= vehiculo.id_vehiculo %>" class="btn btn-outline-primary w-100 mt-2 rounded-4">Reservar</a>
                                         <% } else { %>
-                                            <button class="btn btn-outline-secondary  w-100 mt-2" disabled>
+                                            <button class="btn btn-outline-secondary  w-100 mt-2 rounded-4" disabled>
                                                 <%= vehiculo.estado %> </button>
                                         <% } %>
                                     </div>
