@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vehículos</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="/css/stylesVehiculos.css">
 </head>
@@ -14,41 +14,80 @@
     <%- include('navbar') %>
 
     <div class="container-main text-center">
-        <h2 class="titulo vehiculos pt-5">Vehículos Disponibles</h2>
+        <h2 class="titulo vehiculos">Vehículos Disponibles</h2>
 
-        <div class="container-coche">
-            <% vehiculos.forEach(vehiculo => { %>
-                <div class="row">
-                    <div class="col m-5 d-flex align-items-center">
-                        <div class="box-car text-start">
-                            <h3 class="car-name"><strong><%= vehiculo.nombre %></strong></h3>
-                            <ul>
-                                <li>Marca: <%= vehiculo.marca %></li>
-                                <li>Modelo: <%= vehiculo.modelo %></li>
-                                <li>Año: <%= vehiculo.año_matriculacion %></li>
-                                <li>Color: <%= vehiculo.color %></li>
-                                <li>Precio: <%= vehiculo.precio %></li>
-                            </ul>
-                            <a href="#" class="btn btn-primary">Reservar</a>
-                        </div>
-                    </div>
-                    <div class="col-7 p-5">
-                        <img src="<%= vehiculo.imagen %>" alt="<%= vehiculo.nombre %>" class="fotoCoche">
-                    </div>
+        <!-- Fltro de vehiculos -->
+        <div class="container my-4">
+            <form action="/vehiculos" method="GET" class="row justify-content-center"> <!-- metodo GET y crea fila centrada-->
+                <div class="col-md-4 d-flex gap-2"><!-- col de ancho 4 - d-flex para que esten en fila horizontal y el gap para que esten espaciados-->
+
+                    <label for="filtroEstado" class="col-form-label fw-bold">Estado:</label> <!-- etiqueta del estado para accesiblidad -->
+                    
+                    <select name="estado" id="filtroEstado" class="form-select" onchange="this.form.submit()"><!-- Form que cuando cambie el estado manda el formulario automaticamente -->
+                        <!-- TODOS -->
+                        <option value="" <% if (!filtroActual) { %> selected <% } %>>Todos</option>
+                        <!-- DISPONIBLE -->
+                        <option value="disponible" <% if (filtroActual === 'disponible') { %> selected <% } %>>Disponible</option>
+                        <!-- RESERVADO -->
+                        <option value="reservado" <% if (filtroActual === 'reservado') { %> selected <% } %>>Reservado</option>
+                        <!-- MANTENIMIENTO -->
+                        <option value="mantenimiento" <% if (filtroActual === 'mantenimiento') { %> selected <% } %>>Mantenimiento</option>
+                    </select>
                 </div>
-            <% }); %>
+            </form>
+        </div>
+        <!-- Mostrar vehiculos -->
+        <div class="container-coche container">
+            <% if (vehiculos.length > 0) { %>
+                <div class="row">
+                    <!-- Para Cada vehiculo -->
+                    <% vehiculos.forEach(vehiculo => { %>
+                        <div class="col-md-4 mb-4"><!-- col-md-4 Usa el sistema de rejilla de Bootstrap, 4 col de las 12 - mb-4 margen bottom 4-->
+                            <div class="card h-100 shadow-sm "> <!-- card -->
+                                <!-- imagen -->
+                                <div class="bg-light text-center"> 
+                                    <img src="<%= vehiculo.imagen || '/images/default-car.png' %>" 
+                                        class="card-img-top" 
+                                        alt="Foto <%= vehiculo.marca %>" 
+                                        style="height: 180px; object-fit: contain;">
+                                </div>
+                                <!-- description card body-->
+                                <div class="card-body d-flex flex-column"> 
+                                    <h5 class="card-title"><%= vehiculo.marca %> <%= vehiculo.modelo %></h5>
+                                    <p class="card-text">
+                                        <strong>Año:</strong> <%= vehiculo.año_matriculacion %><br>
+                                        <strong>Precio:</strong> <%= vehiculo.precio %>€
+                                    </p>
+                                    
+                                    <div class="mt-auto"> 
+                                        <!-- badge para el estado del vehiculo -->
+                                        <% 
+                                        let claseBadge = 'bg-danger'; // Rojo por defecto 
+                                        if (vehiculo.estado === 'disponible') {
+                                            claseBadge = 'bg-success'; 
+                                        } else if (vehiculo.estado === 'reservado') {
+                                            claseBadge = 'bg-warning text-dark'; 
+                                        }
+                                        %>
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <span class="badge rounded-pill <%= claseBadge %>">
+                                                <%= vehiculo.estado.charAt(0).toUpperCase() + vehiculo.estado.slice(1) %>
+                                            </span>
+                                        </div>
+                                        <!-- botton reservar -->
+                                        <button class="btn btn-outline-primary w-100 mt-2">Reservar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+
+            <!-- si no hay vehiculos que mostrar -->
+            <% } else { %> 
+                <div class="alert alert-warning mt-5">No hay vehículos con este estado.</div>
+            <% } %>
         </div>
     </div>
-    <footer>
-        <!--Importamos el footer que tenemos creado-->
-        <div id="footer-container"></div><!-- where footer will appear -->
-        <script>
-            fetch('/footer.html')
-            .then(response => response.text()) //load footer.html content
-            .then(html => {
-            document.getElementById('footer-container').innerHTML = html; //insert into this div
-            });
-        </script>
-    </footer>
 </body>
 </html>

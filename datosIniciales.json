@@ -122,6 +122,16 @@
             "imagen": "/media/44444D.jpg", 
             "id_concesionario": 10, 
             "rol": "empleado"
+          },
+          {
+            "id_usuario": 12,
+            "nombre": "Ignacio", 
+            "correo": "igi@gmail.com", 
+            "contraseña": "123", 
+            "telefono": "345672322",
+            "imagen": "/media/44444D.jpg", 
+            "id_concesionario": 10, 
+            "rol": "admin"
           }
         ],
 
