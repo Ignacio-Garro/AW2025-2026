@@ -58,4 +58,46 @@ router.get('/reservar/:id', (req, res) => {
     });
 });
 
+// POST /vehiculos/reservar - Procesar la reserva
+router.post('/reservar', (req, res) => {
+    //Seguridad: Si no hay usuario, fuera.
+    if (!req.session.usuario) {
+        return res.redirect('/login');
+    }
+    //Recoger datos del formulario
+    const { id_vehiculo, fecha_inicio, fecha_fin } = req.body;
+
+    const id_usuario = req.session.usuario.id_usuario;
+
+    //crear la query
+    const queryReserva = `INSERT INTO reservas (
+                            id_usuario,
+                            id_vehiculo,
+                            fecha_inicio,
+                            fecha_fin,
+                            estado) 
+                            VALUES (?, ?, ?, ?, 'activa')`;
+    //ejecutar la query
+    db.query(queryReserva, [id_usuario, id_vehiculo, fecha_inicio, fecha_fin], (err, result) => {
+        if (err) {
+            console.error("Error al crear la reserva:", err);
+            return res.send("Hubo un error al procesar tu reserva.");
+        }
+        //cambiar el estado del coche a reservado
+        const queryUpdate = "UPDATE vehiculos SET estado = 'reservado' WHERE id_vehiculo = ?";
+
+        db.query(queryUpdate, [id_vehiculo], (errUpdate, resultUpdate) => {
+            if (errUpdate) {
+                console.error("Error actualizando estado del vehículo:", errUpdate);
+                return res.send("Error crítico: Reserva creada pero vehículo no actualizado.");
+            }
+            //log existoso de la reserva
+            console.log(`Reserva completada: Usuario ${id_usuario} reservó Vehículo ${id_vehiculo}`);
+            
+            // redirigir a vehiculos
+            res.redirect('/vehiculos'); 
+        });
+    });
+});
+
 module.exports = router; // Exportamos el router para usarlo en app.js
