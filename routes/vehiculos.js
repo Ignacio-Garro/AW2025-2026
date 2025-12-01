@@ -32,8 +32,8 @@ router.get('/', (req, res) => {
     });
 });
 
-// GET /vehiculos/reservar/:id - Reservar un vehículo
-router.get('/reservar/:id', (req, res) => {
+// GET /vehiculos/reservarVehiculo/:id - Reservar un vehículo
+router.get('/reservarVehiculo/:id', (req, res) => {
     // Verificación de sesión
     if (!req.session.usuario) { 
         return res.redirect('/login'); 
@@ -51,16 +51,16 @@ router.get('/reservar/:id', (req, res) => {
             return res.redirect('/vehiculos');
         }
 
-        res.render('reservar', { //cuando es un ejs, renderizar la vista reservar.ejs con los datos usuarios y vehiculo
+        res.render('reservarVehiculo', { //cuando es un ejs, renderizar la vista reservarVehiculo.ejs con los datos usuarios y vehiculo
             usuario: req.session.usuario,
             vehiculo: results[0] // el coche
         });
     });
 });
 
-// POST /vehiculos/reservar - Procesar la reserva
-router.post('/reservar', (req, res) => {
-    //Seguridad: Si no hay usuario, fuera.
+// POST /vehiculos/reservarVehiculo - Procesar la reserva
+router.post('/reservarVehiculo', (req, res) => {
+    // Verificación de sesión
     if (!req.session.usuario) {
         return res.redirect('/login');
     }
@@ -96,6 +96,100 @@ router.post('/reservar', (req, res) => {
             
             // redirigir a vehiculos
             res.redirect('/vehiculos'); 
+        });
+    });
+});
+
+
+// GET /vehiculos/reservas
+router.get('/reservas', (req, res) => {
+    // Verificación de sesión
+    if (!req.session.usuario) {
+        return res.redirect('/login');
+    }
+
+    const idUsuario = req.session.usuario.id_usuario; 
+
+    // crear query de reservas del usuario y del coche reservado en orden descendente cronológico
+    const query = ` SELECT r.id_reserva, r.fecha_inicio, r.fecha_fin, r.estado, r.id_vehiculo, 
+                                         v.marca, v.modelo, v.imagen, v.matricula
+        FROM reservas r
+        JOIN vehiculos v ON r.id_vehiculo = v.id_vehiculo 
+        WHERE r.id_usuario = ?
+        ORDER BY r.fecha_inicio DESC `;
+
+    // ejecutar query
+    db.query(query, [idUsuario], (err, results) => {
+        if (err) {
+            console.error("Error al obtener reservas:", err);
+            return res.status(500).send("Error del servidor");
+        }
+
+        // si existoso, renderizar la vista reservas.ejs con los datos
+        res.render('reservas', {
+            usuario: req.session.usuario,
+            reservas: results
+        });
+    });
+});
+
+//POST /vehiculos/cancelar
+router.post('/cancelar', (req, res) => {
+    // Verificación de sesión
+    if (!req.session.usuario) {
+        return res.redirect('/login');
+    }   
+    const { id_reserva, id_vehiculo } = req.body;
+
+    // crear query para cancelar reserva
+    const queryCancelar = "UPDATE reservas SET estado = 'cancelada' WHERE id_reserva = ?";
+
+    // ejecutar query
+    db.query(queryCancelar, [id_reserva], (errReserva, result) => {    
+        if (errReserva) {
+            console.error("Error al cancelar la reserva:", errReserva);
+            return res.status(500).send("Error del servidor");
+        }
+
+        //exito al cancelar reserva, ahora actualizar estado del vehiculo a disponible
+        const queryLiberarVehiculo = "UPDATE vehiculos SET estado = 'disponible' WHERE id_vehiculo = ?";
+
+        db.query(queryLiberarVehiculo, [id_vehiculo], (errVehiculo, resultVehiculo) => {
+            if (errVehiculo) {
+                console.error("Reserva cancelada pero error al liberar vehículo:", errVehiculo);
+            }
+            //exito al cancelar y liberar vehiculo
+            res.redirect('/vehiculos/reservas'); 
+        });
+    });
+});
+
+
+//POST /vehiculos/finalizar
+router.post('/finalizar', (req, res) => {
+    // Verificación de sesión
+    if (!req.session.usuario) {
+        return res.redirect('/login');
+    }   
+
+    const { id_reserva, id_vehiculo, kilometros, incidencias } = req.body;  
+    // crear query para finalizar reserva
+    const queryFinalizar = "UPDATE reservas SET estado = 'finalizada', kilometros_recorridos = ?, incidencias = ? WHERE id_reserva = ?";
+    // ejecutar query
+    db.query(queryFinalizar, [kilometros, incidencias, id_reserva], (err, result) => {    
+        if (err) {
+            console.error("Error al finalizar la reserva:", err);
+            return res.status(500).send("Error del servidor");
+        }
+        //exito al finalizar reserva, ahora actualizar estado del vehiculo a disponible
+        const queryLiberarVehiculo = "UPDATE vehiculos SET estado = 'disponible' WHERE id_vehiculo = ?";  
+
+        db.query(queryLiberarVehiculo, [id_vehiculo], (errVehiculo, resultVehiculo) => {
+            if (errVehiculo) {
+                console.error("Reserva finalizada pero error al liberar vehículo:", errVehiculo);
+            }
+            //exito al finalizar y liberar vehiculo
+            res.redirect('/vehiculos/reservas');
         });
     });
 });
