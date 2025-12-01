@@ -1,9 +1,9 @@
 footer {
     background-color: white;
-    margin-top: 0 !important; /*SIN MARGEN*/
-    padding-top: 0 !important; /*SIN PADDING*/
+    margin-top: 0; /*SIN MARGEN*/
+    padding-top: 0; /*SIN PADDING*/
     padding-bottom: 20px; 
-    border-top: none !important;
+    border-top: none;
 }
   
 .container-footer {

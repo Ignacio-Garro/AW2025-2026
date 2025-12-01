@@ -19,7 +19,7 @@
             "correo": "aitor.tilla@voltia.com", 
             "contraseña": "Aitor123", 
             "telefono": "600111111",
-            "imagen": "/media/aitorTilla",
+            "imagen": "/media/aitorTilla.png",
             "id_concesionario": 1, 
             "rol": "admin"
           },

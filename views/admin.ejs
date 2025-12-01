@@ -6,14 +6,37 @@
     <title>Panel Administrador</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="/css/stylesAdmin.css"> <!-- ← CREA ESTE CSS -->
+    <link rel="stylesheet" href="/css/stylesAdmin.css"> <!-- ← CREA ESTE CSS -->   
 </head>
 <body>
     <header>
-    <%- include('navbar') %>
-  </header>
-    <h1>Hola grupo</h1>
-    
+        <%- include('navbar') %>
+    </header>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!--COLUMNA IZQUIERDA: foto de perfil y secciones a ver/modificar-->
+            <div class="col-lg-4 col-md-5 col-sm-6 sidebar text-center">
+                <div class="my-5">
+                    <img src="<%= usuario.imagen %>"
+                    alt="Foto de <%= usuario.nombre %>"
+                    class="fotoPerfilAdmin">
+                </div>
+            
+                <ul class="menu-lateral sin-puntos text-center text-start">
+                    <li class="mb-3"><a href="/gestionUsuarios">Gestión de Usuarios</a></li>
+                    <li class="mb-3"><a href="/gestionVehiculos">Gestión de Vehiculos</a></li>
+                    <li class="mb-3"><a href="/gestionConcesionarios">Gestión de Concesionarios</a></li>
+                    <li class="mb-3"><a href="/estadisticas">Estadísticas</a></li>
+                </ul>
+            </div>
+            <!--COLUMNA DERECHA: panel administrador y datos de la BD-->
+            <div class="col-lg-4">
+
+            </div>
+        </div>
+    </div>
+
     <footer>
         <!--Importamos el footer que tenemos creado-->
         <div id="footer-container"></div><!-- where footer will appear -->
