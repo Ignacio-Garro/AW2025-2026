@@ -47,6 +47,9 @@ async function cargarDatosIniciales() {
         await new Promise(resolve => db.query("DELETE FROM Vehiculos", resolve));
         await new Promise(resolve => db.query("DELETE FROM usuarios", resolve));
         await new Promise(resolve => db.query("DELETE FROM Concesionarios", resolve));
+        await new Promise(resolve => db.query("ALTER TABLE Vehiculos AUTO_INCREMENT = 1", resolve));
+        await new Promise(resolve => db.query("ALTER TABLE usuarios AUTO_INCREMENT = 1", resolve));
+        await new Promise(resolve => db.query("ALTER TABLE Concesionarios AUTO_INCREMENT = 1", resolve));
         await new Promise(resolve => db.query("SET FOREIGN_KEY_CHECKS = 1", resolve));
         console.log('✅ Tablas limpiadas');
         
