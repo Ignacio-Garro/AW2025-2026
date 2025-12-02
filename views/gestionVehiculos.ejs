@@ -10,5 +10,136 @@
 
 <body>
 
-    <H1>hello world</H1>
+    <nav class="navbar navbar-dark bg-dark mb-4">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">Panel Admin: Flota Eléctrica</span>
+            <a href="/" class="btn btn-outline-light btn-sm">Volver al Inicio</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2 class="mb-4">Gestión de Vehículos</h2>
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card p-3 bg-light">
+                    <h5>Carga Masiva (JSON)</h5>
+                    <form action="/cargar-json-vehiculos" method="POST" enctype="multipart/form-data" class="d-flex gap-2">
+                        <input type="file" name="fichero_json" class="form-control" accept=".json" required>
+                        <button type="submit" class="btn btn-primary">Cargar</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-md-6 text-end d-flex align-items-center justify-content-end">
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalVehiculo">
+                    + Nuevo Vehículo
+                </button>
+            </div>
+        </div>
+        
+        <div class="mb-3">
+             <input type="text" id="buscador" class="form-control" placeholder="Buscar por matrícula o marca...">
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Imagen</th>
+                        <th>Matrícula</th>
+                        <th>Marca / Modelo</th>
+                        <th>Autonomía</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaCuerpo">
+                    <% if(vehiculos.length > 0) { %>
+                        <% vehiculos.forEach((v) => { %>
+                        <tr>
+                            <td><%= v.id_vehiculo %></td>
+                            <td><img src="<%= v.imagen || '/img/default.png' %>" width="50"></td>
+                            <td><strong><%= v.matricula %></strong></td>
+                            <td><%= v.marca %> <%= v.modelo %></td>
+                            <td><%= v.autonomia_km %> km</td>
+                            <td>
+                                <span class="badge <%= v.estado === 'disponible' ? 'text-bg-success' : 'text-bg-warning' %>">
+                                    <%= v.estado %>
+                                </span>
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-warning">Editar</button>
+                                
+                                <form action="/borrar-vehiculo/<%= v.id_vehiculo %>" method="POST" class="d-inline" onsubmit="return confirm('¿Seguro?');">
+                                    <button type="submit" class="btn btn-sm btn-danger">Baja</button>
+                                </form>
+                            </td>
+                        </tr>
+                        <% }) %>
+                    <% } else { %>
+                        <tr><td colspan="7" class="text-center">No hay vehículos. Carga un JSON.</td></tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalVehiculo" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="/crear-vehiculo" method="POST">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Datos del Vehículo</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label>Matrícula</label>
+                            <input type="text" name="matricula" class="form-control" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label>Marca</label>
+                                <input type="text" name="marca" class="form-control" required>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label>Modelo</label>
+                                <input type="text" name="modelo" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label>Concesionario</label>
+                            <select name="id_concesionario" class="form-select">
+                                <% if(concesionarios) { %>
+                                    <% concesionarios.forEach(c => { %>
+                                        <option value="<%= c.id_concesionario %>"><%= c.nombre %> (<%= c.ciudad %>)</option>
+                                    <% }) %>
+                                <% } %>
+                            </select>
+                        </div>
+                        </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        document.getElementById('buscador').addEventListener('keyup', function() {
+            let valor = this.value.toLowerCase();
+            let filas = document.querySelectorAll('#tablaCuerpo tr');
+            filas.forEach(fila => {
+                let texto = fila.textContent.toLowerCase();
+                fila.style.display = texto.includes(valor) ? '' : 'none';
+            });
+        });
+    </script>
 </body>
+</html>
