@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- mobile friendly -->
+    <title>Gestión de Concesionarios</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel = "stylesheet" href = "/css/gestionConcesionarios.css">
+</head>
+<body>
+    <header>
+        <%- include('navbar') %>
+    </header>
+
+    <h1>Gestión de Concesionarios</h1>
+    <footer>
+    <!--Importamos el footer que tenemos creado-->
+      <div id="footer-container"></div>
+      <script>
+        fetch('/footer.html')
+          .then(response => response.text()) //load footer.html content
+          .then(html => {
+          document.getElementById('footer-container').innerHTML = html; 
+        });
+      </script>
+    </footer>
+</body>
