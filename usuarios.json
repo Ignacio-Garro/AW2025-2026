@@ -6,7 +6,7 @@
         "correo": "aitor.tilla@voltia.com", 
         "contraseña": "Aitor123", 
         "telefono": "600111111",
-        "imagen": "/media/aitorTilla.png",
+        "imagen": "/media/11111A.jpg",
         "id_concesionario": 1, 
         "rol": "admin"
       },
@@ -16,7 +16,7 @@
         "correo": "bill.puertas@tesla.com", 
         "contraseña": "DiezByd1", 
         "telefono": "600222222", 
-        "imagen": "/media/billPuertas.jpg", 
+        "imagen": "/media/133333M.jpg", 
         "id_concesionario": 1, 
         "rol": "empleado"
       },
@@ -26,7 +26,7 @@
         "correo": "armandoparedes@byd.com", 
         "contraseña": "ArmandoByd1", 
         "telefono": "602000000", 
-        "imagen": "/media/111111K.jpg", 
+        "imagen": "/media/200000T.jpg", 
         "id_concesionario": 2, 
         "rol": "empleado"
       },
@@ -36,7 +36,7 @@
         "correo": "felipe.lotas@volvo.com", 
         "contraseña": "FelipeVolvo1", 
         "telefono": "600333333", 
-        "imagen": "/media/felipeLotas.jpg", 
+        "imagen": "/media/199999S.jpg", 
         "id_concesionario": 3, 
         "rol": "empleado"
       },
@@ -46,7 +46,7 @@
         "correo": "felipe.luquin@tesla.com", 
         "contraseña": "FelipeTesla1", 
         "telefono": "600444444", 
-        "imagen": "/media/felipeLuquin.jpg", 
+        "imagen": "/media/188888R.jpg", 
         "id_concesionario": 4, 
         "rol": "empleado"
       },
@@ -56,7 +56,7 @@
         "correo": "manos.tijeras@tesla.com", 
         "contraseña": "ManosTesla1", 
         "telefono": "600555555", 
-        "imagen": "/media/100000J.jpg", 
+        "imagen": "/media/177777Q.jpg", 
         "id_concesionario": 5, 
         "rol": "empleado"
       },
@@ -66,7 +66,7 @@
         "correo": "ramon.aguillo@volvo.com", 
         "contraseña": "RamonVolvo1", 
         "telefono": "600666666", 
-        "imagen": "/media/ramonAguillo.jpg", 
+        "imagen": "/media/166666P.jpg", 
         "id_concesionario": 6, 
         "rol": "empleado"
       },
@@ -76,7 +76,7 @@
         "correo": "roman.tequilla@vw.com", 
         "contraseña": "RomanVw1", 
         "telefono": "600777777",
-        "imagen": "/media/romanTequilla.jpg",  
+        "imagen": "/media/155555O.jpg",  
         "id_concesionario": 7, 
         "rol": "empleado"
       },
@@ -86,7 +86,7 @@
         "correo": "ruben.tosidad@volvo.com", 
         "contraseña": "RubenVolvo1", 
         "telefono": "600888888", 
-        "imagen": "/media/rubenTosidad.jpg", 
+        "imagen": "/media/144444N.jpg", 
         "id_concesionario": 8, 
         "rol": "empleado"
       },
@@ -96,7 +96,7 @@
         "correo": "steve.curros@vw.com", 
         "contraseña": "SteveVw1", 
         "telefono": "600999999",
-        "imagen": "/media/steveCurros.jpg",  
+        "imagen": "/media/122222L.jpg",  
         "id_concesionario": 9, 
         "rol": "empleado"
       },
@@ -106,7 +106,7 @@
         "correo": "bernardaalba@vw.com", 
         "contraseña": "BernardaVw1", 
         "telefono": "601000000",
-        "imagen": "/media/44444D.jpg", 
+        "imagen": "/media/111111K.jpg", 
         "id_concesionario": 10, 
         "rol": "empleado"
       },
@@ -116,7 +116,7 @@
         "correo": "igi@gmail.com", 
         "contraseña": "123", 
         "telefono": "345672322",
-        "imagen": "/media/44444D.jpg", 
+        "imagen": "/media/steveCurros.png", 
         "id_concesionario": 10, 
         "rol": "admin"
       }

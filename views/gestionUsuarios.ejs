@@ -20,11 +20,11 @@
         <div class="row mb-4">
             <!-- Carga JSON-->
             <div class="col-md-8">
-                <div class="card p-3 bg-light">
-                    <h3 class="mb-3">Carga JSON</h3>
-                    <form action="/cargar-json-usuarios" method="POST" enctype="multipart/form-data" class="d-flex gap-3">
+                <div class="card pt-3 px-3 bg-light">
+                    <h5 class="mb-3">Carga JSON</h5>
+                    <form action="/cargar-json-usuarios" method="POST" enctype="multipart/form-data" class="d-flex gap-3 m-0 align-items-center">
                         <input type="file" name="fichero_json" class="form-control" accept=".json" required>
-                        <button type="submit" class="btn btn-primary w-50">Cargar</button>
+                        <button type="submit" class="btn btn-primary w-50 mb-3">Cargar</button>
                     </form>
                 </div>
             </div>
@@ -37,7 +37,7 @@
         </div>
         <!-- buscador -->
         <div class="mb-3">
-             <input type="text" id="buscador" class="form-control" placeholder="🔍 Buscar por nombre, correo o teléfono...">
+             <input type="text" id="buscador" class="form-control" placeholder="Buscar por nombre, correo o teléfono...">
         </div>
 
         <!-- tabla con datos de usuarios -->
@@ -166,7 +166,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <form id="formEditar" method="POST"> 
-                    <div class="modal-header bg-warning">
+                    <div class="modal-header bg-ligth">
                         <h5 class="modal-title">Editar Usuario</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
