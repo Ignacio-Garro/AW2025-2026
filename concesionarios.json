@@ -1,0 +1,14 @@
+{
+    "concesionarios": [
+        {"id_concesionario": 1, "nombre": "Tesla Madrid Centro", "direccion": "Calle Alcalá 123", "telefono_contacto": "910123456"},
+        {"id_concesionario": 2, "nombre": "BYD Barcelona", "direccion": "Rambla Catalunya 45", "telefono_contacto": "932456789"},
+        {"id_concesionario": 3, "nombre": "Volvo Valencia", "direccion": "Av. del Puerto 78", "telefono_contacto": "963789123"},
+        {"id_concesionario": 4, "nombre": "Tesla Bilbao", "direccion": "Gran Vía 12", "telefono_contacto": "944567890"},
+        {"id_concesionario": 5, "nombre": "Tesla Málaga", "direccion": "Paseo Marítimo 89", "telefono_contacto": "954321098"},
+        {"id_concesionario": 6, "nombre": "Volvo Sevilla", "direccion": "Av. Constitución 34", "telefono_contacto": "976654321"},
+        {"id_concesionario": 7, "nombre": "Volkswagen Valladolid", "direccion": "Calle Constitución 15", "telefono_contacto": "952109876"},
+        {"id_concesionario": 8, "nombre": "Volvo Vigo", "direccion": "Rúa do Trazo 23", "telefono_contacto": "986432109"},
+        {"id_concesionario": 9, "nombre": "Volkswagen Murcia", "direccion": "Av. Teniente Flomesta 67", "telefono_contacto": "968765432"},
+        {"id_concesionario": 10, "nombre": "Volkswagen Zaragoza", "direccion": "Paseo Independencia 56", "telefono_contacto": "983210987"}
+    ]
+}

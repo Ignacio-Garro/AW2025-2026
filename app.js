@@ -2,7 +2,6 @@
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
-// const db = require('./config/db'); // Ya no es necesario aquí si solo se usa en las rutas
 const { cargarDatosIniciales } = require('./public/js/cargaJSON');
 
 // --- IMPORTAR RUTAS ---

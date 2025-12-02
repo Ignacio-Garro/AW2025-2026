@@ -2,7 +2,7 @@ const fs = require('fs').promises;
 const path = require('path');
 const db = require('../../config/db');
 
-//Función para cargar el JSON (10 concesionarios, 15 vehiculos y 11 usuarios (1 admin y 10 empleados))
+//Función para cargar el JSON (10 concesionarios, 15 vehiculos y 12 usuarios (2 admin y 10 empleados))
 async function cargarDatosIniciales() {
     try {
         console.log('🔄 Verificando base de datos...');
@@ -28,21 +28,32 @@ async function cargarDatosIniciales() {
         //Al verificar los datos de la BD imprimos un mensaje con su contenido
         console.log(`📊 Estado BD: ${concesTotal}C | ${usersTotal}U | ${vehiTotal}V`);
         
-        //Empezamos a cargar el JSON con la segunda linea
+        //Empezamos a cargar los 3 JSON
         console.log('📦 Cargando JSON...');
-        const jsonPath = path.join(__dirname, '../..', 'datosIniciales.json');
-        const datos = JSON.parse(await fs.readFile(jsonPath, 'utf8'));
+        const concesionariosPath = path.join(__dirname, '../..', 'concesionarios.json');
+        const usuariosPath = path.join(__dirname, '../..', 'usuarios.json');
+        const vehiculosPath = path.join(__dirname, '../..', 'vehiculos.json');
         
-        //Imprimimos lo que encontramos en el JSON
-        console.log(`📋 JSON encontrado: ${datos.concesionarios.length}Concesionarios | ${datos.usuarios.length}Usuarios | ${datos.vehiculos.length}Vehiculos`);
+        const concesionarios = JSON.parse(await fs.readFile(concesionariosPath, 'utf8')).concesionarios;
+        const usuarios = JSON.parse(await fs.readFile(usuariosPath, 'utf8')).usuarios;
+        const vehiculos = JSON.parse(await fs.readFile(vehiculosPath, 'utf8')).vehiculos;
+        
+        //Imprimimos lo que encontramos en los JSON
+        console.log(`📋 JSON encontrado: ${concesionarios.length} Concesionarios | ${usuarios.length} Usuarios | ${vehiculos.length} Vehiculos`);
         
         //1. LIMPIAMOS LAS TABLAS (Para evitar problemas)
-        await new Promise(resolve => db.query("DELETE FROM Vehiculos", () => db.query("DELETE FROM usuarios", () => db.query("DELETE FROM Concesionarios", resolve))));
+        console.log('🗑️  Limpiando tablas...');
+        await new Promise(resolve => db.query("SET FOREIGN_KEY_CHECKS = 0", resolve));
+        await new Promise(resolve => db.query("DELETE FROM Vehiculos", resolve));
+        await new Promise(resolve => db.query("DELETE FROM usuarios", resolve));
+        await new Promise(resolve => db.query("DELETE FROM Concesionarios", resolve));
+        await new Promise(resolve => db.query("SET FOREIGN_KEY_CHECKS = 1", resolve));
+        console.log('✅ Tablas limpiadas');
         
         //2. CARGAMOS LOS CONCESIONARIOS
         console.log('🏢 Cargando CONCESIONARIOS...');
         let consCreados = 0;
-        for (const c of datos.concesionarios) {
+        for (const c of concesionarios) {
             await new Promise(resolve => {
                 db.query(
                     "INSERT IGNORE INTO Concesionarios (id_concesionario, nombre, direccion, telefono_contacto) VALUES (?, ?, ?, ?)",
@@ -64,7 +75,7 @@ async function cargarDatosIniciales() {
         //3. CARGAMOS LOS USUARIOS
         console.log('👥 Cargando USUARIOS...');
         let usersCreados = 0;
-        for (const u of datos.usuarios) {
+        for (const u of usuarios) {
             await new Promise(resolve => {
                 db.query(
                     `INSERT IGNORE INTO usuarios (nombre, correo, contraseña, telefono, imagen, id_concesionario, rol) 
@@ -86,7 +97,7 @@ async function cargarDatosIniciales() {
         //4. CARGAMOS LOS VEHÍCULOS
         console.log('🚗 Cargando VEHÍCULOS...');
         let vehiNuevos = 0;
-        for (const v of datos.vehiculos) {
+        for (const v of vehiculos) {
             await new Promise(resolve => {
                 db.query(
                     `INSERT INTO Vehiculos (id_vehiculo, matricula, marca, modelo, año_matriculacion, precio, numero_plazas, color, autonomia_km, imagen, estado, id_concesionario) 
@@ -107,7 +118,7 @@ async function cargarDatosIniciales() {
         
         console.log(`\n✅ RESUMEN CARGA COMPLETA:`);
         console.log(`   🏢 ${consCreados}/10 CONCESIONARIOS`);
-        console.log(`   👥 ${usersCreados}/11 USUARIOS`);
+        console.log(`   👥 ${usersCreados}/12 USUARIOS`);
         console.log(`   🚗 ${vehiNuevos}/15 VEHÍCULOS`);
         
         //Devolvemos lo que se ha cargado y el admin y lo imprimos por pantalla
