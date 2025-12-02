@@ -72,15 +72,16 @@ router.post('/cargar-json-vehiculos', upload.single('fichero_json'), (req, res) 
     const objetos = JSON.parse(data); // Asumimos que el JSON trae un array de vehículos
     
     // Asumimos que el array está dentro de ".vehiculos"
-        const listaVehiculos = objetos.vehiculos;
+    const listaVehiculos = objetos.vehiculos;
         
     // Insertamos cada vehículo en la base de datos, si existe lo actualizamos
     listaVehiculos.forEach(v => {
     // 1. Definimos la consulta SQL completa con todos los campos
     const sql = `INSERT INTO vehiculos 
-        (matricula, marca, modelo, año_matriculacion, precio, numero_plazas, autonomia_km, color, imagen, estado, id_concesionario)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        (id_vehiculo, matricula, marca, modelo, año_matriculacion, precio, numero_plazas, autonomia_km, color, imagen, estado, id_concesionario)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ON DUPLICATE KEY UPDATE
+            matricula = VALUES(matricula),
             marca = VALUES(marca),
             modelo = VALUES(modelo),
             año_matriculacion = VALUES(año_matriculacion),
@@ -90,14 +91,14 @@ router.post('/cargar-json-vehiculos', upload.single('fichero_json'), (req, res) 
             color = VALUES(color),
             imagen = VALUES(imagen),
             estado = VALUES(estado),
-            id_concesionario = VALUES(id_concesionario)`; //actualizamos todos los campos si la matriucla ya existe
+            id_concesionario = VALUES(id_concesionario)`; //actualizamos todos los campos si el id ya existe
 
     // corremos query
-    db.query(sql, [v.matricula,v.marca,v.modelo,v.año_matriculacion, v.precio,v.numero_plazas,v.autonomia_km,v.color,v.imagen,v.estado,v.id_concesionario], (err) => {
+    db.query(sql, [v.id_vehiculo, v.matricula,v.marca,v.modelo,v.año_matriculacion, v.precio,v.numero_plazas,v.autonomia_km,v.color,v.imagen,v.estado,v.id_concesionario], (err) => {
         if (err) {
             console.log("Error insertando matrícula " + v.matricula + ": " + err.message);
         } else {
-            console.log("Vehículo procesado: " + v.matricula);
+            console.log("Vehículo procesado: " + v.id_vehiculo);
         }
     });
 });
@@ -186,6 +187,147 @@ router.get('/gestionUsuarios', (req, res) => {
                 usuario: req.session.usuario
             });
         });
+    });
+});
+
+//cargar nuevo usuario individual del modal
+router.post('/crear-usuario', (req, res) => {
+    // Nota: en el formulario el campo name="contrasena", en BD la columna es "contraseña"
+    const { nombre, correo, contrasena, rol, telefono, imagen, id_concesionario } = req.body;   
+    const sql = `INSERT INTO usuarios (nombre, correo, contraseña, rol, telefono, imagen, id_concesionario)
+                 VALUES (?, ?, ?, ?, ?, ?, ?)`;
+
+    db.query(sql, [nombre, correo, contrasena, rol, telefono, imagen, id_concesionario], (err) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send("Error al crear el usuario");
+        }
+        // Éxito
+        res.redirect('/gestionUsuarios');
+    });
+});
+
+// Carga de usuarios desde JSON (CON PROMESAS)
+router.post('/cargar-json-usuarios', upload.single('fichero_json'), (req, res) => {
+    if (!req.file) return res.status(400).send('No se subió ningún archivo.');
+
+    try {
+        const data = fs.readFileSync(req.file.path, 'utf8');
+        const objetos = JSON.parse(data);
+        const listaUsuarios = objetos.usuarios || objetos;
+
+        //Creamos un array de Promesas
+        const promesasDeInsercion = listaUsuarios.map(u => {
+            return new Promise((resolve, reject) => {
+                
+                const sql = `INSERT INTO usuarios 
+                    (id_usuario, nombre, correo, contraseña, rol, telefono, imagen, id_concesionario)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    ON DUPLICATE KEY UPDATE
+                        nombre = VALUES(nombre),
+                        correo = VALUES(correo),
+                        contraseña = VALUES(contraseña),
+                        rol = VALUES(rol),
+                        telefono = VALUES(telefono),
+                        imagen = VALUES(imagen),
+                        id_concesionario = VALUES(id_concesionario)`;
+
+                db.query(sql, [u.id_usuario, u.nombre, u.correo, u.contrasena || u.contraseña, u.rol, u.telefono, u.imagen, u.id_concesionario], (err) => {
+                    if (err) {
+                        console.log("Error con usuario ID " + u.id_usuario + ": " + err.message);
+                        resolve(); // Resolvemos aunque falle para que continúe con los demás
+                    } else {
+                        resolve(); // Éxito
+                    }
+                });
+            });
+        });
+
+        //Promise.all espera a que TODAS las inserciones terminen antes de hacer el redirect
+        Promise.all(promesasDeInsercion)
+            .then(() => {
+                // Solo cuando todo ha terminado, borramos el archivo y redirigimos UNA VEZ
+                if (fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path);
+                    res.redirect('/gestionUsuarios');
+            })
+            .catch(error => {
+                console.error("Error general en carga json de usuarios:", error);
+                if (fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path);
+                    res.status(500).send("Error procesando la carga json de usuarios.");
+            });
+
+    } catch (error) {
+        console.error(error);
+        if (req.file && fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path);
+        res.status(500).send("Error procesando el JSON: " + error.message);
+    }
+});
+
+// Eliminar Usuario 
+router.post('/borrar-usuario/:id', (req, res) => {
+    const sql = 'DELETE FROM usuarios WHERE id_usuario = ?'; 
+    db.query(sql, [req.params.id], (err) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send("Error al borrar el usuario");
+        }
+        //exito 
+        res.redirect('/gestionUsuarios');
+    });
+});
+
+//editar un usuario con el modal /editar-usuario/:id
+router.post('/editar-usuario/:id', (req, res) => {
+    const idUsuario = req.params.id; // Capturamos el ID de la URL
+
+    const { nombre, correo, contrasena, rol, telefono, imagen, id_concesionario } = req.body; // cogemos datos del formulario
+
+    // creamos la consulta SQL para actualizar el usuario
+    // Y si la contraseña está vacía, no la actualizamos
+    if (contrasena && contrasena.trim().length > 0) {
+        
+        //contraseña no vacía -> la actualizamos
+        sql = `
+            UPDATE usuarios 
+            SET 
+                nombre = ?, 
+                correo = ?, 
+                contraseña = ?, 
+                rol = ?, 
+                telefono = ?, 
+                imagen = ?, 
+                id_concesionario = ?
+            WHERE id_usuario = ?`;
+        // Pasamos la contraseña en los parámetros
+        params = [nombre, correo, contrasena, rol, telefono, imagen, id_concesionario, idUsuario];
+
+    } else {
+        
+        //contraseña vacía -> NO la actualizamos
+        sql = `
+            UPDATE usuarios 
+            SET 
+                nombre = ?, 
+                correo = ?, 
+                rol = ?, 
+                telefono = ?, 
+                imagen = ?, 
+                id_concesionario = ?
+            WHERE id_usuario = ?`;
+
+        // Pasamos los parámetros SIN la contraseña
+        params = [nombre, correo, rol, telefono, imagen, id_concesionario, idUsuario];
+    }
+
+    // ejecutamos query
+    db.query(sql, params, (err, result) => {
+        if (err) {
+            console.error("Error actualizando usuario: ", err);
+            return res.status(500).send("Error al actualizar el usuario");
+        }
+        
+        // exito
+        res.redirect('/gestionUsuarios');
     });
 });
 

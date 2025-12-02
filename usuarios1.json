@@ -1,0 +1,24 @@
+{
+    "usuarios": [
+    {
+        "id_usuario": 1,
+        "nombre": "AitorTillaCAMBIADO", 
+        "correo": "aitorCAMBIADO.tilla@voltia.com", 
+        "contraseña": "Aitor123", 
+        "telefono": "600111111",
+        "imagen": "/media/11111A.jpg",
+        "id_concesionario": 1, 
+        "rol": "admin"
+      },
+      {
+        "id_usuario": 13,
+        "nombre": "persona json",
+        "correo": "json.puertas@tesla.com", 
+        "contraseña": "json", 
+        "telefono": "600222222", 
+        "imagen": "/media/133333M.jpg", 
+        "id_concesionario": 3, 
+        "rol": "empleado"
+      }
+    ]
+}

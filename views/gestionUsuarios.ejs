@@ -84,8 +84,7 @@
                                     Editar
                                 </button>
                                 <!-- borrar -->
-                                <form action="/borrar-usuario/<%= u.id_usuario %>" method="POST" class="d-inline" 
-                                      onsubmit="return confirm('¿Eliminar al usuario <%= u.nombre %>?');">
+                                <form action="/borrar-usuario/<%= u.id_usuario %>" method="POST" class="d-inline">
                                     <button type="submit" class="btn btn-sm btn-danger">Borrar</button>
                                 </form>
                             </td>
@@ -105,7 +104,7 @@
         <div class="modal-dialog"><!-- MODAl-->
             <div class="modal-content">
                 <form action="/crear-usuario" method="POST"><!-- POST NUEVO USUARIO INDIVIDUAL -->
-                    <div class="modal-header bg-success text-white">
+                    <div class="modal-header bg-light">
                         <h5 class="modal-title">Nuevo Usuario</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
