@@ -87,30 +87,72 @@
         </div>
     </div>
 
-    <!-- Modal nuevo vehiculo -->
+    <!-- Modal nuevo vehiculo-->
     <div class="modal fade" id="modalVehiculo" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog"><!-- MODAl-->
             <div class="modal-content">
-                <form action="/crear-vehiculo" method="POST">
+                <form action="/crear-vehiculo" method="POST"> <!-- POST NUEVO VEHICULO INDIVIDUAL -->
                     <div class="modal-header">
                         <h5 class="modal-title">Datos del Vehículo</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="mb-3">
-                            <label>Matrícula</label>
-                            <input type="text" name="matricula" class="form-control" required>
-                        </div>
                         <div class="row">
+                            <div class="col-6 mb-3">
+                                <label>matricula</label>
+                                <input type="text" name="matricula" class="form-control" required>
+                            </div>
                             <div class="col-6 mb-3">
                                 <label>Marca</label>
                                 <input type="text" name="marca" class="form-control" required>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-6 mb-3">
                                 <label>Modelo</label>
                                 <input type="text" name="modelo" class="form-control" required>
                             </div>
+                            <div class="col-6 mb-3">
+                                <label>Año de Matriculación</label>
+                                <input type="number" name="año_matriculacion" class="form-control" required>
+                            </div>
                         </div>
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label>precio</label>
+                                <input type="number" name="precio" class="form-control" required>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label>numero_plazas</label>
+                                <input type="number" name="numero_plazas" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label>autonomia_km</label>
+                                <input type="number" name="autonomia_km" class="form-control" required>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label>color</label>
+                                <input type="text" name="color" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label>imagen</label>
+                                <input type="text" name="imagen" class="form-control" required>
+                            </div>
+                            <!-- estado -->
+                            <div class="col-6 mb-3">
+                                <label class="form-label">Estado</label>
+                                <select name="estado" class="form-select" required>
+                                    <option value="disponible" selected>Disponible</option>
+                                    <option value="reservado">Reservado</option>
+                                    <option value="mantenimiento">Mantenimiento</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- concesioarios -->
                         <div class="mb-3">
                             <label>Concesionario</label>
                             <select name="id_concesionario" class="form-select">
@@ -124,7 +166,7 @@
                         </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="submit" class="btn btn-primary">Crear nuevo vehiculo</button>
                     </div>
                 </form>
             </div>
