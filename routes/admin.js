@@ -37,7 +37,8 @@ router.get('/gestionVehiculos', (req, res) => {
             // Renderizamos la vista pasando los datos
             res.render('gestionVehiculos', { 
                 vehiculos: vehiculos,
-                concesionarios: concesionarios 
+                concesionarios: concesionarios,
+                usuario: req.session.usuario
             });
         });
     });

@@ -3,89 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- mobile friendly -->
-    <title>inicio</title>
+    <title>gestionVehiculos</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel = "stylesheet" href = "/css/stylesInicio.css">
 </head>
 
 <body>
+    <header>
+        <%- include('navbar') %>
+    </header>
 
-    <nav class="navbar navbar-dark bg-dark mb-4">
-        <div class="container-fluid">
-            <span class="navbar-brand mb-0 h1">Panel Admin: Flota Eléctrica</span>
-            <a href="/" class="btn btn-outline-light btn-sm">Volver al Inicio</a>
-        </div>
-    </nav>
-
-    <div class="container">
+    <div class="container my-5">
         <h2 class="mb-4">Gestión de Vehículos</h2>
-
+        
         <div class="row mb-4">
-            <div class="col-md-6">
+            <!-- Carga JSON-->
+            <div class="col-md-8">
                 <div class="card p-3 bg-light">
-                    <h5>Carga Masiva (JSON)</h5>
-                    <form action="/cargar-json-vehiculos" method="POST" enctype="multipart/form-data" class="d-flex gap-2">
+                    <h3 class="mb-3">Carga JSON</h3>
+                    <form action="/cargar-json-vehiculos" method="POST" enctype="multipart/form-data" class="d-flex gap-3">
                         <input type="file" name="fichero_json" class="form-control" accept=".json" required>
-                        <button type="submit" class="btn btn-primary">Cargar</button>
+                        <button type="submit" class="btn btn-primary w-50">Cargar</button>
                     </form>
                 </div>
             </div>
-
-            <div class="col-md-6 text-end d-flex align-items-center justify-content-end">
-                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalVehiculo">
-                    + Nuevo Vehículo
-                </button>
+            <!-- botton individual -->
+            <div class="col-md-4 text-end d-flex align-items-center justify-content-end">
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalVehiculo">+ Nuevo Vehículo</button>
             </div>
         </div>
-        
+        <!-- buscador -->
         <div class="mb-3">
              <input type="text" id="buscador" class="form-control" placeholder="Buscar por matrícula o marca...">
         </div>
-
-        <div class="table-responsive">
+        <!-- tabla con datos de vehiculos -->
+        <div class="table-responsive shadow-sm rounded-4 border">
             <table class="table table-striped table-hover align-middle">
-                <thead class="table-dark">
+                <!-- tabla headers -->
+                <thead class="table-light">
                     <tr>
-                        <th>ID</th>
-                        <th>Imagen</th>
-                        <th>Matrícula</th>
-                        <th>Marca / Modelo</th>
-                        <th>Autonomía</th>
-                        <th>Estado</th>
-                        <th>Acciones</th>
+                        <th>ID</th><th>Imagen</th><th>Matrícula</th><th>Marca / Modelo</th><th>Autonomía</th><th>Estado</th><th>Acciones</th>
                     </tr>
                 </thead>
+                <!-- tabla body -->
                 <tbody id="tablaCuerpo">
                     <% if(vehiculos.length > 0) { %>
                         <% vehiculos.forEach((v) => { %>
                         <tr>
                             <td><%= v.id_vehiculo %></td>
-                            <td><img src="<%= v.imagen || '/img/default.png' %>" width="50"></td>
+                            <td><img src="<%= v.imagen || '/img/default.png' %>" width="150"></td>
                             <td><strong><%= v.matricula %></strong></td>
                             <td><%= v.marca %> <%= v.modelo %></td>
                             <td><%= v.autonomia_km %> km</td>
-                            <td>
-                                <span class="badge <%= v.estado === 'disponible' ? 'text-bg-success' : 'text-bg-warning' %>">
-                                    <%= v.estado %>
+                            <td> <!-- badge para el estado del vehiculo -->
+                                <% let claseBadge = 'bg-danger'; // Rojo por defecto 
+                                if (v.estado === 'disponible') {
+                                    claseBadge = 'bg-success'; 
+                                } else if (v.estado === 'reservado') {
+                                    claseBadge = 'bg-warning text-dark'; 
+                                } 
+                                %>
+                                <span class="badge rounded-pill <%= claseBadge %>">
+                                    <%= v.estado.charAt(0).toUpperCase() + v.estado.slice(1) %>
                                 </span>
                             </td>
                             <td>
+                                <!-- editar -->
                                 <button class="btn btn-sm btn-warning">Editar</button>
-                                
-                                <form action="/borrar-vehiculo/<%= v.id_vehiculo %>" method="POST" class="d-inline" onsubmit="return confirm('¿Seguro?');">
+                                <!-- borrar -->
+                                <form action="/borrar-vehiculo/<%= v.id_vehiculo %>" method="POST" class="d-inline">
                                     <button type="submit" class="btn btn-sm btn-danger">Baja</button>
                                 </form>
                             </td>
                         </tr>
                         <% }) %>
                     <% } else { %>
-                        <tr><td colspan="7" class="text-center">No hay vehículos. Carga un JSON.</td></tr>
+                        <!-- si no hay vehiculos -->
+                        <tr><td colspan="7" class="text-center">No hay vehículos.</td></tr>
                     <% } %>
                 </tbody>
             </table>
         </div>
     </div>
 
+    <!-- Modal nuevo vehiculo -->
     <div class="modal fade" id="modalVehiculo" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -129,9 +131,19 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <footer>
+      <!--Importamos el footer que tenemos creado-->
+      <div id="footer-container"></div>
+      <script>
+        fetch('/footer.html')
+          .then(response => response.text()) //load footer.html content
+          .then(html => {
+          document.getElementById('footer-container').innerHTML = html; 
+        });
+      </script>
+    </footer>
     
-    <script>
+    <script>//actualización dinámica del buscador
         document.getElementById('buscador').addEventListener('keyup', function() {
             let valor = this.value.toLowerCase();
             let filas = document.querySelectorAll('#tablaCuerpo tr');

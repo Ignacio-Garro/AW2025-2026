@@ -71,11 +71,9 @@
                                             claseBadge = 'bg-warning text-dark'; 
                                         }
                                         %>
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <span class="badge rounded-pill <%= claseBadge %>">
-                                                <%= vehiculo.estado.charAt(0).toUpperCase() + vehiculo.estado.slice(1) %>
-                                            </span>
-                                        </div>
+                                        <span class="badge rounded-pill <%= claseBadge %>">
+                                            <%= vehiculo.estado.charAt(0).toUpperCase() + vehiculo.estado.slice(1) %>
+                                        </span>
                                         <!-- botton reservar -->
                                         <% if (vehiculo.estado === 'disponible') { %>  
                                             <a href="/vehiculos/reservarVehiculo/<%= vehiculo.id_vehiculo %>" class="btn btn-outline-primary w-100 mt-2 rounded-4">Reservar</a>
