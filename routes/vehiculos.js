@@ -148,7 +148,7 @@ router.post('/cancelar', (req, res) => {
     db.query(queryCancelar, [id_reserva], (errReserva, result) => {    
         if (errReserva) {
             console.error("Error al cancelar la reserva:", errReserva);
-            return res.status(500).send("Error del servidor");
+            return res.status(500).send("Error del servidor cancelando reserva");
         }
 
         //exito al cancelar reserva, ahora actualizar estado del vehiculo a disponible
@@ -174,12 +174,18 @@ router.post('/finalizar', (req, res) => {
 
     const { id_reserva, id_vehiculo, kilometros, incidencias } = req.body;  
     // crear query para finalizar reserva
-    const queryFinalizar = "UPDATE reservas SET estado = 'finalizada', kilometros_recorridos = ?, incidencias = ? WHERE id_reserva = ?";
+    const queryFinalizar = `
+    UPDATE reservas 
+    SET estado = 'finalizada', 
+        kilometros_recorridos = ?, 
+        incidencias_reportadas = ?, 
+        fecha_fin = NOW() 
+    WHERE id_reserva = ?`;
     // ejecutar query
     db.query(queryFinalizar, [kilometros, incidencias, id_reserva], (err, result) => {    
         if (err) {
             console.error("Error al finalizar la reserva:", err);
-            return res.status(500).send("Error del servidor");
+            return res.status(500).send("Error del servidor finalizando reserva");
         }
         //exito al finalizar reserva, ahora actualizar estado del vehiculo a disponible
         const queryLiberarVehiculo = "UPDATE vehiculos SET estado = 'disponible' WHERE id_vehiculo = ?";  
