@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
 
 
 
-///GESTION ADMIN VEHICULOS
+//GESTION ADMIN VEHICULOS
 //------------------------------
 // Muestra la página Gestion de Vehículos
 router.get('/gestionVehiculos', (req, res) => {
@@ -152,6 +152,40 @@ router.post('/editar-vehiculo/:id', (req, res) => {
         
         // exito
         res.redirect('/gestionVehiculos');
+    });
+});
+
+//GESTION ADMIN USUARIOS
+//------------------------------
+router.get('/gestionUsuarios', (req, res) => {
+    //comprobar el login
+    if (!req.session.usuario) {
+        return res.redirect('/login');
+    }
+
+    // crear query de todos los usarios
+    const sql = 'SELECT * FROM usuarios'; 
+    
+    // corremos query usuaios
+    db.query(sql, (errUsuarios, listaUsuarios) => {
+        if (errUsuarios) {
+            console.error(errUsuarios);
+            return res.status(500).send("Error cargando usuarios");
+        }
+
+        // segunda consulta para obtener concesionarios
+        db.query('SELECT * FROM concesionarios', (errConcesionarios, listaConcesionarios) => {
+            if (errConcesionarios) {
+                console.error(errConcesionarios);
+                return res.status(500).send("Error cargando concesionarios");
+            }
+            // renderizamos la vista pasando los datos
+            res.render('gestionUsuarios', { 
+                usuarios: listaUsuarios,
+                concesionarios: listaConcesionarios,
+                usuario: req.session.usuario
+            });
+        });
     });
 });
 

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- mobile friendly -->
+    <title>gestionUsuarios</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel = "stylesheet" href = "/css/stylesInicio.css">
+</head>
+
+<body>
+    <header>
+        <%- include('navbar') %>
+    </header>
+
+    <div class="container my-5">
+        <h2 class="mb-4">Gestión de Usuarios</h2>
+        
+        <div class="row mb-4">
+            <!-- Carga JSON-->
+            <div class="col-md-8">
+                <div class="card p-3 bg-light">
+                    <h3 class="mb-3">Carga JSON</h3>
+                    <form action="/cargar-json-usuarios" method="POST" enctype="multipart/form-data" class="d-flex gap-3">
+                        <input type="file" name="fichero_json" class="form-control" accept=".json" required>
+                        <button type="submit" class="btn btn-primary w-50">Cargar</button>
+                    </form>
+                </div>
+            </div>
+            <!-- botton individual -->
+            <div class="col-md-4 text-end d-flex align-items-center justify-content-end">
+                <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#modalUsuario">
+                    <i class="bi bi-person-plus-fill"></i> + Nuevo Usuario
+                </button>
+            </div>
+        </div>
+        <!-- buscador -->
+        <div class="mb-3">
+             <input type="text" id="buscador" class="form-control" placeholder="🔍 Buscar por nombre, correo o teléfono...">
+        </div>
+
+        <!-- tabla con datos de usuarios -->
+        <div class="table-responsive shadow-sm rounded-4 border">
+            <table class="table table-striped table-hover align-middle">
+                <!-- tabla headers -->
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th><th>Imagen</th><th>Nombre</th><th>Correo</th><th>Rol</th><th>Teléfono</th><th>Concesionario</th><th>Acciones</th>
+                    </tr>
+                </thead>
+                <!-- tabla body -->
+                <tbody id="tablaCuerpo">
+                    <% if(usuarios && usuarios.length > 0) { %>
+                        <% usuarios.forEach((u) => { %>
+                        <tr>
+                            <td><%= u.id_usuario %></td>
+                            <td>
+                                <img src="<%= u.imagen && u.imagen.trim() !== '' ? u.imagen : 'https://via.placeholder.com/50' %>" 
+                                     alt="Avatar" width="50" height="50" class="rounded-circle object-fit-cover border">
+                            </td>
+                            <td class="fw-bold"><%= u.nombre %></td>
+                            <td><%= u.correo %></td>
+                            <td>
+                                <span class="badge <%= u.rol === 'admin' ? 'bg-danger' : 'bg-primary' %>">
+                                    <%= u.rol %>
+                                </span>
+                            </td>
+                            <td><%= u.telefono %></td>
+                            <td>ID: <%= u.id_concesionario %></td>
+                            <td>
+                                <!-- editar MODAL guardamos los datos del usuario para mostartlo en el modal -->
+                                <button type="button" 
+                                        class="btn btn-sm btn-warning" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#modalEditarUsuario"
+                                        data-id="<%= u.id_usuario %>"
+                                        data-nombre="<%= u.nombre %>"
+                                        data-correo="<%= u.correo %>"
+                                        data-imagen="<%= u.imagen %>" 
+                                        data-rol="<%= u.rol %>"
+                                        data-telefono="<%= u.telefono %>"
+                                        data-concesionario="<%= u.id_concesionario %>">
+                                    Editar
+                                </button>
+                                <!-- borrar -->
+                                <form action="/borrar-usuario/<%= u.id_usuario %>" method="POST" class="d-inline" 
+                                      onsubmit="return confirm('¿Eliminar al usuario <%= u.nombre %>?');">
+                                    <button type="submit" class="btn btn-sm btn-danger">Borrar</button>
+                                </form>
+                            </td>
+                        </tr>
+                        <% }) %>
+                    <% } else { %>
+                        <!-- si no hay usuarios -->
+                        <tr><td colspan="8" class="text-center py-4">No hay usuarios registrados.</td></tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- ------------------------------------------------------------------------------------------------------- -->
+    <!-- Modal nuevo usuario-->
+    <div class="modal fade" id="modalUsuario" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog"><!-- MODAl-->
+            <div class="modal-content">
+                <form action="/crear-usuario" method="POST"><!-- POST NUEVO USUARIO INDIVIDUAL -->
+                    <div class="modal-header bg-success text-white">
+                        <h5 class="modal-title">Nuevo Usuario</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label>Nombre Completo</label>
+                            <input type="text" name="nombre" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label>Correo Electrónico</label>
+                            <input type="email" name="correo" class="form-control" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label>Contraseña</label>
+                                <input type="password" name="contrasena" class="form-control" required>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label>Teléfono</label>
+                                <input type="text" name="telefono" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label>URL Imagen (ruta)</label>
+                            <input type="text" name="imagen" class="form-control" placeholder="/media/ejemplo.jpg">
+                        </div>
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label>Rol</label>
+                                <select name="rol" class="form-select" required>
+                                    <option value="empleado">Empleado</option>
+                                    <option value="admin">Admin</option>
+                                </select>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label>Concesionario</label>
+                                <select name="id_concesionario" class="form-select" required>
+                                    <% if(concesionarios) { %>
+                                        <% concesionarios.forEach(c => { %>
+                                            <option value="<%= c.id_concesionario %>"><%= c.nombre %> (<%= c.ciudad %>)</option>
+                                        <% }) %>
+                                    <% } %>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Crear</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal editar usuario-->
+    <div class="modal fade" id="modalEditarUsuario" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="formEditar" method="POST"> 
+                    <div class="modal-header bg-warning">
+                        <h5 class="modal-title">Editar Usuario</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label>Nombre</label>
+                            <input type="text" name="nombre" id="edit_nombre" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label>Correo</label>
+                            <input type="email" name="correo" id="edit_correo" class="form-control" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label>Nueva Contraseña</label>
+                                <input type="password" name="contrasena" class="form-control" placeholder="(Dejar vacío para no cambiar)">
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label>Teléfono</label>
+                                <input type="text" name="telefono" id="edit_telefono" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label>URL Imagen</label>
+                            <input type="text" name="imagen" id="edit_imagen" class="form-control">
+                        </div>
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label>Rol</label>
+                                <select name="rol" id="edit_rol" class="form-select" required>
+                                    <option value="empleado">Empleado</option>
+                                    <option value="admin">Admin</option>
+                                </select>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label>Concesionario</label>
+                                <select name="id_concesionario" id="edit_concesionario" class="form-select" required>
+                                    <% if(concesionarios) { %>
+                                        <% concesionarios.forEach(c => { %>
+                                            <option value="<%= c.id_concesionario %>"><%= c.nombre %> (<%= c.ciudad %>)</option>
+                                        <% }) %>
+                                    <% } %>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('buscador').addEventListener('keyup', function() {
+            let valor = this.value.toLowerCase();
+            let filas = document.querySelectorAll('#tablaCuerpo tr');
+            filas.forEach(fila => {
+                let texto = fila.textContent.toLowerCase();
+                fila.style.display = texto.includes(valor) ? '' : 'none';
+            });
+        });
+    </script>
+    
+    <!--script para rellenar el modal de editar usuario-->
+    <script>
+        const modalEditar = document.getElementById('modalEditarUsuario');
+        // Escuchamos el evento de Bootstrap que avisa cuando el modal se está abriendo
+        modalEditar.addEventListener('show.bs.modal', function (event) {
+            //Botón que ha activado el modal
+            const boton = event.relatedTarget; 
+
+            //conseguimos los datos del usuario del boton
+            const id = boton.getAttribute('data-id');
+            const nombre = boton.getAttribute('data-nombre');
+            const correo = boton.getAttribute('data-correo');
+            const imagen = boton.getAttribute('data-imagen');
+            const rol = boton.getAttribute('data-rol');
+            const telefono = boton.getAttribute('data-telefono');
+            const concesionario = boton.getAttribute('data-concesionario');
+
+            //rellenamos los inputs
+            document.getElementById('edit_nombre').value = nombre;
+            document.getElementById('edit_correo').value = correo;
+            document.getElementById('edit_imagen').value = imagen;
+            document.getElementById('edit_telefono').value = telefono;
+            
+            //rellenamos el select del rol y concesionario
+            document.getElementById('edit_rol').value = rol; 
+            document.getElementById('edit_concesionario').value = concesionario;
+
+            //actualizamos la acción del formulario para incluir el ID del vehículo
+            const form = document.getElementById('formEditar');
+            form.action = '/editar-usuario/' + id; // llamamos al post de verdad
+        });
+    </script>
+</body>
+</html>
