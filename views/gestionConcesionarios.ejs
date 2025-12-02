@@ -55,8 +55,18 @@
                     <td><%= c.direccion %></td>
                     <td><%= c.telefono_contacto %></td>
                     <td>
-                       <!--Botón para editar concesionario-->
-                       <button class="btn btn-sm btn-warning">Editar</button>
+                       <!--Botón para editar concesionario con un modal-->
+                       <button type="button" 
+                       class="btn btn-sm btn-warning" 
+                       data-bs-toggle="modal" 
+                       data-bs-target="#modalEditarConcesionario"
+                       data-id="<%= c.id_concesionario %>"
+                       data-nombre="<%= c.nombre %>"
+                       data-ciudad="<%= c.ciudad %>"
+                       data-direccion="<%= c.direccion %>"
+                       data-telefono="<%= c.telefono_contacto %>">
+                   Editar
+               </button>
                        <!--Botón para eliminar concesionario-->
                        <form action="/eliminar-concesionario/<%= c.id_concesionario %>" method="POST" class="d-inline">
                            <button type="submit" class="btn btn-sm btn-danger">Baja</button>
@@ -115,6 +125,51 @@
         </div>
       </div>
 
+      <!--Modal editar concesionario-->
+    <div class="modal fade" id="modalEditarConcesionario" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <form id="formEditar" method="POST"> 
+                  <div class="modal-header">
+                      <h5 class="modal-title">Editar Concesionario</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+                  <!--Cuerpo del modal editar concesionario-->
+                  <div class="modal-body">
+                      <div class="row">
+                          <div class="col-6 mb-3">
+                              <label>Nombre</label>
+                              <input type="text" name="nombre" id="edit_nombre" class="form-control" required>
+                          </div>
+                          <div class="col-6 mb-3">
+                              <label>Ciudad</label>
+                              <input type="text" name="ciudad" id="edit_ciudad" class="form-control" required>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-6 mb-3">
+                              <label>Dirección</label>
+                              <input type="text" name="dirección" id="edit_direccion" class="form-control" required>
+                          </div>
+                          <div class="col-6 mb-3">
+                              <label>Teléfono</label>
+                              <input type="number" name="telefono_contacto" id="edit_telefono_contacto" class="form-control" 
+                              maxlength="9" 
+                              pattern="[0-9]{9}"
+                              oninput="this.value=this.value.replace(/[^0-9]/g,'')"
+                              value="<%= typeof telefono !== 'undefined' ? telefono : '' %>"required>
+                          </div>
+                      </div>
+                  </div>
+                  <!--Footer del modal editar vehiculo-->
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                      <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                  </div>
+              </form>
+          </div>
+      </div>
+
       <footer>
         <!--Importamos el footer que tenemos creado-->
         <div id="footer-container"></div>
@@ -140,5 +195,33 @@
           });
       });
     </script>
+
+    <!--Script para rellenar el modal de editar concesionario-->
+    <script>
+      const modalEditar = document.getElementById('modalEditarConcesionario');
+
+      // Escuchamos el evento de Bootstrap que avisa cuando el modal se está abriendo
+      modalEditar.addEventListener('show.bs.modal', function (event) {
+          //Botón que ha activado el modal
+          const boton = event.relatedTarget; 
+
+          //Conseguimos los datos del vehiculo del boton
+          const id = button.getAttribute('data-id');
+          const nombre = button.getAttribute('data-nombre');
+          const ciudad = button.getAttribute('data-ciudad');
+          const direccion = button.getAttribute('data-direccion');
+          const telefono = button.getAttribute('data-telefono');
+
+          //Rellenamos los inputs
+          document.getElementById('edit_nombre').value = nombre;
+          document.getElementById('edit_ciudad').value = ciudad;
+          document.getElementById('edit_direccion').value = direccion;
+          document.getElementById('edit_telefono_contacto').value = telefono;
+          
+          //actualizamos la acción del formulario para incluir el ID del concesionario
+          const form = document.getElementById('formEditar');
+          form.action = '/gestionConcesionarios/editar-concesionario/' + id; // Llamamos al post de verdad
+      });
+  </script>
 </body>
 </html>

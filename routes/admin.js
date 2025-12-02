@@ -376,4 +376,32 @@ router.post('/eliminar-concesionario/:id', (req, res) => {
     });
 });
 
+//Editar concesionario
+router.post('/editar-concesionario/:id', (req, res) => {
+    const idConcesionario = req.params.id; // Capturamos el ID de la URL
+    const { nombre, ciudad, direccion, telefono_contacto } = req.body; // Cogemos datos del formulario
+
+    // Creamos la consulta SQL para actualizar el vehículo
+    const sql = `
+        UPDATE concesionarios 
+        SET 
+            nombre = ?, 
+            ciudad = ?, 
+            direccion = ?, 
+            telefono_contacto = ?
+        WHERE id_concesionario = ?
+    `;
+
+    // ejecutamos query
+    db.query(sql, [nombre, ciudad,direccion, telefono_contacto,idConcesionario], (err, result) => {
+        if (err) {
+            console.error("Error actualizando concesionario: ", err);
+            return res.status(500).send("Error al actualizar el concesionario");
+        }
+        
+        // exito
+        res.redirect('/gestionConcesionarios');
+    });
+});
+
 module.exports = router; // Exportamos el router para usarlo en app.js
