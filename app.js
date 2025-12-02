@@ -31,7 +31,7 @@ app.use(session({
 app.use('/', indexRoutes);       // Maneja la raíz '/'
 app.use('/', authRoutes);        // Maneja /login, /logout, /inicio
 app.use('/vehiculos', vehiculosRoutes); // Maneja /vehiculos. OJO: En vehiculos.js la ruta ahora es '/'
-app.use('/admin', adminRoutes);  // Maneja /admin
+app.use('/', adminRoutes);  // Maneja /admin
 
 // Iniciamos servidor
 cargarDatosIniciales().then(resultado => {
