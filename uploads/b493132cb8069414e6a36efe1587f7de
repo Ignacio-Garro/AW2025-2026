@@ -1,0 +1,7 @@
+{
+    "vehiculos": [
+        {"id_vehiculo": 1, "matricula": "BYD1", "marca": "BYD", "modelo": "Seal", "año_matriculacion": 2024, "precio": 9999999, "numero_plazas": 4, "color": "Blanco", "autonomia_km": 570, "imagen": "/media/byd_seal1.png", "estado": "Disponible", "id_concesionario": 2},
+        {"id_vehiculo": 16, "matricula": "IGNACIO COCHE", "marca": "IGNACIO MARCA", "modelo": "IGGY", "año_matriculacion": 2024, "precio": 44500, "numero_plazas": 4, "color": "Gris Oscuro", "autonomia_km": 570, "imagen": "/media/byd_seal2.png", "estado": "Disponible", "id_concesionario": 2},
+        
+      ]
+}

@@ -14,6 +14,10 @@ router.get('/', (req, res) => {
     res.render('admin', { usuario: req.session.usuario, active: 'admin'});
 });
 
+
+
+///GESTION ADMIN VEHICULOS
+//------------------------------
 // Muestra la página Gestion de Vehículos
 router.get('/gestionVehiculos', (req, res) => {
     if (!req.session.usuario) {
@@ -43,6 +47,21 @@ router.get('/gestionVehiculos', (req, res) => {
         });
     });
 });
+//cargar nuevo vehiculo individual del modal
+router.post('/crear-vehiculo', (req, res) => {
+    const { matricula, marca, modelo, año_matriculacion, precio, numero_plazas, autonomia_km, color, imagen, estado, id_concesionario } = req.body;   
+    const sql = `INSERT INTO vehiculos (matricula, marca, modelo, año_matriculacion,precio,numero_plazas, autonomia_km,color,imagen,estado, id_concesionario)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
+    db.query(sql, [matricula, marca, modelo, año_matriculacion, precio, numero_plazas, autonomia_km, color, imagen, estado, id_concesionario], (err) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send("Error al crear el vehículo");
+        }
+        // Éxito
+        res.redirect('/gestionVehiculos');
+    });
+});
 
 // Carga de vehiculos desde JSON
 router.post('/cargar-json-vehiculos', upload.single('fichero_json'), (req, res) => { // multer fichero_json
@@ -52,21 +71,36 @@ router.post('/cargar-json-vehiculos', upload.single('fichero_json'), (req, res) 
     const data = fs.readFileSync(req.file.path, 'utf8');
     const objetos = JSON.parse(data); // Asumimos que el JSON trae un array de vehículos
     
-    // Insertamos cada vehículo en la base de datos, si existe lo actualizamos
-    objetos.forEach(v => {
-        const sql = `INSERT INTO vehiculos (matricula, marca, modelo, autonomia_km, id_concesionario) 
-                     VALUES (?, ?, ?, ?, ?) 
-                     ON DUPLICATE KEY UPDATE
-                        marca = VALUES(marca),
-                        modelo = VALUES(modelo),
-                        autonomia_km = VALUES(autonomia_km),
-                        id_concesionario = VALUES(id_concesionario)`; //si ya existe, actualizamos
+    // Asumimos que el array está dentro de ".vehiculos"
+        const listaVehiculos = objetos.vehiculos;
         
-        // corremos el query
-        db.query(sql, [v.matricula, v.marca, v.modelo, v.autonomia, v.concesionario], (err) => {
-           if(err) console.log("Error insertando: " + v.matricula);
-        });
+    // Insertamos cada vehículo en la base de datos, si existe lo actualizamos
+    listaVehiculos.forEach(v => {
+    // 1. Definimos la consulta SQL completa con todos los campos
+    const sql = `INSERT INTO vehiculos 
+        (matricula, marca, modelo, año_matriculacion, precio, numero_plazas, autonomia_km, color, imagen, estado, id_concesionario)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE
+            marca = VALUES(marca),
+            modelo = VALUES(modelo),
+            año_matriculacion = VALUES(año_matriculacion),
+            precio = VALUES(precio),
+            numero_plazas = VALUES(numero_plazas),
+            autonomia_km = VALUES(autonomia_km),
+            color = VALUES(color),
+            imagen = VALUES(imagen),
+            estado = VALUES(estado),
+            id_concesionario = VALUES(id_concesionario)`; //actualizamos todos los campos si la matriucla ya existe
+
+    // corremos query
+    db.query(sql, [v.matricula,v.marca,v.modelo,v.año_matriculacion, v.precio,v.numero_plazas,v.autonomia_km,v.color,v.imagen,v.estado,v.id_concesionario], (err) => {
+        if (err) {
+            console.log("Error insertando matrícula " + v.matricula + ": " + err.message);
+        } else {
+            console.log("Vehículo procesado: " + v.matricula);
+        }
     });
+});
 
     // Borramos el archivo temporal y recargamos
     fs.unlinkSync(req.file.path);
@@ -85,5 +119,7 @@ router.post('/borrar-vehiculo/:id', (req, res) => {
         res.redirect('/gestionVehiculos');
     });
 });
+
+//editar un vehiculo con el modal /editar-vehiculo/:id
 
 module.exports = router; // Exportamos el router para usarlo en app.js

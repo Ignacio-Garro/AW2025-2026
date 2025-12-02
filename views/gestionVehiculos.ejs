@@ -70,7 +70,9 @@
                             </td>
                             <td>
                                 <!-- editar -->
-                                <button class="btn btn-sm btn-warning">Editar</button>
+                                <form action="/editar-vehiculo/<%= v.id_vehiculo %>" method="POST" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditarVehiculo">editar</button>
+                                </form>
                                 <!-- borrar -->
                                 <form action="/borrar-vehiculo/<%= v.id_vehiculo %>" method="POST" class="d-inline">
                                     <button type="submit" class="btn btn-sm btn-danger">Baja</button>
