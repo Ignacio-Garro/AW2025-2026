@@ -121,5 +121,38 @@ router.post('/borrar-vehiculo/:id', (req, res) => {
 });
 
 //editar un vehiculo con el modal /editar-vehiculo/:id
+router.post('/editar-vehiculo/:id', (req, res) => {
+    const idVehiculo = req.params.id; // Capturamos el ID de la URL
+    const { matricula, marca, modelo, año_matriculacion, precio, numero_plazas, autonomia_km, color, imagen, estado, id_concesionario } = req.body; // cogemos datos del formulario
+
+    // creamos la consulta SQL para actualizar el vehículo
+    const sql = `
+        UPDATE vehiculos 
+        SET 
+            matricula = ?, 
+            marca = ?, 
+            modelo = ?, 
+            año_matriculacion = ?, 
+            precio = ?, 
+            numero_plazas = ?, 
+            autonomia_km = ?, 
+            color = ?, 
+            imagen = ?, 
+            estado = ?, 
+            id_concesionario = ?
+        WHERE id_vehiculo = ?
+    `;
+
+    // ejecutamos query
+    db.query(sql, [matricula, marca, modelo, año_matriculacion, precio, numero_plazas,autonomia_km, color, imagen, estado, id_concesionario,idVehiculo], (err, result) => {
+        if (err) {
+            console.error("Error actualizando vehículo: ", err);
+            return res.status(500).send("Error al actualizar el vehículo");
+        }
+        
+        // exito
+        res.redirect('/gestionVehiculos');
+    });
+});
 
 module.exports = router; // Exportamos el router para usarlo en app.js

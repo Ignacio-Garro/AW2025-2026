@@ -69,10 +69,25 @@
                                 </span>
                             </td>
                             <td>
-                                <!-- editar -->
-                                <form action="/editar-vehiculo/<%= v.id_vehiculo %>" method="POST" class="d-inline">
-                                    <button type="submit" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditarVehiculo">editar</button>
-                                </form>
+                                <!-- editar MODAL guardamos los datos del vehiculo para mostartlo en el modal -->
+                                <button type="button" 
+                                        class="btn btn-sm btn-warning" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#modalEditarVehiculo"
+                                        data-id="<%= v.id_vehiculo %>"
+                                        data-matricula="<%= v.matricula %>"
+                                        data-marca="<%= v.marca %>"
+                                        data-modelo="<%= v.modelo %>"
+                                        data-anio="<%= v.año_matriculacion %>"
+                                        data-precio="<%= v.precio %>"
+                                        data-plazas="<%= v.numero_plazas %>"
+                                        data-autonomia="<%= v.autonomia_km %>"
+                                        data-color="<%= v.color %>"
+                                        data-imagen="<%= v.imagen %>"
+                                        data-estado="<%= v.estado %>"
+                                        data-concesionario="<%= v.id_concesionario %>">
+                                    Editar
+                                </button>
                                 <!-- borrar -->
                                 <form action="/borrar-vehiculo/<%= v.id_vehiculo %>" method="POST" class="d-inline">
                                     <button type="submit" class="btn btn-sm btn-danger">Baja</button>
@@ -88,6 +103,7 @@
             </table>
         </div>
     </div>
+    <!-- ------------------------------------------------------------------------------------------------------- -->
 
     <!-- Modal nuevo vehiculo-->
     <div class="modal fade" id="modalVehiculo" tabindex="-1" aria-hidden="true">
@@ -175,6 +191,92 @@
         </div>
     </div>
 
+    <!-- Modal editar vehiculo-->
+    <div class="modal fade" id="modalEditarVehiculo" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <form id="formEditar" method="POST"> 
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Vehículo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label>Matrícula</label>
+                            <input type="text" name="matricula" id="edit_matricula" class="form-control" required>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label>Marca</label>
+                            <input type="text" name="marca" id="edit_marca" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label>Modelo</label>
+                            <input type="text" name="modelo" id="edit_modelo" class="form-control" required>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label>Año</label>
+                            <input type="number" name="año_matriculacion" id="edit_anio" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label>Precio</label>
+                            <input type="number" name="precio" id="edit_precio" class="form-control" required>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label>Plazas</label>
+                            <input type="number" name="numero_plazas" id="edit_plazas" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label>Autonomía</label>
+                            <input type="number" name="autonomia_km" id="edit_autonomia" class="form-control" required>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label>Color</label>
+                            <input type="text" name="color" id="edit_color" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label>Imagen (URL)</label>
+                            <input type="text" name="imagen" id="edit_imagen" class="form-control" required>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label>Estado</label>
+                            <select name="estado" id="edit_estado" class="form-select" required>
+                                <option value="disponible">Disponible</option>
+                                <option value="reservado">Reservado</option>
+                                <option value="mantenimiento">Mantenimiento</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label>Concesionario</label>
+                        <select name="id_concesionario" id="edit_concesionario" class="form-select">
+                            <% if(concesionarios) { %>
+                                <% concesionarios.forEach(c => { %>
+                                    <option value="<%= c.id_concesionario %>"><%= c.nombre %> (<%= c.ciudad %>)</option>
+                                <% }) %>
+                            <% } %>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
     <footer>
       <!--Importamos el footer que tenemos creado-->
       <div id="footer-container"></div>
@@ -195,6 +297,50 @@
                 let texto = fila.textContent.toLowerCase();
                 fila.style.display = texto.includes(valor) ? '' : 'none';
             });
+        });
+    </script>
+
+    <!--script para rellenar el modal de editar vehiculo-->
+    <script>
+        const modalEditar = document.getElementById('modalEditarVehiculo');
+
+        // Escuchamos el evento de Bootstrap que avisa cuando el modal se está abriendo
+        modalEditar.addEventListener('show.bs.modal', function (event) {
+            //Botón que ha activado el modal
+            const boton = event.relatedTarget; 
+
+            //conseguimos los datos del vehiculo del boton
+            const id = boton.getAttribute('data-id');
+            const matricula = boton.getAttribute('data-matricula');
+            const marca = boton.getAttribute('data-marca');
+            const modelo = boton.getAttribute('data-modelo');
+            const anio = boton.getAttribute('data-anio');
+            const precio = boton.getAttribute('data-precio');
+            const plazas = boton.getAttribute('data-plazas');
+            const autonomia = boton.getAttribute('data-autonomia');
+            const color = boton.getAttribute('data-color');
+            const imagen = boton.getAttribute('data-imagen');
+            const estado = boton.getAttribute('data-estado'); 
+            const concesionario = boton.getAttribute('data-concesionario');
+
+            //rellenamos los inputs
+            document.getElementById('edit_matricula').value = matricula;
+            document.getElementById('edit_marca').value = marca;
+            document.getElementById('edit_modelo').value = modelo;
+            document.getElementById('edit_anio').value = anio;
+            document.getElementById('edit_precio').value = precio;
+            document.getElementById('edit_plazas').value = plazas;
+            document.getElementById('edit_autonomia').value = autonomia;
+            document.getElementById('edit_color').value = color;
+            document.getElementById('edit_imagen').value = imagen;
+            
+            //rellenamos el select del estado y concesionario
+            document.getElementById('edit_estado').value = estado.toLowerCase();
+            document.getElementById('edit_concesionario').value = concesionario;
+            
+            //actualizamos la acción del formulario para incluir el ID del vehículo
+            const form = document.getElementById('formEditar');
+            form.action = '/editar-vehiculo/' + id; // llamamos al post de verdad
         });
     </script>
 </body>
