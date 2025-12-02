@@ -9,6 +9,7 @@ const indexRoutes = require('./routes/index');
 const authRoutes = require('./routes/auth');
 const vehiculosRoutes = require('./routes/vehiculos');
 const adminRoutes = require('./routes/admin');
+const concesionariosRoutes = require('./routes/concesionarios.js');
 
 
 const PORT = 3000;
@@ -32,6 +33,8 @@ app.use('/', indexRoutes);       // Maneja la raíz '/'
 app.use('/', authRoutes);        // Maneja /login, /logout, /inicio
 app.use('/vehiculos', vehiculosRoutes); // Maneja /vehiculos. OJO: En vehiculos.js la ruta ahora es '/'
 app.use('/', adminRoutes);  // Maneja /admin
+app.use('/gestionConcesionarios', concesionariosRoutes); // Maneja gestionConcesionarios
+
 
 // Iniciamos servidor
 cargarDatosIniciales().then(resultado => {

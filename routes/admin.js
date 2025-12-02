@@ -189,4 +189,49 @@ router.get('/gestionUsuarios', (req, res) => {
     });
 });
 
+
+//-----CONCESIONARIOS GESTIÓN ADMIN-----
+//Crear concesionario
+router.post('/crear-concesionario', (req, res) => {
+    const { nombre, ciudad, direccion, telefono_contacto } = req.body;   
+    const sql = `INSERT INTO concesionarios (nombre, ciudad, direccion, telefono_contacto)
+                    VALUES (?, ?, ?, ?)`;
+
+    db.query(sql, [nombre, ciudad,direccion, telefono_contacto], (err) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send("Error al crear el concesionario");
+        }
+        // Éxito
+        res.redirect('/gestionConcesionarios');
+    });
+});
+
+//Eliminar concesionario 
+router.post('/eliminar-concesionario/:id', (req, res) => {
+    const id = req.params.id;
+
+    //Primero comprobamos si hay vehículos en ese concesionario
+    db.query('SELECT COUNT(*) AS total FROM vehiculos WHERE id_concesionario = ?', [id], (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send("Error del servidor");
+        }
+
+        if (result[0].total > 0) {
+            //Hay vehículos → NO se puede borrar
+            return res.redirect('/gestionConcesionarios?error=No se puede eliminar: hay ' + result[0].total + ' vehículos asociados');
+        }
+
+        //No hay vehículos → sí se puede borrar
+        db.query('DELETE FROM concesionarios WHERE id_concesionario = ?', [id], (err) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).send("Error al eliminar el concesionario");
+            }
+            res.redirect('/gestionConcesionarios?success=Concesionario eliminado');
+        });
+    });
+});
+
 module.exports = router; // Exportamos el router para usarlo en app.js

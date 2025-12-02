@@ -43,13 +43,18 @@ async function cargarDatosIniciales() {
         
         //1. LIMPIAMOS LAS TABLAS (Para evitar problemas)
         console.log('🗑️  Limpiando tablas...');
+        
         await new Promise(resolve => db.query("SET FOREIGN_KEY_CHECKS = 0", resolve));
+        
         await new Promise(resolve => db.query("DELETE FROM Vehiculos", resolve));
         await new Promise(resolve => db.query("DELETE FROM usuarios", resolve));
         await new Promise(resolve => db.query("DELETE FROM Concesionarios", resolve));
+        
+        //Reseteamos autoincrement para que al limpiar la tabla no se disparen los ID's
         await new Promise(resolve => db.query("ALTER TABLE Vehiculos AUTO_INCREMENT = 1", resolve));
         await new Promise(resolve => db.query("ALTER TABLE usuarios AUTO_INCREMENT = 1", resolve));
         await new Promise(resolve => db.query("ALTER TABLE Concesionarios AUTO_INCREMENT = 1", resolve));
+        
         await new Promise(resolve => db.query("SET FOREIGN_KEY_CHECKS = 1", resolve));
         console.log('✅ Tablas limpiadas');
         
@@ -59,8 +64,8 @@ async function cargarDatosIniciales() {
         for (const c of concesionarios) {
             await new Promise(resolve => {
                 db.query(
-                    "INSERT IGNORE INTO Concesionarios (id_concesionario, nombre, direccion, telefono_contacto) VALUES (?, ?, ?, ?)",
-                    [c.id_concesionario, c.nombre, c.direccion, c.telefono_contacto],
+                    "INSERT IGNORE INTO Concesionarios (id_concesionario, nombre, ciudad, direccion, telefono_contacto) VALUES (?, ?, ?, ?, ?)",
+                    [c.id_concesionario, c.nombre, c.ciudad, c.direccion, c.telefono_contacto],
                     (err, result) => {
                         //Manejamos la carga en la BD (✅si se completa adecuadamente, ❌si no se carga)
                         if (!err) {
