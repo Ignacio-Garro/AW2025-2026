@@ -426,4 +426,70 @@ router.post('/editar-concesionario/:id', (req, res) => {
     });
 });
 
+//-----ESTADÍSTICAS-----
+
+//Abrimos página
+router.get('/estadisticas', async (req, res) => {
+    if (!req.session.usuario || req.session.usuario.rol !== 'admin') {
+        return res.redirect('/login');
+    }
+
+    try {
+        //Reservas por concesionario (buscamos con la siguiente consulta)
+        const reservasPorConcesionario = await new Promise((resolve, reject) => {
+            db.query(`
+                SELECT c.nombre AS concesionario, COUNT(r.id_reserva) AS total_reservas
+                FROM reservas r
+                JOIN vehiculos v ON r.id_vehiculo = v.id_vehiculo
+                JOIN concesionarios c ON v.id_concesionario = c.id_concesionario
+                GROUP BY c.id_concesionario
+                ORDER BY total_reservas DESC
+            `, (err, results) => {
+                if (err) reject(err);
+                else resolve(results);
+            });
+        });
+
+        //Vehículos más reservados
+        const vehiculosMasReservados = await new Promise((resolve, reject) => {
+            db.query(`
+                SELECT v.matricula, v.marca, v.modelo, COUNT(r.id_reserva) AS reservas
+                FROM reservas r
+                JOIN vehiculos v ON r.id_vehiculo = v.id_vehiculo
+                GROUP BY v.id_vehiculo
+                ORDER BY reservas DESC
+                LIMIT 10
+            `, (err, results) => {
+                if (err) reject(err);
+                else resolve(results);
+            });
+        });
+
+        //Totales: reservas, vehiculos, concesionarios y kms
+        const totales = await new Promise((resolve, reject) => {
+            db.query(`
+                SELECT 
+                    (SELECT COUNT(*) FROM reservas) AS total_reservas,
+                    (SELECT COUNT(*) FROM vehiculos) AS total_vehiculos,
+                    (SELECT COUNT(*) FROM concesionarios) AS total_concesionarios,
+                    (SELECT SUM(kilometros_recorridos) FROM reservas WHERE kilometros_recorridos > 0) AS total_kms
+            `, (err, results) => {
+                if (err) reject(err);
+                else resolve(results[0]);
+            });
+        });
+
+        res.render('estadisticas', {
+            usuario: req.session.usuario,
+            reservasPorConcesionario,
+            vehiculosMasReservados,
+            totales
+        });
+
+    } catch (err) {
+        console.error('Error en estadísticas:', err);
+        res.status(500).send('Error cargando estadísticas');
+    }
+});
+
 module.exports = router; // Exportamos el router para usarlo en app.js
