@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Administrador</title>
+    <title>Estadísticas</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!--IMPORTAMOS CHART.JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <link rel="stylesheet" href="/css/stylesAdmin.css"> 
 </head>
 <body>
@@ -13,9 +15,145 @@
         <%- include('navbar') %>
     </header>
 
-    <div class="container-main">
-        <h1>HOLA MUNDO</h1>
-    </div>
+    <div class="container my-5">
+        <h1 class="mb-5 text-center">Estadísticas del Sistema</h1>
+    
+        <!--RESUMEN DE LAS ESTADÍSTICAS (totalReservas, nºvehiculos, nºconcesionarios, kilometros recorridos)-->
+        <div class="row mb-5 text-white">
+          <div class="col-md-3">
+            <!--bg para el color de la tarjeta de resumen-->
+            <div class="bg-primary p-4 rounded shadow text-center">
+              <h3><%= totales.total_reservas %></h3>
+              <p>Reservas Totales</p>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="bg-success p-4 rounded shadow text-center">
+              <h3><%= totales.total_vehiculos %></h3>
+              <p>Vehículos</p>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="bg-warning p-4 rounded shadow text-center">
+              <h3><%= totales.total_concesionarios %></h3>
+              <p>Concesionarios</p>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="bg-danger p-4 rounded shadow text-center">
+              <h3><%= totales.total_kms || 0 %> km</h3>
+              <p>Kilómetros Recorridos</p>
+            </div>
+          </div>
+        </div>
+    
+        <div class="row">
+          <!--HACEMOS GRÁFICA PARA RESERVAS POR CONCESIONARIO-->
+          <div class="col-lg-6 mb-5">
+            <div class="card shadow">
+              <div class="card-body">
+                <h5 class="card-title">Reservas por Concesionario</h5>
+                <!--Canvas nos permite hacer un gráfico que más abajo desarrollaremos en un script-->
+                <canvas id="chartConcesionarios"></canvas>
+              </div>
+            </div>
+          </div>
+    
+          <!--HACEMOS GRÁFICA EN CÍRCULO PARA LOS VEHÍCULOS MÁS RESERVADOS-->
+          <div class="col-lg-6 mb-5">
+            <div class="card shadow">
+              <div class="card-body">
+                <h5 class="card-title">Vehículos Más Reservados</h5>
+                <canvas id="chartVehiculos"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+    
+        <!--HACEMOS TABLA PARA REPRESENTAR EL TOP 10 VEHÍCULOS MÁS RESERVADOS-->
+        <div class="card shadow">
+          <div class="card-body">
+            <h5 class="card-title">Top 10 Vehículos Más Reservados</h5>
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead class="table-dark">
+                  <tr>
+                    <th>#</th>
+                    <th>Matrícula</th>
+                    <th>Marca / Modelo</th>
+                    <th>Reservas</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% vehiculosMasReservados.forEach((v, index) => { %>
+                    <tr>
+                      <td><%= index + 1 %></td>
+                      <td><strong><%= v.matricula %></strong></td>
+                      <td><%= v.marca %> <%= v.modelo %></td>
+                      <td><span class="badge bg-secondary rounded-pill px-3 py-2 fs-6 text-white shadow-sm"><%= v.reservas %></span></td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+     <!-- SCRIPTS DE CHART.JS -->
+     <script>
+        //Datos desde el servidor
+        const reservasPorConcesionario = JSON.parse('<%- JSON.stringify(reservasPorConcesionario) %>');
+        const vehiculosMasReservados = JSON.parse('<%- JSON.stringify(vehiculosMasReservados) %>');
+      
+        //Gráfica de barras: reservas por concesionario
+        new Chart(document.getElementById('chartConcesionarios'), {
+          type: 'bar',
+          data: {
+            labels: reservasPorConcesionario.map(c => c.concesionario),
+            datasets: [{
+              label: 'Número de Reservas',
+              data: reservasPorConcesionario.map(c => c.total_reservas),
+              backgroundColor: ['#0d6efd', '#198754', '#ffc107', '#dc3545', '#6f42c1'],
+              borderRadius: 8
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: {
+                    ticks: {
+                        stepSize: 1, //Para que el eje y de la gráfica vaya de 1 en 1
+                        callback: function(value) {
+                            return parseInt(value); //Para que salgan enteros sin decimales (4 en vez de 4,0)
+                        }
+                    }
+                } 
+            }
+          }
+        });
+      
+        //Gráfica de dona: vehículos más usados
+        new Chart(document.getElementById('chartVehiculos'), {
+          type: 'doughnut',
+          data: {
+            labels: vehiculosMasReservados.map(v => v.matricula),
+            datasets: [{
+              data: vehiculosMasReservados.map(v => v.reservas),
+              backgroundColor: [ //Colores de ejemplo cualesquiera
+                '#0d6efd','#198754','#ffc107','#dc3545','#6f42c1','#fd7e14','#20c997','#0dcaf0','#6610f2','#e83e8c'
+              ]
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { position: 'right' }
+            }
+          }
+        });
+      </script>
 
     <footer>
         <!--Importamos el footer que tenemos creado-->
