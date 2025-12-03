@@ -206,11 +206,11 @@
           const boton = event.relatedTarget; 
 
           //Conseguimos los datos del vehiculo del boton
-          const id = button.getAttribute('data-id');
-          const nombre = button.getAttribute('data-nombre');
-          const ciudad = button.getAttribute('data-ciudad');
-          const direccion = button.getAttribute('data-direccion');
-          const telefono = button.getAttribute('data-telefono');
+          const id = boton.getAttribute('data-id');
+          const nombre = boton.getAttribute('data-nombre');
+          const ciudad = boton.getAttribute('data-ciudad');
+          const direccion = boton.getAttribute('data-direccion');
+          const telefono = boton.getAttribute('data-telefono');
 
           //Rellenamos los inputs
           document.getElementById('edit_nombre').value = nombre;
@@ -220,7 +220,7 @@
           
           //actualizamos la acción del formulario para incluir el ID del concesionario
           const form = document.getElementById('formEditar');
-          form.action = '/gestionConcesionarios/editar-concesionario/' + id; // Llamamos al post de verdad
+          form.action = '/editar-concesionario/' + id; // Llamamos al post de verdad
       });
   </script>
 </body>

@@ -15,7 +15,6 @@ router.get('/', (req, res) => {
 });
 
 
-
 //GESTION ADMIN VEHICULOS
 //------------------------------
 // Muestra la página Gestion de Vehículos
@@ -333,6 +332,29 @@ router.post('/editar-usuario/:id', (req, res) => {
 
 
 //-----CONCESIONARIOS GESTIÓN ADMIN-----
+
+// Muestra la página Gestión de Concesionarios
+router.get('/gestionConcesionarios', (req, res) => {
+    if (!req.session.usuario) {
+        return res.redirect('/login');
+    }
+
+    db.query('SELECT * FROM concesionarios ORDER BY id_concesionario', (err, concesionarios) => {
+        if (err) {
+            console.error('Error cargando concesionarios:', err);
+            return res.status(500).send('Error del servidor');
+        }
+
+        res.render('gestionConcesionarios', {
+            usuario: req.session.usuario,
+            concesionarios: concesionarios,
+            //Para mensajes de éxito/error
+            error: req.query.error,
+            success: req.query.success
+        });
+    });
+});
+
 //Crear concesionario
 router.post('/crear-concesionario', (req, res) => {
     const { nombre, ciudad, direccion, telefono_contacto } = req.body;   
