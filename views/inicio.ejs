@@ -14,59 +14,56 @@
     <%- include('navbar') %>
   </header>
 
-  <div class="container-main container-login">
+  <div class="container-main">
     <div class="container container-padding-large text-center">
-        <h2 class="bienvenido mb-5">Bienvenido a la página de inicio</h2>
-
-        <div class="row gy-3">
-          <div class="col">
-            <img src="<%= usuario.imagen %>" alt="foto perfil usuario" class="fotoPerfilUsuario rounded-5 overflow-hidden" style="height: 250px; object-fit: contain;">
-          </div>
-          <div class="col d-flex align-items-center justify-content-center text-center">
-            <ul class="sin-puntos text-start">
-              <li>Nombre: <%= usuario.nombre %></li>
-              <li>Correo: <%= usuario.correo %></li>
-              <li>Telefono: <%= usuario.telefono %></li>
-              <li>Rol: <%= usuario.rol %></li>
-              <li>Concesionario: <%= usuario.id_concesionario %></li>
-            </ul>
-          </div>
+      <h2 class="mb-5">Bienvenido a la página de inicio</h2>
+      <div class="row gy-3 justify-content-center gap-5">
+        <div class="col-auto">
+          <img src="<%= usuario.imagen %>" 
+              alt="foto perfil usuario" 
+              class="shadow-sm" 
+              style="width: 250px; object-fit: cover;">
         </div>
+
+        <div class="col-auto d-flex">
+          <ul class="sin-puntos text-start">
+            <li>Nombre: <%= usuario.nombre %></li>
+            <li>Correo: <%= usuario.correo %></li>
+            <li>Telefono: <%= usuario.telefono %></li>
+            <li>Rol: <%= usuario.rol %></li>
+            <li>Concesionario: <%= usuario.id_concesionario %></li>
+          </ul>
+        </div>
+      </div>
     </div>
 
     <div class="container d-flex justify-content-center">
-      <div class="row gy-3">
+      <div class="row gy-3 gap-4 mb-5">
         <div class="col">
           <div class="box box-tall">
-            <a href="/vehiculos" class="btn btn-primary mb-3">Ver Vehiculos</a>
+            <a href="/vehiculos" class="btn btn-dark mb-3">Ver Vehiculos</a>
             <p>Muestra todos los vehículos disponibles para reservar.</p>
           </div>
         </div>
         <div class="col">
           <div class="box box-tall">
-            <a href="/vehiculos/reservas" class="btn btn-primary mb-3">Ver mis Reservas</a>
+            <a href="/vehiculos/reservas" class="btn btn-dark mb-3">Ver mis Reservas</a>
             <p>Consulta las reservas que tienes activas o pendientes.</p>
           </div>
         </div>
         <div class="col">
           <div class="box box-tall">
-            <button class="btn btn-primary mb-3">Cancelar Reserva</button>
-            <p>Elimina una reserva que ya no necesites o quieras modificar.</p>
-          </div>
-        </div>
-        <div class="col">
-          <div class="box box-tall">
-            <button class="btn btn-primary mb-3">Soporte</button>
-            <p>Accede al centro de ayuda para resolver incidencias o dudas.</p>
+            <a href="/perfil" class="btn btn-dark mb-3">Ver mi Perfil</a>
+            <p>Accede a tu perfil para gestionar tu información personal.</p>
           </div>
         </div>
       </div>
     </div>
-
-    <div class="container-foto-fondo container-padding-medium">
+  
+    <div class="container-foto-fondo">
       <img src="/media/coche.png" alt="foto de fondo">
     </div>
-
+  </div>
     <footer>
       <!--Importamos el footer que tenemos creado-->
       <div id="footer-container"></div>

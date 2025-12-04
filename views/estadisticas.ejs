@@ -6,7 +6,6 @@
     <title>Estadísticas</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!--IMPORTAMOS CHART.JS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <link rel="stylesheet" href="/css/stylesAdmin.css"> 
 </head>
@@ -52,7 +51,7 @@
           <div class="col-lg-6 mb-5">
             <div class="card shadow">
               <div class="card-body">
-                <h5 class="card-title">Reservas por Concesionario</h5>
+                <h5 class="card-title">Reservas por Concesionario Totales</h5>
                 <!--Canvas nos permite hacer un gráfico que más abajo desarrollaremos en un script-->
                 <canvas id="chartConcesionarios"></canvas>
               </div>
@@ -63,7 +62,7 @@
           <div class="col-lg-6 mb-5">
             <div class="card shadow">
               <div class="card-body">
-                <h5 class="card-title">Vehículos Más Reservados</h5>
+                <h5 class="card-title">Vehículos Más Reservados Totales</h5>
                 <canvas id="chartVehiculos"></canvas>
               </div>
             </div>
@@ -73,10 +72,10 @@
         <!--HACEMOS TABLA PARA REPRESENTAR EL TOP 10 VEHÍCULOS MÁS RESERVADOS-->
         <div class="card shadow">
           <div class="card-body">
-            <h5 class="card-title">Top 10 Vehículos Más Reservados</h5>
+            <h5 class="card-title">Top 10 Vehículos Más Reservados Totales</h5>
             <div class="table-responsive">
               <table class="table table-hover">
-                <thead class="table-dark">
+                <thead class="table-light">
                   <tr>
                     <th>#</th>
                     <th>Matrícula</th>
