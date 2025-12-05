@@ -9,7 +9,7 @@ const indexRoutes = require('./routes/index');
 const authRoutes = require('./routes/auth');
 const vehiculosRoutes = require('./routes/vehiculos');
 const adminRoutes = require('./routes/admin');
-
+const perfilRoutes = require('./routes/perfil');
 
 const PORT = 3000;
 const app = express();
@@ -32,7 +32,7 @@ app.use('/', indexRoutes);       // Maneja la raíz '/'
 app.use('/', authRoutes);        // Maneja /login, /logout, /inicio
 app.use('/vehiculos', vehiculosRoutes); // Maneja /vehiculos. OJO: En vehiculos.js la ruta ahora es '/'
 app.use('/', adminRoutes);  // Maneja /admin (/gestionConcesionarios, /gestionVehiculos, /gestionUsuarios)
-
+app.use('/', perfilRoutes); // Maneja /perfil de usuario (actualizacion de campos)
 // Iniciamos servidor
 cargarDatosIniciales().then(resultado => {
   app.listen(PORT, () => {

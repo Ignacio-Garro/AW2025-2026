@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - RentaCar</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/perfil.css">
+</head>
+<body>
+    <header>
+        <%- include('navbar') %>
+    </header>
+
+    <div class="perfil-container">
+        <div class="perfil-header">
+            <h1>Mi Perfil</h1>
+            <img src="<%= usuario.imagen || '/images/default-avatar.png' %>" 
+                 alt="Foto de perfil" 
+                 class="perfil-imagen">
+        </div>
+
+        <% if (mensaje) { %>
+            <div class="mensaje exito"><%= mensaje %></div>
+        <% } %>
+        
+        <% if (error) { %>
+            <div class="mensaje error"><%= error %></div>
+        <% } %>
+
+        <div class="perfil-sections">
+            <!-- Información básica -->
+            <div class="perfil-card">
+                <h2>Información Básica</h2>
+                <form action="/perfil/actualizar" method="POST">
+                    <div class="form-group">
+                        <label for="nombre">Nombre Completo</label>
+                        <input type="text" id="nombre" name="nombre" 
+                               value="<%= usuario.nombre %>" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="correo">Correo Electrónico</label>
+                        <input type="email" id="correo" name="correo" 
+                               value="<%= usuario.correo %>" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telefono">Teléfono</label>
+                        <input type="tel" id="telefono" name="telefono" 
+                               value="<%= usuario.telefono %>" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </form>
+            </div>
+
+            <!--Información de cuenta (esta no es modificable)-->
+            <div class="perfil-card">
+                <h2>Información de Cuenta (no modificable)</h2>
+                <div class="info-estatica">
+                    <p><strong>ID de Usuario:</strong> <%= usuario.id_usuario %></p>
+                    <p><strong>Rol:</strong> <%= usuario.rol %></p>
+                    <% if (usuario.id_concesionario) { %>
+                        <p><strong>ID Concesionario:</strong> <%= usuario.id_concesionario %></p>
+                    <% } %>
+                </div>
+            </div>
+
+            <!--Cambiar contraseña-->
+            <div class="perfil-card">
+                <h2>Cambiar Contraseña</h2>
+                <form action="/perfil/cambiar-contraseña" method="POST">
+                    <div class="form-group">
+                        <label for="contraseñaActual">Contraseña Actual</label>
+                        <input type="password" name="contraseñaActual" id="contraseñaActual" class="form-control"
+                               pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$"
+                               title="Mín. 8 caracteres, 1 mayúscula, 1 minúscula y 1 número" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contraseñaNueva">Nueva Contraseña</label>
+                        <input type="password" name="contraseñaNueva" id="contraseñaNueva" class="form-control"
+                               pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$"
+                               title="Mín. 8 caracteres, 1 mayúscula, 1 minúscula y 1 número" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contrasenaConfirmar">Confirmar Nueva Contraseña</label>
+                        <input type="password" name="contrasenaConfirmar" id="contrasenaConfirmar" class="form-control"
+                               pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$"
+                               title="Mín. 8 caracteres, 1 mayúscula, 1 minúscula y 1 número" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Cambiar Contraseña</button>
+                </form>
+            </div>
+
+            <!--Cambiar imagen de perfil (hacer bien)-->
+            <div class="perfil-card">
+                <h2>Imagen de Perfil</h2>
+                <form action="/perfil/actualizar-imagen" method="POST">
+
+                    <!--INCOMPLETO, RELLENAR-->
+                    
+                    <button type="submit" class="btn btn-primary" style="margin-top: 20px;">
+                        Actualizar Imagen
+                    </button>
+                </form>
+            </div>
+
+            <!-- Preferencias de accesibilidad -->
+            <div class="perfil-card">
+                <h2>Preferencias de Accesibilidad</h2>
+                <form action="/perfil/actualizar-preferencias" method="POST">
+                    
+                    <!--INCOMPLETO, RELLENAR-->
+
+                    <button type="submit" class="btn btn-primary">Guardar Preferencias</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <!--Importamos el footer que tenemos creado-->
+        <div id="footer-container"></div>
+        <script>
+          fetch('/footer.html')
+            .then(response => response.text())
+            .then(html => {
+              document.getElementById('footer-container').innerHTML = html; 
+            });
+        </script>
+    </footer>
+
+    <script>
+        // Agregar interactividad al selector de imágenes
+        //document.querySelectorAll('.imagen-opcion').forEach(opcion => {
+            //opcion.addEventListener('click', function() {
+                //document.querySelectorAll('.imagen-opcion').forEach(o => 
+                    //o.classList.remove('seleccionada'));
+                //this.classList.add('seleccionada');
+                //this.querySelector('input[type="radio"]').checked = true;
+            //});
+        //});
+
+        // Validar que las contraseñas coincidan
+        const formContrasena = document.querySelector('form[action="/perfil/cambiar-contrasena"]');
+        if (formContrasena) {
+            formContrasena.addEventListener('submit', function(e) {
+                const nueva = document.getElementById('contraseÑaNueva').value;
+                const confirmar = document.getElementById('contraseÑaConfirmar').value;
+                
+                if (nueva !== confirmar) {
+                    e.preventDefault();
+                    alert('Las contraseñas no coinciden');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
