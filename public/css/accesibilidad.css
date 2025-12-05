@@ -1,0 +1,38 @@
+/* --- TAMAÑOS DE FUENTE --- */
+
+html[data-font-size="peque"] {
+    font-size: 0.8rem; /* 80% */
+}
+
+html[data-font-size="normal"] {
+    font-size: 1rem;   /* 100% */
+}
+
+html[data-font-size="grande"] {
+    font-size: 1.2rem; /* 120% */
+}
+
+/* ---  CONTRASTE ALTO --- */
+body[data-theme="high-contrast"] {
+    background-color: #000 !important;
+    color: #fff !important;
+}
+
+body[data-theme="high-contrast"] .navbar, 
+body[data-theme="high-contrast"] .card,
+body[data-theme="high-contrast"] .modal-content {
+    background-color: #1a1a1a !important;
+    border: 2px solid #fff !important;
+    color: #fff !important;
+}
+
+body[data-theme="high-contrast"] a {
+    color: #ffff00 !important; /* Enlaces amarillos para resaltar */
+    text-decoration: underline !important;
+}
+
+/* --- MODO DALTÓNICOS --- */
+body[data-theme="colorblind"] #contenido-web,
+body[data-theme="colorblind"] .modal-content {
+    filter: saturate(150%) contrast(120%);
+}

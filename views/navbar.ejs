@@ -5,165 +5,222 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- mobile friendly -->
     <title>navbar</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel = "stylesheet" href = "/css/stylesInicio.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel = "stylesheet" href = "/css/accesibilidad.css">
 </head>
 
 <body>
+  <div id="contenido-web">
     <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-    <div class="container">
-      <a href="/inicio" class="navbar-brand">
-        <img src="/media/logoWhite.png" alt="Logo de la empresa" height="60">
-      </a>
-      
-      <button 
-        class="navbar-toggler" 
-        type="button" 
-        data-bs-toggle="collapse" 
-        data-bs-target="#nav" 
-        aria-controls="nav" 
-        aria-expanded="false" 
-        aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+      <div class="container">
+        <a href="/inicio" class="navbar-brand">
+          <img src="/media/logoWhite.png" alt="Logo de la empresa" height="60">
+        </a>
+        
+        <button 
+          class="navbar-toggler" 
+          type="button" 
+          data-bs-toggle="collapse" 
+          data-bs-target="#nav" 
+          aria-controls="nav" 
+          aria-expanded="false" 
+          aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
 
-      <div class="collapse navbar-collapse" id="nav">            
-        <ul class="navbar-nav mx-auto gap-3">
-          <li class="nav-item"><a class="nav-link" href="/inicio">Inicio</a></li>
-          <li class="nav-item"><a class="nav-link" href="/vehiculos">Vehiculos Disponibles</a></li>
-          <li class="nav-item"><a class="nav-link" href="/perfil">Perfil</a></li>
-          <li class="nav-item">
-              <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#modalAccesibilidad">Accesibilidad</a>
-          </li>
-          
-          <!--Con esto conseguimos que la opción de panel de admin solo esta activo si el rol es admin-->
-          <% if (usuario.rol === "admin") { %>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                Panel Admin
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="/gestionVehiculos">Gestión de Vehículos</a></li>
-                <li><a class="dropdown-item" href="/gestionConcesionarios">Gestión de Concesionarios</a></li>
-                <li><a class="dropdown-item" href="/gestionUsuarios">Gestión de Usuarios</a></li>
-                <li><a class="dropdown-item" href="/estadisticas">Estadísticas</a></li>
-              </ul>
+        <div class="collapse navbar-collapse" id="nav">            
+          <ul class="navbar-nav mx-auto gap-3">
+            <li class="nav-item"><a class="nav-link" href="/inicio">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" href="/vehiculos">Vehiculos Disponibles</a></li>
+            <li class="nav-item"><a class="nav-link" href="/perfil">Perfil</a></li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#modalAccesibilidad">Accesibilidad</a>
             </li>
-          <% } %>
+            
+            <!--Con esto conseguimos que la opción de panel de admin solo esta activo si el rol es admin-->
+            <% if (usuario.rol === "admin") { %>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                  Panel Admin
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="/gestionVehiculos">Gestión de Vehículos</a></li>
+                  <li><a class="dropdown-item" href="/gestionConcesionarios">Gestión de Concesionarios</a></li>
+                  <li><a class="dropdown-item" href="/gestionUsuarios">Gestión de Usuarios</a></li>
+                  <li><a class="dropdown-item" href="/estadisticas">Estadísticas</a></li>
+                </ul>
+              </li>
+            <% } %>
 
-        </ul>
-        <!--botton fuera del ul para logout-->
-        <div class="d-flex">
-            <a href="/logout" class="btn btn-primary">Cerrar Sesión</a>
-        </div>
-      </div>  
-    </div>
-  </nav>
+          </ul>
+          <!--botton fuera del ul para logout-->
+          <div class="d-flex">
+              <a href="/logout" class="btn btn-primary">Cerrar Sesión</a>
+          </div>
+        </div>  
+      </div>
+    </nav>
+  </div>
 
   <!-- Modal de Accesibilidad -->
-  <div class="modal fade" id="modalAccesibilidad" tabindex="-1" aria-labelledby="tituloModal" aria-hidden="true"> <!-- modal con un id -->
-    <div class="modal-dialog"> <!-- ancho y margenes de modal -->
-      <div class="modal-content text-dark p-4"> <!-- la caja donde esta el modal -->
+  <div class="modal fade" id="modalAccesibilidad" tabindex="-1" aria-labelledby="modalAccesibilidadLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
         
-        <div class="modal-header"><!-- header de modal -->
-          <h5 class="modal-title" id="tituloModal">Ajustes de Accesibilidad</h5>
-          
+        <div class="modal-header">
+          <h4 class="modal-title fw-bold" id="modalAccesibilidadLabel">Accesibilidad</h4>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
 
-        <div class="modal-body"><!-- body de modal -->
-          
-          <div class="form-check form-switch mb-5 mt-4"> <!-- modo oscuro -->
-              <input class="form-check-input" type="checkbox" id="switchModoOscuro">
-              <label class="form-check-label" for="switchModoOscuro">Activar Modo Oscuro</label>
+        <div class="modal-body">
+          <!-- Tamaño de Fuente -->
+          <div class="mb-4">
+            <h5 class="mb-2 fw-bold">Tamaño de fuente</h5>
+            <div class="btn-group w-100" role="group" aria-label="Selector de tamaño">
+              
+              <button type="button" class="btn btn-outline-primary btn-font-size" data-value="peque" style="width: 33.3%;">
+                Pequeño
+              </button>
+              
+              <button type="button" class="btn btn-primary active btn-font-size" data-value="normal" style="width: 33.3%;">
+                Normal
+              </button>
+              
+              <button type="button" class="btn btn-outline-primary btn-font-size" data-value="grande" style="width: 33.3%;">
+                Grande
+              </button>
+
+            </div>
           </div>
 
-          <div class="mb-5"><!-- elegir tamaño de texto -->
-              <label for="rangeFuente" class="form-label">Tamaño de texto</label>
-              <input type="range" class="form-range" min="16" max="32" step="1" id="rangeFuente" value="16">
-          </div>
-
-          
-
-          <div class="mb-5"> <!-- elegir color -->
-              <label for="colorTexto" class="form-label">Color del texto</label>
-              <input type="color" class="form-control form-control-color" id="colorTexto" value="#000000" title="Elige tu color">
+          <hr class="text-muted opacity-25">
+          <!-- Contraste y Color -->
+          <div class="mb-4">
+            <h5 class="mb-2 fw-bold">Contraste y Color</h5>
+            
+            <div class="d-grid gap-2">
+              
+              <button type="button" class="btn btn-outline-primary p-3 btn-theme" data-value="standard">
+                Vista Estándar
+              </button>
+              
+              <button type="button" class="btn btn-outline-primary p-3 btn-theme" data-value="high-contrast">
+                Alto Contraste
+              </button>
+              
+              <button type="button" class="btn btn-outline-primary p-3 btn-theme" data-value="colorblind">
+                Adaptado Daltónicos
+              </button>
+            </div>
           </div>
 
         </div>
 
-      <div class="modal-footer"> <!-- botones de restablecer y guardar -->
-        <button type="button" class="btn btn-secondary" id="btnReset">Restablecer</button>
-        
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Guardar y Cerrar</button>
+        <div class="modal-footer bg-light border-top-0">
+          <div class="row w-100 m-0">
+            <div class="col-4 ps-0">
+              <button type="button" class="btn btn-outline-secondary w-100" data-bs-dismiss="modal">Cancelar</button>
+            </div>
+            <div class="col-8 pe-0">
+              <button type="button" id="btn-save-accessibility" class="btn btn-primary w-100" data-bs-dismiss="modal">Guardar cambios</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-</div>
-  
-<script>
-    // MODAL DE ACCESIBILIDAD
 
-    // 1. SELECCIÓN DE ELEMENTOS
-    // =========================
-    // Guardamos en variables los elementos del HTML que vamos a manipular.
-    // document.getElementById('...') busca la etiqueta que tenga ese ID exacto.
-    const body = document.body; // El cuerpo entero de la página (para cambiar fondo y texto general)
-    const switchOscuro = document.getElementById('switchModoOscuro'); // El interruptor
-    const rangeFuente = document.getElementById('rangeFuente'); // El deslizador de tamaño
-    const colorInput = document.getElementById('colorTexto'); // El selector de color
-    const btnReset = document.getElementById('btnReset'); // El botón de restablecer
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+    // Variables de configuración por defecto
+    let currentFontSize = localStorage.getItem('access_fontSize') || 'normal';
+    let currentTheme = localStorage.getItem('access_theme') || 'standard';
 
-    // 2. LÓGICA PARA MODO OSCURO
-    // ==========================
-    // 'change' detecta cuando el usuario hace clic en el interruptor (on/off)
-    switchOscuro.addEventListener('change', () => {
-        // Comprobamos si el interruptor quedó marcado (true) o desmarcado (false)
-        if (switchOscuro.checked) {
-            // Si está marcado, añadimos clases de Bootstrap:
-            // 'bg-dark' pone el fondo negro.
-            // 'text-white' pone las letras blancas.
-            body.classList.add('bg-dark', 'text-white'); 
-        } else {
-            // Si se desmarca, quitamos esas clases para volver al estado normal.
-            body.classList.remove('bg-dark', 'text-white');
-        }
-    });
-
-    // 3. LÓGICA PARA TAMAÑO DE TEXTO
-    // ==============================
-    // 'input' detecta el movimiento del deslizador en tiempo real (mientras arrastras)
-    rangeFuente.addEventListener('input', (e) => {
-        // e.target.value contiene el número actual del deslizador (ej. 24)
-        // Le añadimos 'px' para formar "24px" y se lo aplicamos al body.
-        body.style.fontSize = e.target.value + 'px';
-    });
-
-    // 4. LÓGICA PARA COLOR DE TEXTO
-    // =============================
-    colorInput.addEventListener('input', (e) => {
-        // Cambiamos el color de la fuente al color elegido por el usuario
-        body.style.color = e.target.value;
+    // Función para aplicar los cambios al DOM
+    function applySettings(fontSize, theme) {
+        // Aplicar fuente al elemento HTML (afecta a los REMs)
+        document.documentElement.setAttribute('data-font-size', fontSize);
         
-        // TRUCO: Si el modo oscuro está activado, Bootstrap fuerza el texto a blanco con 'text-white'.
-        // Para que se vea nuestro color personalizado, tenemos que quitar 'text-white' si existe.
-        if(switchOscuro.checked) {
-             body.classList.remove('text-white');
-        }
+        // Aplicar tema al BODY
+        document.body.setAttribute('data-theme', theme);
+        
+        updateModalUI(fontSize, theme);
+    }
+
+    // Función para actualizar visualmente el Modal (qué botones están activos)
+    function updateModalUI(fontSize, theme) {
+        
+        // --- 1. ACTUALIZAR BOTONES DE FUENTE (Esto ya lo tenías bien) ---
+        document.querySelectorAll('.btn-font-size').forEach(btn => {
+            btn.classList.remove('btn-primary', 'active');
+            btn.classList.add('btn-outline-secondary');
+            
+            // Texto interior: volver a negro si no está activo
+            btn.classList.remove('text-white'); 
+
+            if(btn.dataset.value === fontSize) {
+                btn.classList.remove('btn-outline-secondary');
+                btn.classList.add('btn-primary', 'active');
+            }
+        });
+
+        // --- 2. ACTUALIZAR BOTONES DE TEMA (Lógica Nueva Simplificada) ---
+        document.querySelectorAll('.btn-theme').forEach(btn => {
+            
+            // PASO A: Resetear TODOS los botones a estado "Inactivo" (Gris)
+            btn.className = 'btn btn-outline-secondary d-flex justify-content-between align-items-center p-3 btn-theme';
+            
+            // Ocultar el check de todos
+            const icon = btn.querySelector('.check-icon');
+            if(icon) icon.classList.add('d-none');
+
+            // PASO B: Pintar de azul SOLO el elegido
+            if(btn.dataset.value === theme) {
+                // Quitar gris, poner azul
+                btn.classList.remove('btn-outline-secondary');
+                btn.classList.add('btn-primary', 'active'); // Azul Bootstrap
+                
+                // Mostrar el check
+                if(icon) icon.classList.remove('d-none');
+            }
+        });
+    }
+
+    // 1. Inicializar al cargar la página
+    applySettings(currentFontSize, currentTheme);
+
+    // 2. Event Listeners para los botones dentro del modal (Previsualización)
+    
+    // Botones de Fuente
+    document.querySelectorAll('.btn-font-size').forEach(btn => {
+        btn.addEventListener('click', function() {
+            currentFontSize = this.dataset.value;
+            updateModalUI(currentFontSize, currentTheme);
+            // Opcional: Aplicar inmediatamente para ver efecto en vivo
+             document.documentElement.setAttribute('data-font-size', currentFontSize);
+        });
     });
 
-    // 5. BOTÓN DE RESTABLECER (RESET)
-    // ===============================
-    btnReset.addEventListener('click', () => {
-        // 1. Limpiamos los estilos visuales del body
-        body.classList.remove('bg-dark', 'text-white'); // Quita modo oscuro
-        body.style.fontSize = ''; // Quita tamaño personalizado (vuelve al original)
-        body.style.color = ''; // Quita color personalizado
-        
-        // 2. Reiniciamos los controles del modal a sus valores por defecto
-        switchOscuro.checked = false; // Apaga el interruptor visualmente
-        rangeFuente.value = 16; // Devuelve el deslizador al inicio
-        colorInput.value = '#000000'; // Devuelve el color a negro
+    // Botones de Tema
+    document.querySelectorAll('.btn-theme').forEach(btn => {
+        btn.addEventListener('click', function() {
+            currentTheme = this.dataset.value;
+            updateModalUI(currentFontSize, currentTheme);
+            // Opcional: Aplicar inmediatamente
+            document.body.setAttribute('data-theme', currentTheme);
+        });
     });
+
+    // 3. Botón Guardar Cambios
+    document.getElementById('btn-save-accessibility').addEventListener('click', () => {
+        // Guardar en LocalStorage
+        localStorage.setItem('access_fontSize', currentFontSize);
+        localStorage.setItem('access_theme', currentTheme);
+        
+        // Aplicar finalmente (por seguridad)
+        applySettings(currentFontSize, currentTheme);
+    });
+});
 </script>
 
 </body>
