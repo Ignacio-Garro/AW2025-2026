@@ -6,7 +6,6 @@
     <title>gestionVehiculos</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel = "stylesheet" href = "/css/stylesInicio.css">
 </head>
 
 <body>
@@ -52,10 +51,14 @@
                         <% vehiculos.forEach((v) => { %>
                         <tr>
                             <td><%= v.id_vehiculo %></td>
-                            <td><img src="<%= v.imagen || '/img/default.png' %>" width="150"></td>
+                            <td><img src="<%= v.imagen %>"
+                                alt="Imagen del vehículo"
+                                style="width: 150px; height: 50px; object-fit: cover;">
+                            </td>
                             <td><strong><%= v.matricula %></strong></td>
                             <td><%= v.marca %> <%= v.modelo %></td>
                             <td><%= v.autonomia_km %> km</td>
+                            
                             <td> <!-- badge para el estado del vehiculo -->
                                 <% let claseBadge = 'bg-danger'; // Rojo por defecto 
                                 if (v.estado === 'disponible') {
@@ -68,6 +71,7 @@
                                     <%= v.estado.charAt(0).toUpperCase() + v.estado.slice(1) %>
                                 </span>
                             </td>
+
                             <td>
                                 <!-- editar MODAL guardamos los datos del vehiculo para mostartlo en el modal -->
                                 <button type="button" 

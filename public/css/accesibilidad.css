@@ -12,12 +12,12 @@ html[data-font-size="grande"] {
     font-size: 1.2rem; /* 120% */
 }
 
+
 /* ---  CONTRASTE ALTO --- */
 body[data-theme="high-contrast"] {
     background-color: #000 !important;
     color: #fff !important;
 }
-
 body[data-theme="high-contrast"] .navbar, 
 body[data-theme="high-contrast"] .card,
 body[data-theme="high-contrast"] .modal-content {
@@ -25,11 +25,46 @@ body[data-theme="high-contrast"] .modal-content {
     border: 2px solid #fff !important;
     color: #fff !important;
 }
-
+/* Enlaces amarillos para resaltar */
 body[data-theme="high-contrast"] a {
-    color: #ffff00 !important; /* Enlaces amarillos para resaltar */
+    color: #ffff00 !important;
     text-decoration: underline !important;
 }
+/* cambiar list-group-item */
+body[data-theme="high-contrast"] .list-group-item {
+    background-color: #000 !important; /* Fondo negro */
+    color: #fff !important;            /* Texto blanco */
+    border-color: #fff !important;     /* Líneas divisorias blancas */
+}
+/* --- CAMBIAR SOMBRA NEGRA POR RESPLANDOR BLANCO --- */
+body[data-theme="high-contrast"] .shadow,
+body[data-theme="high-contrast"] .shadow-lg,
+body[data-theme="high-contrast"] .shadow-sm {
+    /* box-shadow: eje-x eje-y difuminado color */
+    box-shadow: 0 0 1rem rgba(255, 255, 255, 0.3) !important;
+}
+/* La caja del menú dropdown */
+body[data-theme="high-contrast"] .dropdown-menu {
+    background-color: #000 !important;  /* Fondo negro */
+    border: 2px solid #fff !important;  /* Borde blanco para definir límites */
+}
+/* La caja del menú dropdown  hover y focus*/
+body[data-theme="high-contrast"] .dropdown-item:hover,
+body[data-theme="high-contrast"] .dropdown-item:focus {
+    background-color: #ffff00 !important; /* Fondo amarillo neón */
+    color: #000 !important;               /* Texto negro */
+    font-weight: bold !important;
+}
+/* --- CORRECCIÓN SIMPLE PARA TABLE-LIGHT --- */
+body[data-theme="high-contrast"] tbody,
+body[data-theme="high-contrast"] tr,
+body[data-theme="high-contrast"] th,
+body[data-theme="high-contrast"] td {
+    color: #ffffff !important; /* Ahora sí es blanco puro */
+    border-color: #ffffff; /* Opcional: Ayuda mucho ver las líneas en alto contraste */
+}
+
+
 
 /* --- MODO DALTÓNICOS --- */
 body[data-theme="colorblind"] #contenido-web,

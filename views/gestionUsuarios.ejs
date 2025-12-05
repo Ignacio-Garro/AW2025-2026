@@ -6,7 +6,6 @@
     <title>gestionUsuarios</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel = "stylesheet" href = "/css/stylesInicio.css">
 </head>
 
 <body>
@@ -44,7 +43,7 @@
         <div class="table-responsive shadow-sm rounded-4 border">
             <table class="table table-striped table-hover align-middle">
                 <!-- tabla headers -->
-                <thead class="table-light">
+                <thead class="table">
                     <tr>
                         <th>ID</th><th>Imagen</th><th>Nombre</th><th>Correo</th><th>Rol</th><th>Teléfono</th><th>Concesionario</th><th>Acciones</th>
                     </tr>
@@ -98,6 +97,21 @@
             </table>
         </div>
     </div>
+
+
+    <footer>
+        <!--Importamos el footer que tenemos creado-->
+        <div id="footer-container"></div>
+        <script>
+        fetch('/footer.html')
+            .then(response => response.text()) //load footer.html content
+            .then(html => {
+            document.getElementById('footer-container').innerHTML = html; 
+        });
+        </script>
+    </footer>
+
+
     <!-- ------------------------------------------------------------------------------------------------------- -->
     <!-- Modal nuevo usuario-->
     <div class="modal fade" id="modalUsuario" tabindex="-1" aria-hidden="true">

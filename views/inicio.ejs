@@ -6,7 +6,6 @@
     <title>Inicio</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="/css/stylesInicio.css">
 </head>
 <body>
 
@@ -14,45 +13,47 @@
     <%- include('navbar') %>
   </header>
 
-  <div class="container-main">
-    <div class="container container-padding-large text-center">
-      <h2 class="mb-5">Bienvenido a la página de inicio</h2>
+  <div class="container">
+    <div class="container py-5 text-center">
+      <h2 class="mb-5">Bienvenido a Voltia Drive <%= usuario.nombre %></h2>
+
       <div class="row gy-3 justify-content-center gap-5">
+
         <div class="col-auto">
           <img src="<%= usuario.imagen %>" 
               alt="foto perfil usuario" 
-              class="shadow-sm" 
+              class="shadow-lg" 
               style="width: 250px; object-fit: cover;">
         </div>
 
-        <div class="col-auto d-flex">
-          <ul class="sin-puntos text-start">
-            <li>Nombre: <%= usuario.nombre %></li>
-            <li>Correo: <%= usuario.correo %></li>
-            <li>Telefono: <%= usuario.telefono %></li>
-            <li>Rol: <%= usuario.rol %></li>
-            <li>Concesionario: <%= usuario.id_concesionario %></li>
+        <div class="col-auto d-flex ">
+          <ul class=" container p-5 text-start shadow-lg rounded-4">
+            <li><h5>Nombre: <%= usuario.nombre %></h5></li>
+            <li><h5>Correo: <%= usuario.correo %></h5></li>
+            <li><h5>Telefono: <%= usuario.telefono %></h5></li>
+            <li><h5>Rol: <%= usuario.rol %></h5></li>
+            <li><h5>Concesionario: <%= usuario.id_concesionario %></h5></li>
           </ul>
         </div>
       </div>
     </div>
 
     <div class="container d-flex justify-content-center">
-      <div class="row gy-3 gap-5 mb-5">
+      <div class="row gy-3 gap-5 mb-5 text-center">
         <div class="col">
-          <div class="box box-tall">
+          <div class="container p-4 shadow-lg rounded-4">
             <a href="/vehiculos" class="btn btn-dark mb-3">Ver Vehiculos</a>
             <p>Muestra todos los vehículos disponibles para reservar.</p>
           </div>
         </div>
         <div class="col">
-          <div class="box box-tall">
+          <div class="container p-4 shadow-lg rounded-4">
             <a href="/vehiculos/reservas" class="btn btn-dark mb-3">Ver mis Reservas</a>
             <p>Consulta las reservas que tienes activas o pendientes.</p>
           </div>
         </div>
         <div class="col">
-          <div class="box box-tall">
+          <div class="container p-4 shadow-lg rounded-4">
             <a href="/perfil" class="btn btn-dark mb-3">Ver mi Perfil</a>
             <p>Accede a tu perfil para gestionar tu información personal.</p>
           </div>
@@ -60,22 +61,23 @@
       </div>
     </div>
   
-    <div class="container-foto-fondo">
-      <img src="/media/coche.png" alt="foto de fondo">
-    </div>
   </div>
-    <footer>
-      <!--Importamos el footer que tenemos creado-->
-      <div id="footer-container"></div>
-      <script>
-        fetch('/footer.html')
-          .then(response => response.text()) //load footer.html content
-          .then(html => {
-          document.getElementById('footer-container').innerHTML = html; 
-        });
-      </script>
-    </footer>
+
+  <div class="container-fluid p-0">
+    <img src="/media/coche.png" alt="foto de fondo de coche " class="w-100">
+  </div>
+
+  <footer>
+    <!--Importamos el footer que tenemos creado-->
+    <div id="footer-container"></div>
+    <script>
+      fetch('/footer.html')
+        .then(response => response.text()) //load footer.html content
+        .then(html => {
+        document.getElementById('footer-container').innerHTML = html; 
+      });
+    </script>
+  </footer>
     
-  </div>
 </body>
 </html>

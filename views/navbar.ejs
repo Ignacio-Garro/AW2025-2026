@@ -77,19 +77,9 @@
           <div class="mb-4">
             <h5 class="mb-2 fw-bold">Tamaño de fuente</h5>
             <div class="btn-group w-100" role="group" aria-label="Selector de tamaño">
-              
-              <button type="button" class="btn btn-outline-primary btn-font-size" data-value="peque" style="width: 33.3%;">
-                Pequeño
-              </button>
-              
-              <button type="button" class="btn btn-primary active btn-font-size" data-value="normal" style="width: 33.3%;">
-                Normal
-              </button>
-              
-              <button type="button" class="btn btn-outline-primary btn-font-size" data-value="grande" style="width: 33.3%;">
-                Grande
-              </button>
-
+              <button type="button" class="btn btn-outline-primary btn-font-size" data-value="peque" style="width: 33.3%;">Pequeño</button>
+              <button type="button" class="btn btn-primary active btn-font-size" data-value="normal" style="width: 33.3%;">Normal</button>
+              <button type="button" class="btn btn-outline-primary btn-font-size" data-value="grande" style="width: 33.3%;">Grande</button>
             </div>
           </div>
 
@@ -97,29 +87,18 @@
           <!-- Contraste y Color -->
           <div class="mb-4">
             <h5 class="mb-2 fw-bold">Contraste y Color</h5>
-            
             <div class="d-grid gap-2">
-              
-              <button type="button" class="btn btn-outline-primary p-3 btn-theme" data-value="standard">
-                Vista Estándar
-              </button>
-              
-              <button type="button" class="btn btn-outline-primary p-3 btn-theme" data-value="high-contrast">
-                Alto Contraste
-              </button>
-              
-              <button type="button" class="btn btn-outline-primary p-3 btn-theme" data-value="colorblind">
-                Adaptado Daltónicos
-              </button>
+              <button type="button" class="btn btn-outline-primary p-3 btn-theme" data-value="standard">Vista Estándar</button>
+              <button type="button" class="btn btn-outline-primary p-3 btn-theme" data-value="high-contrast">Alto Contraste</button>
+              <button type="button" class="btn btn-outline-primary p-3 btn-theme" data-value="colorblind">Adaptado Daltónicos</button>
             </div>
           </div>
-
         </div>
 
-        <div class="modal-footer bg-light border-top-0">
+        <div class="modal-footer border-top-0">
           <div class="row w-100 m-0">
             <div class="col-4 ps-0">
-              <button type="button" class="btn btn-outline-secondary w-100" data-bs-dismiss="modal">Cancelar</button>
+              <button type="button" class="btn btn-outline-primary w-100" data-bs-dismiss="modal">Cancelar</button>
             </div>
             <div class="col-8 pe-0">
               <button type="button" id="btn-save-accessibility" class="btn btn-primary w-100" data-bs-dismiss="modal">Guardar cambios</button>
@@ -147,10 +126,10 @@
         updateModalUI(fontSize, theme);
     }
 
-    // Función para actualizar visualmente el Modal (qué botones están activos)
+    // Función para actualizar visualmente el Modal 
     function updateModalUI(fontSize, theme) {
         
-        // --- 1. ACTUALIZAR BOTONES DE FUENTE (Esto ya lo tenías bien) ---
+        // ACTUALIZAR BOTONES DE FUENTE
         document.querySelectorAll('.btn-font-size').forEach(btn => {
             btn.classList.remove('btn-primary', 'active');
             btn.classList.add('btn-outline-secondary');
@@ -164,21 +143,21 @@
             }
         });
 
-        // --- 2. ACTUALIZAR BOTONES DE TEMA (Lógica Nueva Simplificada) ---
+        // ACTUALIZAR BOTONES DE TEMA
         document.querySelectorAll('.btn-theme').forEach(btn => {
             
-            // PASO A: Resetear TODOS los botones a estado "Inactivo" (Gris)
+            // Resetear TODOS los botones a estado "Inactivo" 
             btn.className = 'btn btn-outline-secondary d-flex justify-content-between align-items-center p-3 btn-theme';
             
             // Ocultar el check de todos
             const icon = btn.querySelector('.check-icon');
             if(icon) icon.classList.add('d-none');
 
-            // PASO B: Pintar de azul SOLO el elegido
+            // Pintar de azul SOLO el elegido
             if(btn.dataset.value === theme) {
                 // Quitar gris, poner azul
                 btn.classList.remove('btn-outline-secondary');
-                btn.classList.add('btn-primary', 'active'); // Azul Bootstrap
+                btn.classList.add('btn-primary', 'active'); 
                 
                 // Mostrar el check
                 if(icon) icon.classList.remove('d-none');
@@ -186,10 +165,10 @@
         });
     }
 
-    // 1. Inicializar al cargar la página
+    //Inicializar al cargar la página
     applySettings(currentFontSize, currentTheme);
 
-    // 2. Event Listeners para los botones dentro del modal (Previsualización)
+    // Event Listeners para los botones dentro del modal (Previsualización)
     
     // Botones de Fuente
     document.querySelectorAll('.btn-font-size').forEach(btn => {
@@ -206,18 +185,18 @@
         btn.addEventListener('click', function() {
             currentTheme = this.dataset.value;
             updateModalUI(currentFontSize, currentTheme);
-            // Opcional: Aplicar inmediatamente
+            // Aplicar inmediatamente
             document.body.setAttribute('data-theme', currentTheme);
         });
     });
 
-    // 3. Botón Guardar Cambios
+    // Botón Guardar Cambios
     document.getElementById('btn-save-accessibility').addEventListener('click', () => {
         // Guardar en LocalStorage
         localStorage.setItem('access_fontSize', currentFontSize);
         localStorage.setItem('access_theme', currentTheme);
         
-        // Aplicar finalmente (por seguridad)
+        // Aplicar 
         applySettings(currentFontSize, currentTheme);
     });
 });
