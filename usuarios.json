@@ -2,7 +2,7 @@
   "usuarios": [
     {
       "id_usuario": 1,
-      "nombre": "AitorCulo",
+      "nombre": "Aitor",
       "correo": "aitor.tilla@voltia.com",
       "contraseña": "Aitor123",
       "telefono": "600111111",

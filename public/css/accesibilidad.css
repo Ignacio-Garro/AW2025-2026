@@ -60,8 +60,8 @@ body[data-theme="high-contrast"] tbody,
 body[data-theme="high-contrast"] tr,
 body[data-theme="high-contrast"] th,
 body[data-theme="high-contrast"] td {
-    color: #ffffff !important; /* Ahora sí es blanco puro */
-    border-color: #ffffff; /* Opcional: Ayuda mucho ver las líneas en alto contraste */
+    color: #ffffff !important; 
+    border-color: #ffffff; 
 }
 
 
@@ -69,5 +69,5 @@ body[data-theme="high-contrast"] td {
 /* --- MODO DALTÓNICOS --- */
 body[data-theme="colorblind"] #contenido-web,
 body[data-theme="colorblind"] .modal-content {
-    filter: saturate(150%) contrast(120%);
+    filter: saturate(150%) contrast(150%);
 }

@@ -33,6 +33,24 @@ app.use('/', authRoutes);        // Maneja /login, /logout, /inicio
 app.use('/vehiculos', vehiculosRoutes); // Maneja /vehiculos. OJO: En vehiculos.js la ruta ahora es '/'
 app.use('/', adminRoutes);  // Maneja /admin (/gestionConcesionarios, /gestionVehiculos, /gestionUsuarios)
 app.use('/', perfilRoutes); // Maneja /perfil de usuario (actualizacion de campos)
+
+
+// Ruta para guardar preferencias de accesibilidad
+app.post('/api/guardar-accesibilidad', (req, res) => {
+    // Verificación de sesión
+    if (!req.session.usuario) {
+        return res.redirect('/login');
+    }
+
+    // Guardamos las preferencias en la sesión del usuario en el servidor
+    req.session.accesibilidad = {
+        fontSize: req.body.fontSize,
+        theme: req.body.theme
+    };
+    res.sendStatus(200); // 200-> OK
+});
+
+
 // Iniciamos servidor
 cargarDatosIniciales().then(resultado => {
   app.listen(PORT, () => {

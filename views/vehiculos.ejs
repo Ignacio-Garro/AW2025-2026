@@ -18,22 +18,63 @@
         <h2 class="titulo vehiculos my-5">Vehículos Disponibles</h2>
 
         <!-- Fltro de vehiculos -->
-        <div class="container my-4">
-            <form action="/vehiculos" method="GET" class="row justify-content-center"> <!-- metodo GET y crea fila centrada-->
-                <div class="col-md-4 d-flex gap-2 mb-4"><!-- col de ancho 4 - d-flex para que esten en fila horizontal y el gap para que esten espaciados-->
-
-                    <label for="filtroEstado" class="col-form-label fw-bold">Estado:</label> <!-- etiqueta del estado para accesiblidad -->
-                    
-                    <select name="estado" id="filtroEstado" class="form-select" onchange="this.form.submit()"><!-- Form que cuando cambie el estado manda el formulario automaticamente -->
-                        <!-- TODOS -->
-                        <option value="" <% if (!filtroActual) { %> selected <% } %>>Todos</option>
-                        <!-- DISPONIBLE -->
-                        <option value="disponible" <% if (filtroActual === 'disponible') { %> selected <% } %>>Disponible</option>
-                        <!-- RESERVADO -->
-                        <option value="reservado" <% if (filtroActual === 'reservado') { %> selected <% } %>>Reservado</option>
-                        <!-- MANTENIMIENTO -->
-                        <option value="mantenimiento" <% if (filtroActual === 'mantenimiento') { %> selected <% } %>>Mantenimiento</option>
+        <div class="container my-4 p-4 rounded-4 shadow-lg">
+            <form action="/vehiculos" method="GET" class="row g-3 align-items-end"> 
+                <!-- Fltro de Estado -->
+                <div class="col-md-2">
+                    <label for="filtroEstado" class="form-label fw-bold">Estado</label>
+                    <select name="estado" id="filtroEstado" class="form-select">
+                        <option value="" <%= !query.estado ? 'selected' : '' %>>Todos</option>
+                        <option value="disponible" <%= query.estado === 'disponible' ? 'selected' : '' %>>Disponible</option>
+                        <option value="reservado" <%= query.estado === 'reservado' ? 'selected' : '' %>>Reservado</option>
+                        <option value="mantenimiento" <%= query.estado === 'mantenimiento' ? 'selected' : '' %>>Mantenimiento</option>
                     </select>
+                </div>
+                <!-- Fltro de Concesionario -->
+                <div class="col-md-3">
+                    <label for="filtroConcesionario" class="form-label fw-bold">Concesionario</label>
+                    <select name="concesionario" id="filtroConcesionario" class="form-select">
+                        <option value="">Todos</option>
+                        <% if (typeof concesionarios !== 'undefined') { %>
+                            <% concesionarios.forEach(c => { %>
+                                <option value="<%= c.id_concesionario %>" 
+                                    <%= query.concesionario == c.id_concesionario ? 'selected' : '' %>>
+                                    <%= c.nombre %> (<%= c.ciudad %>)
+                                </option>
+                            <% }) %>
+                        <% } %>
+                    </select>
+                </div>
+                <!-- Fltro de Autonomía -->
+                <div class="col-md-2">
+                    <label for="filtroAutonomia" class="form-label fw-bold">Autonomía (Min Km)</label>
+                    <input type="number" name="autonomia" id="filtroAutonomia" class="form-control" value="<%= query.autonomia || '' %>" min="0">
+                </div>
+                <!-- Fltro de Plazas -->
+                <div class="col-md-2">
+                    <label for="filtroPlazas" class="form-label fw-bold">Plazas</label>
+                    <select name="plazas" id="filtroPlazas" class="form-select">
+                        <option value="">Todos</option>
+                        <option value="2" <%= query.plazas == '2' ? 'selected' : '' %>>2 Plazas</option>
+                        <option value="4" <%= query.plazas == '4' ? 'selected' : '' %>>4 Plazas</option>
+                        <option value="5" <%= query.plazas == '5' ? 'selected' : '' %>>5 Plazas</option>
+                        <option value="7" <%= query.plazas == '7' ? 'selected' : '' %>>7+ Plazas</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <label for="filtroColor" class="form-label fw-bold">Color</label>
+                    <input type="text" name="color" id="filtroColor" class="form-control" value="<%= query.color || '' %>">
+                </div>
+
+                <div class="col-md-1 d-grid">
+                    <button type="submit" class="btn btn-primary rounded-3" title="Aplicar filtros">
+                        <i class="bi bi-search"></i> Filtrar
+                    </button>
+                </div>
+                
+                <div class="col-12 text-end mt-2">
+                    <a href="/vehiculos" class="text-decoration-none small text-muted">Limpiar filtros ✕</a>
                 </div>
             </form>
         </div>

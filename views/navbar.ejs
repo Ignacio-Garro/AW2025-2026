@@ -109,97 +109,76 @@
     </div>
   </div>
 
+
+  <!-- Scripts de logica de modal de Accesibilidad -->
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-    // Variables de configuración por defecto
-    let currentFontSize = localStorage.getItem('access_fontSize') || 'normal';
-    let currentTheme = localStorage.getItem('access_theme') || 'standard';
+    document.addEventListener('DOMContentLoaded', () => { //busca si ya tengo guardado en localstorage valores de accesibilidad
+      // Variables por defecto
+      let currentFontSize = localStorage.getItem('access_fontSize') || 'normal';
+      let currentTheme = localStorage.getItem('access_theme') || 'standard';
 
-    // Función para aplicar los cambios al DOM
-    function applySettings(fontSize, theme) {
-        // Aplicar fuente al elemento HTML (afecta a los REMs)
+      // Función para aplicar los cambios a la página y actualizar el Modal -> ESTO ES LO MAS IMPORTANTE
+      function applySettings(fontSize, theme) {
         document.documentElement.setAttribute('data-font-size', fontSize);
-        
-        // Aplicar tema al BODY
         document.body.setAttribute('data-theme', theme);
-        
         updateModalUI(fontSize, theme);
-    }
+      }
 
-    // Función para actualizar visualmente el Modal 
-    function updateModalUI(fontSize, theme) {
-        
-        // ACTUALIZAR BOTONES DE FUENTE
-        document.querySelectorAll('.btn-font-size').forEach(btn => {
-            btn.classList.remove('btn-primary', 'active');
-            btn.classList.add('btn-outline-secondary');
-            
-            // Texto interior: volver a negro si no está activo
-            btn.classList.remove('text-white'); 
+      // Función para actualizar visualmente el Modal 
+      function updateModalUI(fontSize, theme) {
+        // ACTUALIZAR BOTONES DE TAMAÑO DE FUENTE
+        document.querySelectorAll('.btn-font-size').forEach(btn => {//los pone a todos en estado inactivo con la class btn-font-size
+          btn.classList.remove('btn-primary', 'active');
+          btn.classList.add('btn-outline-secondary');
 
-            if(btn.dataset.value === fontSize) {
-                btn.classList.remove('btn-outline-secondary');
-                btn.classList.add('btn-primary', 'active');
-            }
+          if(btn.dataset.value === fontSize) { //pone el seleccionado a activo
+            btn.classList.remove('btn-outline-secondary');
+            btn.classList.add('btn-primary', 'active');
+          }
         });
 
         // ACTUALIZAR BOTONES DE TEMA
-        document.querySelectorAll('.btn-theme').forEach(btn => {
-            
-            // Resetear TODOS los botones a estado "Inactivo" 
-            btn.className = 'btn btn-outline-secondary d-flex justify-content-between align-items-center p-3 btn-theme';
-            
-            // Ocultar el check de todos
-            const icon = btn.querySelector('.check-icon');
-            if(icon) icon.classList.add('d-none');
+        document.querySelectorAll('.btn-theme').forEach(btn => { //para los de la class btn-theme
+          // Resetear los botones a estado "Inactivo" 
+          btn.className = 'btn btn-outline-secondary d-flex justify-content-between align-items-center p-3 btn-theme';
 
-            // Pintar de azul SOLO el elegido
-            if(btn.dataset.value === theme) {
-                // Quitar gris, poner azul
-                btn.classList.remove('btn-outline-secondary');
-                btn.classList.add('btn-primary', 'active'); 
-                
-                // Mostrar el check
-                if(icon) icon.classList.remove('d-none');
-            }
+          // Pintar de azul a el elegido
+          if(btn.dataset.value === theme) {
+              btn.classList.remove('btn-outline-secondary');
+              btn.classList.add('btn-primary', 'active'); 
+          }
         });
-    }
+      }
 
-    //Inicializar al cargar la página
-    applySettings(currentFontSize, currentTheme);
-
-    // Event Listeners para los botones dentro del modal (Previsualización)
-    
-    // Botones de Fuente
-    document.querySelectorAll('.btn-font-size').forEach(btn => {
+      //carga inicial de la configuración guardada
+      applySettings(currentFontSize, currentTheme);
+      
+      // Botones de Fuente
+      document.querySelectorAll('.btn-font-size').forEach(btn => {
         btn.addEventListener('click', function() {
-            currentFontSize = this.dataset.value;
-            updateModalUI(currentFontSize, currentTheme);
-            // Opcional: Aplicar inmediatamente para ver efecto en vivo
-             document.documentElement.setAttribute('data-font-size', currentFontSize);
+          currentFontSize = this.dataset.value;
+          updateModalUI(currentFontSize, currentTheme);
         });
-    });
+      });
 
-    // Botones de Tema
-    document.querySelectorAll('.btn-theme').forEach(btn => {
+      // Botones de Tema
+      document.querySelectorAll('.btn-theme').forEach(btn => {
         btn.addEventListener('click', function() {
-            currentTheme = this.dataset.value;
-            updateModalUI(currentFontSize, currentTheme);
-            // Aplicar inmediatamente
-            document.body.setAttribute('data-theme', currentTheme);
+          currentTheme = this.dataset.value;
+          updateModalUI(currentFontSize, currentTheme);
         });
-    });
+      });
 
-    // Botón Guardar Cambios
-    document.getElementById('btn-save-accessibility').addEventListener('click', () => {
+      // Botón Guardar Cambios
+      document.getElementById('btn-save-accessibility').addEventListener('click', () => {
         // Guardar en LocalStorage
         localStorage.setItem('access_fontSize', currentFontSize);
         localStorage.setItem('access_theme', currentTheme);
-        
         // Aplicar 
         applySettings(currentFontSize, currentTheme);
-    });
-});
+      });
+    }
+  );
 </script>
 
 </body>
