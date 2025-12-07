@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Perfil</title>
-    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script defer src="/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
     <header>
@@ -14,7 +14,7 @@
     <div class="container py-5">
         
         <div class="text-center mb-5">
-            <h1 class="display-5 fw-bold text-dark mb-3">Mi Perfil</h1>
+            <h1 class="display-5 fw-bold mb-3">Mi Perfil</h1>
             <img src="<%= usuario.imagen || '/images/default-avatar.png' %>" 
                  alt="Foto de perfil" 
                  class="rounded-circle border border-5 border-primary shadow"
@@ -44,19 +44,19 @@
                         
                         <form action="/perfil/actualizar" method="POST">
                             <div class="mb-3">
-                                <label for="nombre" class="form-label fw-bold text-secondary">Nombre Completo</label>
+                                <label for="nombre" class="form-label fw-bold">Nombre Completo</label>
                                 <input type="text" id="nombre" name="nombre" class="form-control"
                                        value="<%= usuario.nombre %>" required>
                             </div>
 
                             <div class="mb-3">
-                                <label for="correo" class="form-label fw-bold text-secondary">Correo Electrónico</label>
+                                <label for="correo" class="form-label fw-bold">Correo Electrónico</label>
                                 <input type="email" id="correo" name="correo" class="form-control"
                                        value="<%= usuario.correo %>" required>
                             </div>
 
                             <div class="mb-3">
-                                <label for="telefono" class="form-label fw-bold text-secondary">Teléfono</label>
+                                <label for="telefono" class="form-label fw-bold">Teléfono</label>
                                 <input type="tel" id="telefono" name="telefono" class="form-control"
                                        value="<%= usuario.telefono %>" required>
                             </div>
@@ -97,19 +97,19 @@
                         </h4>
                         <form action="/perfil/cambiar-contrasena" method="POST">
                             <div class="mb-3">
-                                <label for="contraseñaActual" class="form-label fw-bold text-secondary">Contraseña Actual</label>
+                                <label for="contraseñaActual" class="form-label fw-bold">Contraseña Actual</label>
                                 <input type="password" name="contraseñaActual" id="contraseñaActual" class="form-control"
                                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$" required>
                             </div>
 
                             <div class="mb-3">
-                                <label for="contraseñaNueva" class="form-label fw-bold text-secondary">Nueva Contraseña</label>
+                                <label for="contraseñaNueva" class="form-label fw-bold">Nueva Contraseña</label>
                                 <input type="password" name="contraseñaNueva" id="contraseñaNueva" class="form-control"
                                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$" required>
                             </div>
 
                             <div class="mb-3">
-                                <label for="contraseñaConfirmar" class="form-label fw-bold text-secondary">Confirmar Nueva</label>
+                                <label for="contraseñaConfirmar" class="form-label fw-bold">Confirmar Nueva</label>
                                 <input type="password" name="contraseñaConfirmar" id="contraseñaConfirmar" class="form-control"
                                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$" required>
                             </div>
@@ -130,7 +130,7 @@
                         </h4>
                         <form action="/perfil/actualizar-imagen" method="POST" enctype="multipart/form-data">
                             <div class="mb-3">
-                                <label for="imagen" class="form-label fw-bold text-secondary">Seleccionar nueva imagen</label>
+                                <label for="imagen" class="form-label fw-bold ">Seleccionar nueva imagen</label>
                                 <input type="file" id="imagen" name="imagen" class="form-control" accept="image/*" required>
                                 <div class="form-text text-muted mt-2">
                                     Formatos: JPG, PNG, GIF (máx. 5MB)
