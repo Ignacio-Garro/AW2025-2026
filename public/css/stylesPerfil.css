@@ -1,0 +1,242 @@
+/* ---- CONTENEDOR GENERAL ---- */
+.perfil-container {
+    max-width: 1100px;
+    margin: 50px auto;
+    padding: 20px;
+    font-family: "Segoe UI", Roboto, sans-serif;
+}
+
+/* ---- HEADER DEL PERFIL ---- */
+.perfil-header {
+    text-align: center;
+    margin-bottom: 45px;
+}
+
+.perfil-header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #2d2d2d;
+    letter-spacing: 1px;
+}
+
+.perfil-imagen {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid #007bff;
+    box-shadow: 0px 4px 15px rgba(0,0,0,0.15);
+    transition: transform .3s ease;
+}
+
+.perfil-imagen:hover {
+    transform: scale(1.05);
+}
+
+/* ---- TARJETAS ---- */
+.perfil-sections {
+    display: grid;
+    gap: 25px;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+}
+
+.perfil-card {
+    background: #ffffff;
+    color: black;
+    border-radius: 12px;
+    padding: 25px;
+    border: 1px solid rgba(0,0,0,0.05);
+    box-shadow: 0px 8px 20px rgba(0,0,0,0.07);
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.perfil-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0px 12px 28px rgba(0,0,0,0.12);
+}
+
+.perfil-card h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #007bff;
+    margin-bottom: 18px;
+    border-left: 5px solid #007bff;
+    padding-left: 12px;
+}
+
+/* ---- INPUTS ---- */
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: #444;
+    font-size: 14px;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="tel"],
+.form-group input[type="file"] {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 15px;
+    border-radius: 8px;
+    border: 1px solid #dcdcdc;
+    background-color: #fafafa;
+    transition: 0.3s ease;
+}
+
+.form-group input:focus {
+    background-color: white;
+    border-color: #007bff;
+    box-shadow: 0px 0px 6px rgba(0,123,255,0.3);
+    outline: none;
+}
+
+/* ---- MENSAJES ---- */
+.mensaje {
+    padding: 12px 18px;
+    border-radius: 6px;
+    font-weight: 600;
+    margin-top: -15px;
+    margin-bottom: 25px;
+}
+
+.mensaje.exito {
+    background: #d8f3dc;
+    color: #245c39;
+    border-left: 5px solid #52b788;
+}
+
+.mensaje.error {
+    background: #ffdad6;
+    color: #9d2a2a;
+    border-left: 5px solid #d9534f;
+}
+
+/* ---- BOTONES ---- */
+.btn {
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s ease;
+    font-size: 15px;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #007bff, #005fcc);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(45deg, #005fcc, #004bb5);
+    transform: translateY(-2px);
+}
+
+/* ---- ACCESIBILIDAD ---- */
+.btn-font-size,
+.btn-theme {
+    padding: 10px;
+    border: 2px solid #dcdcdc;
+    border-radius: 8px;
+    background: #fafafa;
+    transition: 0.3s;
+    font-weight: 600;
+}
+
+.btn-font-size:hover,
+.btn-theme:hover {
+    border-color: #007bff;
+    background-color: #eef7ff;
+}
+
+.btn-selected {
+    background: #007bff !important;
+    color: #fff;
+    border-color: #007bff;
+}
+
+
+
+/*PARA LA ACCESIBILIDAD*/
+
+/* --- TAMAÑOS DE FUENTE --- */
+
+html[data-font-size="peque"] {
+    font-size: 0.8rem; /* 80% */
+}
+
+html[data-font-size="normal"] {
+    font-size: 1rem;   /* 100% */
+}
+
+html[data-font-size="grande"] {
+    font-size: 1.2rem; /* 120% */
+}
+
+
+/* ---  CONTRASTE ALTO --- */
+body[data-theme="high-contrast"] {
+    background-color: #000 !important;
+    color: #fff !important;
+}
+body[data-theme="high-contrast"] .navbar, 
+body[data-theme="high-contrast"] .card,
+body[data-theme="high-contrast"] .modal-content {
+    background-color: #1a1a1a !important;
+    border: 2px solid #fff !important;
+    color: #fff !important;
+}
+/* Enlaces amarillos para resaltar */
+body[data-theme="high-contrast"] a {
+    color: #ffff00 !important;
+    text-decoration: underline !important;
+}
+/* cambiar list-group-item */
+body[data-theme="high-contrast"] .list-group-item {
+    background-color: #000 !important; /* Fondo negro */
+    color: #fff !important;            /* Texto blanco */
+    border-color: #fff !important;     /* Líneas divisorias blancas */
+}
+/* --- CAMBIAR SOMBRA NEGRA POR RESPLANDOR BLANCO --- */
+body[data-theme="high-contrast"] .shadow,
+body[data-theme="high-contrast"] .shadow-lg,
+body[data-theme="high-contrast"] .shadow-sm {
+    /* box-shadow: eje-x eje-y difuminado color */
+    box-shadow: 0 0 1rem rgba(255, 255, 255, 0.3) !important;
+}
+/* La caja del menú dropdown */
+body[data-theme="high-contrast"] .dropdown-menu {
+    background-color: #000 !important;  /* Fondo negro */
+    border: 2px solid #fff !important;  /* Borde blanco para definir límites */
+}
+/* La caja del menú dropdown  hover y focus*/
+body[data-theme="high-contrast"] .dropdown-item:hover,
+body[data-theme="high-contrast"] .dropdown-item:focus {
+    background-color: #ffff00 !important; /* Fondo amarillo neón */
+    color: #000 !important;               /* Texto negro */
+    font-weight: bold !important;
+}
+/* --- CORRECCIÓN SIMPLE PARA TABLE-LIGHT --- */
+body[data-theme="high-contrast"] tbody,
+body[data-theme="high-contrast"] tr,
+body[data-theme="high-contrast"] th,
+body[data-theme="high-contrast"] td {
+    color: #ffffff !important; 
+    border-color: #ffffff; 
+}
+
+
+
+/* --- MODO DALTÓNICOS --- */
+body[data-theme="colorblind"] #contenido-web,
+body[data-theme="colorblind"] .modal-content {
+    filter: saturate(150%) contrast(150%);
+}

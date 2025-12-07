@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Perfil - RentaCar</title>
-    <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="/css/perfil.css">
+    <title>Mi Perfil</title>
+    <link rel="stylesheet" href="/css/stylesPerfil.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
     <header>
@@ -70,7 +70,7 @@
             <!--Cambiar contraseña-->
             <div class="perfil-card">
                 <h2>Cambiar Contraseña</h2>
-                <form action="/perfil/cambiar-contraseña" method="POST">
+                <form action="/perfil/cambiar-contrasena" method="POST">
                     <div class="form-group">
                         <label for="contraseñaActual">Contraseña Actual</label>
                         <input type="password" name="contraseñaActual" id="contraseñaActual" class="form-control"
@@ -86,8 +86,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="contrasenaConfirmar">Confirmar Nueva Contraseña</label>
-                        <input type="password" name="contrasenaConfirmar" id="contrasenaConfirmar" class="form-control"
+                        <label for="contraseñaConfirmar">Confirmar Nueva Contraseña</label>
+                        <input type="password" name="contraseñaConfirmar" id="contraseñaConfirmar" class="form-control"
                                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$"
                                title="Mín. 8 caracteres, 1 mayúscula, 1 minúscula y 1 número" required>
                     </div>
@@ -99,24 +99,66 @@
             <!--Cambiar imagen de perfil (hacer bien)-->
             <div class="perfil-card">
                 <h2>Imagen de Perfil</h2>
-                <form action="/perfil/actualizar-imagen" method="POST">
-
-                    <!--INCOMPLETO, RELLENAR-->
-                    
-                    <button type="submit" class="btn btn-primary" style="margin-top: 20px;">
+                <form action="/perfil/actualizar-imagen" method="POST" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="imagen">Seleccionar nueva imagen</label>
+                        <input type="file" id="imagen" name="imagen" accept="image/*" required>
+                        <small style="display: block; margin-top: 8px; color: #666;">
+                            Formatos permitidos: JPG, PNG, GIF (máx. 5MB)
+                        </small>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
                         Actualizar Imagen
                     </button>
                 </form>
             </div>
 
-            <!-- Preferencias de accesibilidad -->
+            <!--Preferencias de accesibilidad-->
             <div class="perfil-card">
-                <h2>Preferencias de Accesibilidad</h2>
+                <h2>♿ Preferencias de Accesibilidad</h2>
                 <form action="/perfil/actualizar-preferencias" method="POST">
                     
-                    <!--INCOMPLETO, RELLENAR-->
+                    <!-- Tamaño de fuente -->
+                    <div class="form-group">
+                        <label style="font-weight: 600; margin-bottom: 10px; display: block;">Tamaño de Fuente</label>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+                            <button type="button" class="btn-font-size <%= (usuario.preferencias_accesibilidad?.fontSize === 'peque') ? 'btn-selected' : '' %>" 
+                                    data-value="peque">
+                                Pequeño
+                            </button>
+                            <button type="button" class="btn-font-size <%= (!usuario.preferencias_accesibilidad?.fontSize || usuario.preferencias_accesibilidad?.fontSize === 'normal') ? 'btn-selected' : '' %>" 
+                                    data-value="normal">
+                                Normal
+                            </button>
+                            <button type="button" class="btn-font-size <%= (usuario.preferencias_accesibilidad?.fontSize === 'grande') ? 'btn-selected' : '' %>" 
+                                    data-value="grande">
+                                Grande
+                            </button>
+                        </div>
+                        <input type="hidden" name="fontSize" id="fontSize" value="<%= usuario.preferencias_accesibilidad?.fontSize || 'normal' %>">
+                    </div>
 
-                    <button type="submit" class="btn btn-primary">Guardar Preferencias</button>
+                    <!-- Contraste y Color -->
+                    <div class="form-group" style="margin-top: 25px;">
+                        <label style="font-weight: 600; margin-bottom: 10px; display: block;">Contraste y Color</label>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <button type="button" class="btn-theme <%= (!usuario.preferencias_accesibilidad?.theme || usuario.preferencias_accesibilidad?.theme === 'standard') ? 'btn-selected' : '' %>" 
+                                    data-value="standard">
+                                Vista Estándar
+                            </button>
+                            <button type="button" class="btn-theme <%= (usuario.preferencias_accesibilidad?.theme === 'high-contrast') ? 'btn-selected' : '' %>" 
+                                    data-value="high-contrast">
+                                Alto Contraste
+                            </button>
+                            <button type="button" class="btn-theme <%= (usuario.preferencias_accesibilidad?.theme === 'colorblind') ? 'btn-selected' : '' %>" 
+                                    data-value="colorblind">
+                                Adaptado Daltónicos
+                            </button>
+                        </div>
+                        <input type="hidden" name="theme" id="theme" value="<%= usuario.preferencias_accesibilidad?.theme || 'standard' %>">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Guardar Cambios</button>
                 </form>
             </div>
         </div>
@@ -134,28 +176,54 @@
         </script>
     </footer>
 
+    <script src="/js/accesibilidad.js"></script>
+
     <script>
-        // Agregar interactividad al selector de imágenes
-        //document.querySelectorAll('.imagen-opcion').forEach(opcion => {
-            //opcion.addEventListener('click', function() {
-                //document.querySelectorAll('.imagen-opcion').forEach(o => 
-                    //o.classList.remove('seleccionada'));
-                //this.classList.add('seleccionada');
-                //this.querySelector('input[type="radio"]').checked = true;
-            //});
-        //});
-script
+        //Mostramos el nombre del archivo seleccionado
+        document.getElementById('imagen').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                document.getElementById('nombre-archivo').textContent = file.name;
+            }
+        });
+
         // Validar que las contraseñas coincidan
         const formContrasena = document.querySelector('form[action="/perfil/cambiar-contrasena"]');
         if (formContrasena) {
             formContrasena.addEventListener('submit', function(e) {
-                const nueva = document.getElementById('contraseÑaNueva').value;
-                const confirmar = document.getElementById('contraseÑaConfirmar').value;
+                const nueva = document.getElementById('contraseñaNueva').value;
+                const confirmar = document.getElementById('contraseñaConfirmar').value;
                 
                 if (nueva !== confirmar) {
                     e.preventDefault();
                     alert('Las contraseñas no coinciden');
                 }
+            });
+        }
+
+        // Sincronizar los botones de accesibilidad con el formulario
+        document.querySelectorAll('.btn-font-size').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.getElementById('fontSize').value = this.dataset.value;
+            });
+        });
+
+        document.querySelectorAll('.btn-theme').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.getElementById('theme').value = this.dataset.value;
+            });
+        });
+
+        // Al enviar el formulario, también guardar en localStorage
+        const formAccesibilidad = document.querySelector('form[action="/perfil/actualizar-preferencias"]');
+        if (formAccesibilidad) {
+            formAccesibilidad.addEventListener('submit', function(e) {
+                const fontSize = document.getElementById('fontSize').value;
+                const theme = document.getElementById('theme').value;
+                
+                // Guardar también en localStorage para que persista entre páginas
+                localStorage.setItem('access_fontSize', fontSize);
+                localStorage.setItem('access_theme', theme);
             });
         }
     </script>

@@ -5,6 +5,11 @@ const upload = multer({ dest: 'uploads/' }); // Carpeta temporal
 const fs = require('fs'); // para manejar ficheros
 const db = require('../config/db'); // Conexión MySQL
 
+//Validacions por regex
+const emailRegex = /^[a-zA-Z0-9._%+-]+@voltiaDrive\.es$/;
+const passRegex = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+const phoneRegex = /^[0-9]{9}$/;
+
 // Panel administrador
 router.get('/', (req, res) => {
     if (!req.session.usuario) {
@@ -193,6 +198,12 @@ router.get('/gestionUsuarios', (req, res) => {
 router.post('/crear-usuario', (req, res) => {
     // Nota: en el formulario el campo name="contrasena", en BD la columna es "contraseña"
     const { nombre, correo, contrasena, rol, telefono, imagen, id_concesionario } = req.body;   
+    
+    //Validaciones REGEX
+    if (!emailRegex.test(correo)) return res.status(400).send("Correo debe ser @voltiaDrive.es");
+    if (!passRegex.test(contrasena)) return res.status(400).send("Contraseña débil");
+    if (!phoneRegex.test(telefono)) return res.status(400).send("Teléfono: 9 dígitos");
+
     const sql = `INSERT INTO usuarios (nombre, correo, contraseña, rol, telefono, imagen, id_concesionario)
                  VALUES (?, ?, ?, ?, ?, ?, ?)`;
 
@@ -219,6 +230,26 @@ router.post('/cargar-json-usuarios', upload.single('fichero_json'), (req, res) =
         const promesasDeInsercion = listaUsuarios.map(u => {
             return new Promise((resolve, reject) => {
                 
+                //Validaciones REGEX
+                if (!emailRegex.test(u.correo)) {
+                    console.log(`  ❌ Usuario NO cargado (${u.correo || 'sin correo'}): Correo inválido`);
+                    rechazados++;
+                    return resolve();
+                }
+
+                const contraseña = u.contraseña || u.contrasena;
+                if (!passRegex.test(contraseña)) {
+                    console.log(`  ❌ Usuario NO cargado (${u.correo}): Contraseña insegura (mín. 8, 1 mayús. y 1 minús.)`);
+                    rechazados++;
+                    return resolve();
+                }
+
+                if (!phoneRegex.test(u.telefono)) {
+                    console.log(`  ❌ Usuario NO cargado (${u.correo}): Teléfono inválido (9 dígitos)`);
+                    rechazados++;
+                    return resolve();
+                }
+
                 const sql = `INSERT INTO usuarios 
                     (id_usuario, nombre, correo, contraseña, rol, telefono, imagen, id_concesionario)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
@@ -280,6 +311,17 @@ router.post('/editar-usuario/:id', (req, res) => {
     const idUsuario = req.params.id; // Capturamos el ID de la URL
 
     const { nombre, correo, contrasena, rol, telefono, imagen, id_concesionario } = req.body; // cogemos datos del formulario
+
+    //Comprobaciones REGEX
+    if (!emailRegex.test(correo)) {
+        return res.status(400).send("Error: El correo debe terminar en @voltiaDrive.es");
+    }
+    if (contrasena && contrasena.trim() !== '' && !passRegex.test(contrasena)) {
+        return res.status(400).send("Error: La nueva contraseña debe tener mínimo 8 caracteres, 1 mayúscula y 1 minúscula");
+    }
+    if (!phoneRegex.test(telefono)) {
+        return res.status(400).send("Error: El teléfono debe tener exactamente 9 dígitos");
+    }
 
     // creamos la consulta SQL para actualizar el usuario
     // Y si la contraseña está vacía, no la actualizamos
@@ -357,7 +399,13 @@ router.get('/gestionConcesionarios', (req, res) => {
 
 //Crear concesionario
 router.post('/crear-concesionario', (req, res) => {
-    const { nombre, ciudad, direccion, telefono_contacto } = req.body;   
+    const { nombre, ciudad, direccion, telefono_contacto } = req.body; 
+    
+    //Validación REGEX (teléfono)
+    if (!phoneRegex.test(telefono_contacto)) {
+        return res.status(400).send("Error: El teléfono del concesionario debe tener exactamente 9 dígitos");
+    }
+
     const sql = `INSERT INTO concesionarios (nombre, ciudad, direccion, telefono_contacto)
                     VALUES (?, ?, ?, ?)`;
 
@@ -384,7 +432,7 @@ router.post('/eliminar-concesionario/:id', (req, res) => {
 
         if (result[0].total > 0) {
             //Hay vehículos → NO se puede borrar
-            return res.redirect('/gestionConcesionarios?error=No se puede eliminar: hay ' + result[0].total + ' vehículos asociados');
+            return res.status(500).send('No se puede eliminar: hay ' + result[0].total + ' vehículos asociados');
         }
 
         //No hay vehículos → sí se puede borrar
@@ -402,6 +450,11 @@ router.post('/eliminar-concesionario/:id', (req, res) => {
 router.post('/editar-concesionario/:id', (req, res) => {
     const idConcesionario = req.params.id; // Capturamos el ID de la URL
     const { nombre, ciudad, direccion, telefono_contacto } = req.body; // Cogemos datos del formulario
+
+    //Validación REGEX (teléfono)
+    if (!phoneRegex.test(telefono_contacto)) {
+        return res.status(400).send("Error: El teléfono debe tener 9 dígitos");
+    }
 
     // Creamos la consulta SQL para actualizar el vehículo
     const sql = `
@@ -487,7 +540,6 @@ router.get('/estadisticas', async (req, res) => {
         });
 
     } catch (err) {
-        console.error('Error en estadísticas:', err);
         res.status(500).send('Error cargando estadísticas');
     }
 });

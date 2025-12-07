@@ -1,6 +1,34 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../config/db'); // Conexión MySQL
+const multer = require('multer');
+const path = require('path');
+
+//Usamos multer para poder subir imágenes
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public/media/'); //Carpeta donde se guardarán las imágenes
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, 'perfil-' + uniqueSuffix + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ 
+    storage: storage,
+    limits: { fileSize: 5 * 1024 * 1024 }, // Límite de 5MB
+    fileFilter: function (req, file, cb) {
+        const filetypes = /jpeg|jpg|png|gif/;
+        const mimetype = filetypes.test(file.mimetype);
+        const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+        
+        if (mimetype && extname) {
+            return cb(null, true);
+        }
+        cb(new Error('Solo se permiten imágenes (jpeg, jpg, png, gif)'));
+    }
+});
 
 // Middleware para verificar sesión
 function verificarSesion(req, res, next) {
@@ -72,7 +100,7 @@ router.post('/perfil/actualizar', verificarSesion, (req, res) => {
 });
 
 // Ruta para cambiar contraseña
-router.post('/perfil/cambiar-contraseña', verificarSesion, (req, res) => {
+router.post('/perfil/cambiar-contrasena', verificarSesion, (req, res) => {
     const { contraseñaActual, contraseñaNueva, contraseñaConfirmar } = req.body;
     
     // Verificar contraseña actual
@@ -94,12 +122,12 @@ router.post('/perfil/cambiar-contraseña', verificarSesion, (req, res) => {
         }
         
         // Verificar que las contraseñas nuevas coincidan
-        if (contrasenaNueva !== contraseñaConfirmar) {
+        if (contraseñaNueva !== contraseñaConfirmar) {
             return res.redirect('/perfil?error=Las contraseñas nuevas no coinciden');
         }
         
         // Validar longitud mínima
-        if (contraseñaNueva.length < 6) {
+        if (contraseñaNueva.length < 8) {
             return res.redirect('/perfil?error=La contraseña debe tener al menos 6 caracteres');
         }
         
@@ -118,13 +146,52 @@ router.post('/perfil/cambiar-contraseña', verificarSesion, (req, res) => {
 });
 
 // Ruta para actualizar imagen de perfil
-router.post('/perfil/actualizar-imagen', verificarSesion, (req, res) => {
+router.post('/perfil/actualizar-imagen', verificarSesion, upload.single('imagen'), (req, res) => {
     
+    if (!req.file) {
+        console.error('No se seleccionó ninguna imagen.', err);
+        return res.redirect('/perfil?error=No se seleccionó ninguna imagen');
+    }
+    
+    const rutaImagen = '/media/' + req.file.filename;
+    
+    const updateQuery = 'UPDATE usuarios SET imagen = ? WHERE id_usuario = ?';
+    
+    db.query(updateQuery, [rutaImagen, req.session.usuario.id_usuario], (err, result) => {
+        if (err) {
+            console.error('Error al actualizar imagen:', err);
+            return res.redirect('/perfil?error=Error al actualizar la imagen');
+        }
+        
+        // Actualizar sesión
+        req.session.usuario.imagen = rutaImagen;
+        
+        res.redirect('/perfil?mensaje=Imagen actualizada correctamente');
+    });
 });
 
 // Ruta para actualizar preferencias de accesibilidad
 router.post('/perfil/actualizar-preferencias', verificarSesion, (req, res) => {
+    const { fontSize, theme } = req.body;
+   
+    const preferencias = JSON.stringify({
+        fontSize: fontSize || 'normal',
+        theme: theme || 'standard'
+    });
     
+    const updateQuery = 'UPDATE usuarios SET preferencias_accesibilidad = ? WHERE id_usuario = ?';
+    
+    db.query(updateQuery, [preferencias, req.session.usuario.id_usuario], (err, result) => {
+        if (err) {
+            console.error('Error al actualizar preferencias:', err);
+            return res.redirect('/perfil?error=Error al actualizar las preferencias');
+        }
+        
+        // Actualizar sesión
+        req.session.usuario.preferencias_accesibilidad = JSON.parse(preferencias);
+        
+        res.redirect('/perfil?mensaje=Preferencias actualizadas correctamente');
+    });
 });
 
 module.exports = router;
