@@ -27,8 +27,9 @@
             <div class="table-responsive shadow-sm rounded-4 border"><!--contenedor de la tabla responsiva con sombra, bordes redondeados y borde-->
                 <table class="table table-hover align-middle mb-0"><!--tabla con hover-->
 
-                    <thead class="table-light"> <!--cabezera de la tabla-->
+                    <thead class="table"> <!--cabezera de la tabla-->
                         <tr><!--table row-->
+                            <th>Id_Usuario</th>
                             <th>Vehículos</th> <!--table headers -->
                             <th>Fechas</th>
                             <th>Estado</th>
@@ -39,6 +40,11 @@
                     <tbody>
                         <% reservas.forEach(reserva => { %> <!--Mostrar cada reserva-->
                             <tr>
+                                <td> <!--table data usuario -->
+                                    <div>
+                                        <div class="fw-bold"><%= reserva.nombre_usuario %></div>
+                                    </div>
+                                </td>
                                 <td> <!--table data vehiculos -->
                                     <div class="d-flex align-items-center"> <!--d-flex para alinear horizontalmente -->
                                         <img src="<%= reserva.imagen %>" 

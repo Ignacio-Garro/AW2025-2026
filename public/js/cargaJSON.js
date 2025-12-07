@@ -35,9 +35,9 @@ async function cargarDatosIniciales() {
         
         //Empezamos a cargar los 3 JSON
         console.log('\nCargando JSON...');
-        const concesionariosPath = path.join(__dirname, '../..', 'concesionarios.json');
-        const usuariosPath = path.join(__dirname, '../..', 'usuarios.json');
-        const vehiculosPath = path.join(__dirname, '../..', 'vehiculos.json');
+        const concesionariosPath = path.join(__dirname, '../..', 'public', 'json', 'concesionarios.json');
+        const usuariosPath = path.join(__dirname, '../..', 'public', 'json', 'usuarios.json');
+        const vehiculosPath = path.join(__dirname, '../..', 'public', 'json', 'vehiculos.json');
         
         const concesionarios = JSON.parse(await fs.readFile(concesionariosPath, 'utf8')).concesionarios;
         const usuarios = JSON.parse(await fs.readFile(usuariosPath, 'utf8')).usuarios;
