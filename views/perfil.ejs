@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Perfil</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
     <script defer src="/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
@@ -15,7 +16,7 @@
         
         <div class="text-center mb-5">
             <h1 class="display-5 fw-bold mb-3">Mi Perfil</h1>
-            <img src="<%= usuario.imagen || '/images/default-avatar.png' %>" 
+            <img src="<%= usuario.imagen%>" 
                  alt="Foto de perfil" 
                  class="rounded-circle border border-5 border-primary shadow"
                  style="width: 160px; height: 160px; object-fit: cover;">
