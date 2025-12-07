@@ -59,22 +59,44 @@ async function cargarDatosIniciales() {
             }
 
             await new Promise(resolve => {
+                
+                //Si no hay nada en la BD
                 db.query(
                     "INSERT IGNORE INTO Concesionarios (id_concesionario, nombre, ciudad, direccion, telefono_contacto) VALUES (?, ?, ?, ?, ?)",
                     [c.id_concesionario, c.nombre, c.ciudad, c.direccion, c.telefono_contacto],
-                    (err, result) => {
+                    async (err, result) => {
                         //Manejamos la carga en la BD (✅ si se completa adecuadamente, ❌si no se carga)
-                        if (!err && result.affectedRows > 0) {
-                            consCreados++;
-                            console.log(`  ✅ Concesionario ${c.id_concesionario}: ${c.nombre}`);
-                        } else if (!err){
-                            console.log(`  📌 Ya existe el concesionario ${c.id_concesionario} (${c.nombre})`);
-                        } else {
-                            console.log(`  ❌ ERROR Concesionario ${c.id_concesionario}:`, err.message);
+                        if (err) {
+                            console.log(`  ❌ Concesionario ${c.id_concesionario}: ${c.nombre}`);
+                            resolve();
+                            return;
                         }
-                        resolve();
+                        
+                        db.query(
+                            `SELECT id_concesionario, nombre, ciudad FROM Concesionarios WHERE id_concesionario = ?`,
+                            [c.id_concesionario],
+                            (err2, rows) => {
+                                if (err2 || rows.length === 0) {
+                                    console.log(`  ❌ ERROR leyendo concesionario ${c.id_concesionario}`);
+                                    resolve();
+                                    return;
+                                }
+            
+                                const concesionarioReal = rows[0];
+            
+                                if (result.affectedRows > 0) {
+                                    consCreados++;
+                                    console.log(`  ✅ Concesionario ${concesionarioReal.id_concesionario} (${concesionarioReal.nombre})`);
+                                } else {
+                                    console.log(`  📌 Ya existe el concesionario ${concesionarioReal.id_concesionario} (${concesionarioReal.nombre})`);
+                                }
+                                resolve();
+                            }
+                        );
                     }
+                    
                 );
+                
             });
         }
         
@@ -101,20 +123,41 @@ async function cargarDatosIniciales() {
             }
 
             await new Promise(resolve => {
+                //Insertamos si no existe el usuario (lo vemos con el id)
                 db.query(
                     `INSERT IGNORE INTO usuarios (id_usuario, nombre, correo, contraseña, telefono, imagen, id_concesionario, rol, preferencias_accesibilidad) 
                      VALUES (?,?, ?, ?, ?, ?, ?, ?, ?)`,
                     [u.id_usuario, u.nombre, u.correo, u.contraseña, u.telefono, u.imagen, u.id_concesionario, u.rol, JSON.stringify(u.preferencias_accesibilidad)],
-                    (err, result) => {
-                        if (!err && result.affectedRows > 0) {
-                            usersCreados++;
-                            console.log(`  ✅ Usuario ${u.correo} (${u.rol})`);
-                        } else if (!err){
-                            console.log(`  📌 Ya existe el usuario ${u.correo} (${u.rol})`);
-                        } else {
-                            console.log(`  ❌ ERROR Usuario ${u.correo}:`, err.message);
+                    async (err, result) => {
+                        if (err) {
+                            console.log(`  ❌ ERROR Usuario ${u.correo} (${u.rol}): ${err.message}`);
+                            resolve();
+                            return;
                         }
-                        resolve();
+                        
+                        //Si el usuario existe, leemos sus datos de la BD porque a lo mejor han cambiado
+                        db.query(
+                            `SELECT id_usuario, nombre, correo, rol FROM usuarios WHERE id_usuario = ?`,
+                            [u.id_usuario],
+                            (err2, rows) => {
+                                if (err2 || rows.length === 0) {
+                                    console.log(`  ERROR leyendo usuario ${u.id_usuario}`);
+                                    resolve();
+                                    return;
+                                }
+        
+                                const usuarioReal = rows[0];
+        
+                                if (result.affectedRows > 0) {
+                                    usersCreados++;
+                                    console.log(`  ✅ Usuario ${usuarioReal.correo} (${usuarioReal.rol})`);
+                                } else {
+                                    console.log(`  📌 Ya existe el usuario ${usuarioReal.nombre} (${usuarioReal.correo} (${usuarioReal.rol})`);
+                                }
+        
+                                resolve();
+                            }
+                        );
                     }
                 );
             });
@@ -125,20 +168,38 @@ async function cargarDatosIniciales() {
         let vehiNuevos = 0;
         for (const v of vehiculos) {
             await new Promise(resolve => {
+                //Si no esta en la BD
                 db.query(
                     `INSERT IGNORE INTO Vehiculos (id_vehiculo, matricula, marca, modelo, año_matriculacion, precio, numero_plazas, color, autonomia_km, imagen, estado, id_concesionario) 
                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
                     [v.id_vehiculo, v.matricula, v.marca, v.modelo, v.año_matriculacion, v.precio, v.numero_plazas, v.color, v.autonomia_km, v.imagen, v.estado, v.id_concesionario],
-                    (err, result) => {
-                        if (!err && result.affectedRows > 0) {
-                            vehiNuevos++;
-                            console.log(`  ✅ Vehículo ${v.matricula} (${v.marca} ${v.modelo})`);
-                        } else if (!err){
-                            console.log(`  📌 Ya existe el vehículo ${v.matricula} (${v.marca} ${v.modelo})`);
-                        } else {
-                            console.log(`  ❌ ERROR Vehículo ${v.matricula}:`, err.message);
-                        }
-                        resolve();
+                    async (err, result) => {
+                        if (err) {
+                            console.log(`  ❌ Vehículo ${v.matricula} (${v.marca} ${v.modelo})`);
+                            resolve();
+                            return;
+                        } 
+                        db.query(
+                            `SELECT matricula, marca, modelo, estado FROM Vehiculos WHERE id_vehiculo = ?`,
+                            [v.id_vehiculo],
+                            (err2, rows) => {
+                                if (err2 || rows.length === 0) {
+                                    console.log(`  ERROR leyendo vehículo ${v.id_vehiculo}`);
+                                    resolve();
+                                    return;
+                                }
+        
+                                const vehiculoReal = rows[0];
+        
+                                if (result.affectedRows > 0) {
+                                    vehiNuevos++;
+                                    console.log(`  ✅ Vehículo ${vehiculoReal.matricula} (${vehiculoReal.marca} ${vehiculoReal.modelo})`);
+                                } else {
+                                    console.log(`  📌 Ya existe el vehículo ${vehiculoReal.matricula} (${vehiculoReal.marca} ${vehiculoReal.modelo})`);
+                                }
+                                resolve();
+                            }
+                        );
                     }
                 );
             });
