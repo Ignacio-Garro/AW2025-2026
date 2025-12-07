@@ -57,7 +57,8 @@ body {
   
   .container-main{
     /*Para meter una imagen de fondo en el main*/
-    background-image: url(/media/FondoFoto.png);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                      url(/media/FondoFoto.png);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

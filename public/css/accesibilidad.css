@@ -67,7 +67,16 @@ body[data-theme="high-contrast"] td {
 
 
 /* --- MODO DALTÓNICOS --- */
-body[data-theme="colorblind"] #contenido-web,
-body[data-theme="colorblind"] .modal-content {
-    filter: saturate(150%) contrast(150%);
+/* --- creamos una capa fija que cubre toda la pantalla por encima de todo --- */
+body[data-theme="colorblind"]::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 10000; /* Un número muy alto para estar encima*/
+    
+    pointer-events: none; /*para que los clicks traspasen esta capa */
+    backdrop-filter: saturate(150%) contrast(120%); /* aplicamos el filtro */
 }
