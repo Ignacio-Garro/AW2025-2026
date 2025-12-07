@@ -4,6 +4,11 @@ const db = require('../config/db'); // Conexión MySQL
 const multer = require('multer');
 const path = require('path');
 
+//Validacions por regex
+const emailRegex = /^[a-zA-Z0-9._%+-]+@voltiaDrive\.es$/;
+const passRegex = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+const phoneRegex = /^[0-9]{9}$/;
+
 //Usamos multer para poder subir imágenes
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -67,6 +72,15 @@ router.get('/perfil', verificarSesion, (req, res) => {
 router.post('/perfil/actualizar', verificarSesion, (req, res) => {
     const { nombre, correo, telefono } = req.body;
     
+    // Validaciones REGEX
+    if (!emailRegex.test(correo)) {
+        return res.redirect('/perfil?error=El correo debe pertenecer al dominio @voltiaDrive.es');
+    }
+
+    if (telefono && !phoneRegex.test(telefono)) {
+        return res.redirect('/perfil?error=El teléfono debe tener exactamente 9 dígitos');
+    }
+
     // Verificar si el correo ya existe en otro usuario
     const checkQuery = 'SELECT id_usuario FROM usuarios WHERE correo = ? AND id_usuario != ?';
     
@@ -103,9 +117,13 @@ router.post('/perfil/actualizar', verificarSesion, (req, res) => {
 router.post('/perfil/cambiar-contrasena', verificarSesion, (req, res) => {
     const { contraseñaActual, contraseñaNueva, contraseñaConfirmar } = req.body;
     
+    // Validacion REGEX
+    if (!contraseñaActual || !contraseñaNueva || !contraseñaConfirmar) {
+        return res.redirect('/perfil?error=Todos los campos son obligatorios');
+    }
+
     // Verificar contraseña actual
     const checkQuery = 'SELECT contraseña FROM usuarios WHERE id_usuario = ?';
-    
     db.query(checkQuery, [req.session.usuario.id_usuario], (err, results) => {
         if (err) {
             console.error('Error al verificar contraseña:', err);
@@ -128,7 +146,7 @@ router.post('/perfil/cambiar-contrasena', verificarSesion, (req, res) => {
         
         // Validar longitud mínima
         if (contraseñaNueva.length < 8) {
-            return res.redirect('/perfil?error=La contraseña debe tener al menos 6 caracteres');
+            return res.redirect('/perfil?error=La contraseña debe tener al menos 8 caracteres');
         }
         
         // Actualizar contraseña

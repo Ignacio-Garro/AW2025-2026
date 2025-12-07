@@ -2,7 +2,7 @@
   "usuarios": [
     {
       "id_usuario": 1,
-      "nombre": "Aitor",
+      "nombre": "AitorTilla",
       "correo": "aitor.tilla@voltiaDrive.es",
       "contraseña": "Aitor123",
       "telefono": "600111111",
