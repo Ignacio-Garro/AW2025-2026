@@ -10,8 +10,8 @@
       "id_concesionario": 1,
       "rol": "admin",
       "preferencias_accesibilidad": {
-        "fontSize": "normal",
-        "theme": "standard"
+        "fontSize": "peque",
+        "theme": "colorblind"
       }
     },
     {
@@ -24,8 +24,8 @@
       "id_concesionario": 1,
       "rol": "empleado",
       "preferencias_accesibilidad": {
-        "fontSize": "large",
-        "theme": "dark"
+        "fontSize": "grande",
+        "theme": "clorblind"
       }
     },
     {
@@ -52,7 +52,7 @@
       "id_concesionario": 3,
       "rol": "empleado",
       "preferencias_accesibilidad": {
-        "fontSize": "small",
+        "fontSize": "peque",
         "theme": "standard"
       }
     },
@@ -66,7 +66,7 @@
       "id_concesionario": 4,
       "rol": "empleado",
       "preferencias_accesibilidad": {
-        "fontSize": "large",
+        "fontSize": "grande",
         "theme": "high-contrast"
       }
     },
@@ -81,7 +81,7 @@
       "rol": "empleado",
       "preferencias_accesibilidad": {
         "fontSize": "normal",
-        "theme": "dark"
+        "theme": "colorblind"
       }
     },
     {
@@ -108,7 +108,7 @@
       "id_concesionario": 7,
       "rol": "empleado",
       "preferencias_accesibilidad": {
-        "fontSize": "large",
+        "fontSize": "grande",
         "theme": "standard"
       }
     },
@@ -136,8 +136,8 @@
       "id_concesionario": 9,
       "rol": "empleado",
       "preferencias_accesibilidad": {
-        "fontSize": "small",
-        "theme": "dark"
+        "fontSize": "peque",
+        "theme": "colorblind"
       }
     },
     {
@@ -165,7 +165,7 @@
       "rol": "admin",
       "preferencias_accesibilidad": {
         "fontSize": "normal",
-        "theme": "dark"
+        "theme": "colorblind"
       }
     }
   ]

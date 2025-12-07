@@ -9,7 +9,7 @@ async function cargarDatosIniciales() {
         
         let concesTotal = 0, usersTotal = 0, vehiTotal = 0;
 
-        //Validaciones por regex
+        //Validaciones REGEX
         const emailRegex = /^[a-zA-Z0-9._%+-]+@voltiaDrive\.es$/;
         const passRegex = /^(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
         const phoneRegex = /^[0-9]{9}$/;
@@ -18,17 +18,17 @@ async function cargarDatosIniciales() {
         try {
             const [conces] = await new Promise(r => db.query("SELECT COUNT(*) as total FROM Concesionarios", (e, res) => r(e ? [{total:0}] : res)));
             concesTotal = conces[0]?.total || 0;
-        } catch(e) { console.log('⚠️  Tabla Concesionarios no existe'); }
+        } catch(e) { console.log('  Tabla Concesionarios no existe'); }
         
         try {
             const [users] = await new Promise(r => db.query("SELECT COUNT(*) as total FROM usuarios", (e, res) => r(e ? [{total:0}] : res)));
             usersTotal = users[0]?.total || 0;
-        } catch(e) { console.log('⚠️  Tabla usuarios no existe'); }
+        } catch(e) { console.log('  Tabla usuarios no existe'); }
         
         try {
             const [vehi] = await new Promise(r => db.query("SELECT COUNT(*) as total FROM Vehiculos", (e, res) => r(e ? [{total:0}] : res)));
             vehiTotal = vehi[0]?.total || 0;
-        } catch(e) { console.log('⚠️  Tabla Vehiculos no existe'); }
+        } catch(e) { console.log('  Tabla Vehiculos no existe'); }
         
         //Al verificar los datos de la BD imprimos un mensaje con su contenido
         console.log(`Estado BD: ${concesTotal}C | ${usersTotal}U | ${vehiTotal}V`);
@@ -46,24 +46,10 @@ async function cargarDatosIniciales() {
         //Imprimimos lo que encontramos en los JSON
         console.log(`JSON encontrado: ${concesionarios.length} Concesionarios | ${usuarios.length} Usuarios | ${vehiculos.length} Vehiculos`);
         
-        //1. LIMPIAMOS LAS TABLAS (Para evitar problemas)
-        await new Promise(resolve => db.query("SET FOREIGN_KEY_CHECKS = 0", resolve));
-        
-        await new Promise(resolve => db.query("DELETE FROM Vehiculos", resolve));
-        await new Promise(resolve => db.query("DELETE FROM usuarios", resolve));
-        await new Promise(resolve => db.query("DELETE FROM Concesionarios", resolve));
-        
-        //Reseteamos autoincrement para que al limpiar la tabla no se disparen los ID's
-        await new Promise(resolve => db.query("ALTER TABLE Vehiculos AUTO_INCREMENT = 1", resolve));
-        await new Promise(resolve => db.query("ALTER TABLE usuarios AUTO_INCREMENT = 1", resolve));
-        await new Promise(resolve => db.query("ALTER TABLE Concesionarios AUTO_INCREMENT = 1", resolve));
-        
-        await new Promise(resolve => db.query("SET FOREIGN_KEY_CHECKS = 1", resolve));
-    
-        
-        //2. CARGAMOS LOS CONCESIONARIOS
+        //1. CARGAMOS LOS CONCESIONARIOS
         console.log('\nCargando CONCESIONARIOS...');
         let consCreados = 0;
+
         for (const c of concesionarios) {
 
             //Validamos antes de cargar
@@ -78,9 +64,11 @@ async function cargarDatosIniciales() {
                     [c.id_concesionario, c.nombre, c.ciudad, c.direccion, c.telefono_contacto],
                     (err, result) => {
                         //Manejamos la carga en la BD (✅ si se completa adecuadamente, ❌si no se carga)
-                        if (!err) {
+                        if (!err && result.affectedRows > 0) {
                             consCreados++;
                             console.log(`  ✅ Concesionario ${c.id_concesionario}: ${c.nombre}`);
+                        } else if (!err){
+                            console.log(`  📌 Ya existe el concesionario ${c.id_concesionario} (${c.nombre})`);
                         } else {
                             console.log(`  ❌ ERROR Concesionario ${c.id_concesionario}:`, err.message);
                         }
@@ -90,7 +78,7 @@ async function cargarDatosIniciales() {
             });
         }
         
-        //3. CARGAMOS LOS USUARIOS
+        //2. CARGAMOS LOS USUARIOS
         console.log('\nCargando USUARIOS...');
         let usersCreados = 0;
 
@@ -114,13 +102,15 @@ async function cargarDatosIniciales() {
 
             await new Promise(resolve => {
                 db.query(
-                    `INSERT IGNORE INTO usuarios (nombre, correo, contraseña, telefono, imagen, id_concesionario, rol, preferencias_accesibilidad) 
-                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-                    [u.nombre, u.correo, u.contraseña, u.telefono, u.imagen, u.id_concesionario, u.rol, JSON.stringify(u.preferencias_accesibilidad)],
+                    `INSERT IGNORE INTO usuarios (id_usuario, nombre, correo, contraseña, telefono, imagen, id_concesionario, rol, preferencias_accesibilidad) 
+                     VALUES (?,?, ?, ?, ?, ?, ?, ?, ?)`,
+                    [u.id_usuario, u.nombre, u.correo, u.contraseña, u.telefono, u.imagen, u.id_concesionario, u.rol, JSON.stringify(u.preferencias_accesibilidad)],
                     (err, result) => {
-                        if (!err) {
+                        if (!err && result.affectedRows > 0) {
                             usersCreados++;
                             console.log(`  ✅ Usuario ${u.correo} (${u.rol})`);
+                        } else if (!err){
+                            console.log(`  📌 Ya existe el usuario ${u.correo} (${u.rol})`);
                         } else {
                             console.log(`  ❌ ERROR Usuario ${u.correo}:`, err.message);
                         }
@@ -130,19 +120,21 @@ async function cargarDatosIniciales() {
             });
         }
         
-        //4. CARGAMOS LOS VEHÍCULOS
+        //3. CARGAMOS LOS VEHÍCULOS
         console.log('\nCargando VEHÍCULOS...');
         let vehiNuevos = 0;
         for (const v of vehiculos) {
             await new Promise(resolve => {
                 db.query(
-                    `INSERT INTO Vehiculos (id_vehiculo, matricula, marca, modelo, año_matriculacion, precio, numero_plazas, color, autonomia_km, imagen, estado, id_concesionario) 
+                    `INSERT IGNORE INTO Vehiculos (id_vehiculo, matricula, marca, modelo, año_matriculacion, precio, numero_plazas, color, autonomia_km, imagen, estado, id_concesionario) 
                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
                     [v.id_vehiculo, v.matricula, v.marca, v.modelo, v.año_matriculacion, v.precio, v.numero_plazas, v.color, v.autonomia_km, v.imagen, v.estado, v.id_concesionario],
                     (err, result) => {
-                        if (!err) {
+                        if (!err && result.affectedRows > 0) {
                             vehiNuevos++;
                             console.log(`  ✅ Vehículo ${v.matricula} (${v.marca} ${v.modelo})`);
+                        } else if (!err){
+                            console.log(`  📌 Ya existe el vehículo ${v.matricula} (${v.marca} ${v.modelo})`);
                         } else {
                             console.log(`  ❌ ERROR Vehículo ${v.matricula}:`, err.message);
                         }
